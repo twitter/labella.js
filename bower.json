@@ -1,0 +1,39 @@
+{
+  "name": "labella.js",
+  "version": "1.0.0",
+  "authors": [
+    "Krist Wongsuphasawat <kristw@twitter.com>"
+  ],
+  "description": "May the force label you",
+  "main": "dist/labella.min.js",
+  "moduleType": [
+    "amd"
+  ],
+  "keywords": [
+    "d3",
+    "visualization",
+    "javascript"
+  ],
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "examples",
+    "src",
+    "grunt",
+    "karma.conf.js",
+    "Gruntfile.js",
+    "package.json",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "angular": "~1.4.0",
+    "bootstrap": "~3.3.1",
+    "chai": "~1.9.1",
+    "d3": "~3.4",
+    "d3kit": "~1.0.6",
+    "webcola": "~3.1.0"
+  }
+}

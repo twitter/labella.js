@@ -1,0 +1,13 @@
+src
+coverage
+node_modules
+bower_components
+karma.conf.js
+Gruntfile.js
+grunt/*.js
+test
+vendor
+tmp
+*.sublime-workspace
+*.sublime-project
+examples

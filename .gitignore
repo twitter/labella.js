@@ -1,0 +1,7 @@
+bower_components
+node_modules
+tmp
+coverage
+.DS_Store
+.grunt
+examples/dist

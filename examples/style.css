@@ -1,0 +1,110 @@
+/*@import url(http://fonts.googleapis.com/css?family=Lato:100,300,400,700);*/
+
+body{
+  font-family: 'Lato', Helvetica, Arial, sans-serif;
+  background: #111;
+  text-align: center;
+  color: #aaa;
+}
+
+header{
+  display: inline-block;
+  width: 1000px;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+h1, h2, h3{
+  font-family: 'Lato', sans-serif;
+  color: #C2A53C;
+}
+
+h1{
+  font-weight: 300;
+  font-size: 50px;
+  margin-top: 20px;
+  margin-bottom: 0px;
+  padding: 0px 6px 4px 6px;
+  color: #C2A53C;
+}
+h2{
+  font-weight: 100;
+  font-size: 24px;
+  color: #D5BE59;
+  margin-top: 0px;
+}
+h3{
+  font-weight: 400;
+}
+
+a, a:link, a:visited{
+  color: #D5CB82;
+  text-decoration: none;
+}
+
+a:hover{
+  color: #D5C59F;
+  text-decoration: underline;
+}
+
+.block{
+  display: inline-block;
+  width: 1000px;
+  margin-bottom: 25px;
+  font-size: 15px;
+}
+
+.content-block{
+  margin-top: -5px;
+  display: inline-block;
+  width: 1000px;
+  text-align: left;
+  background: #eee;
+  padding: 10px 0px;
+  color: #000;
+  font-size: 12px;
+}
+
+.form-inline:first-child{
+  margin-bottom: 10px;
+}
+
+.chart-container{
+  margin-top: -5px;
+  text-align: center;
+}
+
+svg {
+  background: #eee;
+  background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1IiBoZWlnaHQ9IjUiPgo8cmVjdCB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSIjZmZmIj48L3JlY3Q+CjxyZWN0IHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9IiNjY2MiPjwvcmVjdD4KPC9zdmc+");
+}
+
+.form-control, button.btn{
+  border-radius: 0;
+}
+
+.form-control.short-input{
+  width: 60px;
+  text-align: center;
+}
+
+.metrics-table{
+  display: inline-block;
+}
+
+.metrics-table th{
+  font-weight: 100;
+  font-size: 1.2em;
+}
+
+.metrics-table td:first-child{
+  padding-right: 10px;
+}
+
+footer{
+  text-align: center;
+  color: #aaa;
+  font-size: 12px;
+  font-weight: 300;
+  padding: 20px;
+}
