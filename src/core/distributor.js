@@ -9,7 +9,7 @@ function(helper, IntervalTree){
 
 var DEFAULT_OPTIONS = {
   algorithm: 'overlap',
-  rowWidth: 1000,
+  layerWidth: 1000,
   density: 0.75,
   nodeSpacing: 3,
   // bundleStubs: false,
@@ -33,48 +33,48 @@ var Distributor = function(options){
     }) - options.nodeSpacing;
   };
 
-  distributor.maxWidthPerRow = function(){
-    return (options.density * options.rowWidth);
+  distributor.maxWidthPerLayer = function(){
+    return (options.density * options.layerWidth);
   };
 
   distributor.needToSplit = function(nodes){
-    return distributor.estimateRequiredRows(nodes) > 1;
+    return distributor.estimateRequiredLayers(nodes) > 1;
   };
 
-  distributor.estimateRequiredRows = function(nodes){
-    return Math.ceil(distributor.computeRequiredWidth(nodes) / distributor.maxWidthPerRow());
+  distributor.estimateRequiredLayers = function(nodes){
+    return Math.ceil(distributor.computeRequiredWidth(nodes) / distributor.maxWidthPerLayer());
   };
 
   var algorithms = {
     simple: function(nodes){
-      var rowsNeeded = distributor.estimateRequiredRows(nodes);
+      var numLayers = distributor.estimateRequiredLayers(nodes);
 
-      var rows = [];
-      for(var i=0;i<rowsNeeded;i++){
-        rows.push([]);
+      var layers = [];
+      for(var i=0;i<numLayers;i++){
+        layers.push([]);
       }
 
       nodes.forEach(function(node, i){
-        var mod = i%rowsNeeded;
-        rows[mod].push(node);
+        var mod = i%numLayers;
+        layers[mod].push(node);
 
         var stub = node;
         for(var j=mod-1;j>=0;j--){
           stub = stub.createStub(options.stubWidth);
-          rows[j].push(stub);
+          layers[j].push(stub);
         }
       });
 
-      return rows;
+      return layers;
     },
     roundRobin: function(nodes){
-      var rows = [];
+      var layers = [];
 
-      return rows;
+      return layers;
     },
     overlap: function(nodes){
-      var rows = [];
-      var maxWidth = distributor.maxWidthPerRow();
+      var layers = [];
+      var maxWidth = distributor.maxWidthPerLayer();
 
       var puntedNodes = nodes.concat();
       var puntedWidth = distributor.computeRequiredWidth(puntedNodes);
@@ -82,65 +82,65 @@ var Distributor = function(options){
       while(puntedWidth > maxWidth){
         distributor.countIdealOverlaps(puntedNodes);
 
-        var nodesInCurrentRow = puntedNodes.concat();
-        var currentRowWidth = puntedWidth;
+        var nodesInCurrentLayer = puntedNodes.concat();
+        var currentlayerWidth = puntedWidth;
         puntedNodes = [];
 
-        while(nodesInCurrentRow.length > 2 && currentRowWidth > maxWidth){
+        while(nodesInCurrentLayer.length > 2 && currentlayerWidth > maxWidth){
           // Sort by overlaps
-          nodesInCurrentRow.sort(function(a,b){
+          nodesInCurrentLayer.sort(function(a,b){
             return b.overlapCount - a.overlapCount;
           });
 
           // Remove the node with most overlap
-          var first = nodesInCurrentRow.shift();
+          var first = nodesInCurrentLayer.shift();
 
           // Update width
-          currentRowWidth -= first.width;
-          currentRowWidth += options.stubWidth;
+          currentlayerWidth -= first.width;
+          currentlayerWidth += options.stubWidth;
 
           // Update overlap count for the remaining nodes
           first.overlaps.forEach(function(node){
             node.overlapCount--;
           });
 
-          // Add removed node to the next row
+          // Add removed node to the next layer
           puntedNodes.push(first);
         }
 
-        rows.push(nodesInCurrentRow);
+        layers.push(nodesInCurrentLayer);
 
         puntedWidth = distributor.computeRequiredWidth(puntedNodes);
       }
 
       if(puntedNodes.length>0){
-        rows.push(puntedNodes);
+        layers.push(puntedNodes);
       }
 
       // Create stubs
-      // From last row
-      for(var i=rows.length-1; i>=1; i--){
-        var row = rows[i];
-        // For each node in the row
-        for(var k=0; k<row.length; k++){
-          var node = row[k];
+      // From last layer
+      for(var i=layers.length-1; i>=1; i--){
+        var layer = layers[i];
+        // For each node in the layer
+        for(var k=0; k<layer.length; k++){
+          var node = layer[k];
           // If it is not a stub
           if(node.isStub()) continue;
-          // Create one stub for each row above it
+          // Create one stub for each layer above it
           var stub = node;
           for(var j=i-1;j>=0;j--){
             stub = stub.createStub(options.stubWidth);
-            rows[j].push(stub);
+            layers[j].push(stub);
           }
         }
       }
 
-      return rows;
+      return layers;
     }
   };
 
   distributor.countIdealOverlaps = function(nodes){
-    var iTree = new IntervalTree(options.rowWidth/2);
+    var iTree = new IntervalTree(options.layerWidth/2);
     nodes.forEach(function(node){
       iTree.add([node.idealLeft(), node.idealRight(), node]);
     });

@@ -21,7 +21,7 @@ var DEFAULT_OPTIONS = {
   roundsPerTick: 100,
 
   algorithm: 'overlap',
-  rowWidth: 1000,
+  layerWidth: 1000,
   density: 0.85,
   // bundleStubs: false,
   stubWidth: 1
@@ -29,27 +29,27 @@ var DEFAULT_OPTIONS = {
 
 var Force = function(options){
   var force = {};
-  var dispatch = helper.dispatch('start', 'tick', 'endRow', 'end');
+  var dispatch = helper.dispatch('start', 'tick', 'endLayer', 'end');
 
   options = helper.extend({}, DEFAULT_OPTIONS, options);
 
   var distributor = new Distributor(helper.extractKeys(options, Object.keys(Distributor.DEFAULT_OPTIONS)));
   var simulators = [];
   var nodes = [];
-  var rows = null;
+  var layers = null;
 
   var isRunning = false;
 
   force.nodes = function(x) {
     if (!arguments.length) return nodes;
     nodes = x;
-    rows = null;
+    layers = null;
     simulators = [];
     return force;
   };
 
-  force.getRows = function(){
-    return rows;
+  force.getLayers = function(){
+    return layers;
   };
 
   force.options = function(x){
@@ -69,11 +69,10 @@ var Force = function(options){
     if(isRunning){
       throw 'This function cannot be called while the simulator is running. Stop it first.';
     }
-    rows = distributor.distribute(nodes);
+    layers = distributor.distribute(nodes);
     var simOptions = helper.extractKeys(options, Object.keys(Simulator.DEFAULT_OPTIONS));
-    simulators = rows.map(function(row){
-      return new Simulator(simOptions)
-        .nodes(row);
+    simulators = layers.map(function(layer){
+      return new Simulator(simOptions).nodes(layer);
     });
     return force;
   };
@@ -106,38 +105,38 @@ var Force = function(options){
     if(isRunning){
       throw 'This function cannot be called while the simulator is running. Stop it first.';
     }
-    if(!rows){
+    if(!layers){
       force.distribute();
     }
     return force.initialize().resume(maxRound);
   };
 
   force.resume = function(additionalRound){
-    if(rows.length===0) return force;
+    if(layers.length===0) return force;
 
     if(!isRunning){
-      var rowIndex = 0;
+      var layerIndex = 0;
       dispatch.start({type: 'start'});
 
       var simulate = function(){
-        var sim = simulators[rowIndex];
+        var sim = simulators[layerIndex];
         if(!sim) return;
 
         sim.on('tick', function(event){
           dispatch.tick(helper.extend({}, event, {
-            row: rowIndex
+            layerIndex: layerIndex
           }));
         });
         sim.on('end', function(event){
-          dispatch.endRow(helper.extend({}, event, {
-            type: 'endRow',
-            row: rowIndex
+          dispatch.endLayer(helper.extend({}, event, {
+            type: 'endLayer',
+            layerIndex: layerIndex
           }));
 
-          rowIndex++;
+          layerIndex++;
 
-          // Still have row(s) left
-          if(rowIndex < rows.length){
+          // Still have layer(s) left
+          if(layerIndex < layers.length){
             simulate();
           }
           // really end
@@ -147,7 +146,7 @@ var Force = function(options){
           }
         });
 
-        if(rowIndex>0){
+        if(layerIndex>0){
           sim.start(additionalRound);
         }
         else{
@@ -183,13 +182,13 @@ var Force = function(options){
   force.metric = function(name){
     switch(name){
       case 'overflow':
-        return metrics[name](rows, options.minPos, options.maxPos);
+        return metrics[name](layers, options.minPos, options.maxPos);
       case 'overDensity':
-        return metrics[name](rows, options.density, options.rowWidth, options.nodeSpacing - 1);
+        return metrics[name](layers, options.density, options.layerWidth, options.nodeSpacing - 1);
       case 'overlapCount':
-        return metrics[name](rows, options.nodeSpacing - 1);
+        return metrics[name](layers, options.nodeSpacing - 1);
       default:
-        return metrics[name] ? metrics[name](rows) : null;
+        return metrics[name] ? metrics[name](layers) : null;
     }
   };
 

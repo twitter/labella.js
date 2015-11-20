@@ -8,25 +8,21 @@ function(helper){
 
 function Renderer(options){
   this.options = helper.extend({
-    rowGap: 60,
+    layerGap: 60,
     labelHeight: 10
   }, options);
 }
 
-function pos(x,y){
-  return [x,y].join(',');
-}
-
 function L(x, y){
-  return 'L '+pos(x,y);
+  return ['L', x, y].join(' ');
 }
 
 function M(x, y){
-  return 'M '+pos(x,y);
+  return ['M', x, y].join(' ');
 }
 
 function C(cx1, cy1, cx2, cy2, x, y){
-  return ['C', pos(cx1,cy1), pos(cx2,cy2), pos(x,y)].join(' ');
+  return ['C', cx1, cy1, cx2, cy2, x, y].join(' ');
 }
 
 function verticalConnect(x1, y1, x2, y2){
@@ -47,16 +43,16 @@ function verticalConnect(x1, y1, x2, y2){
 //       yPos += options.labelHeight;
 //       steps.push([hop.idealPos, yPos]);
 //     }
-//     steps.push([hop.currentPos, yPos + options.rowGap]);
-//     yPos += options.rowGap;
+//     steps.push([hop.currentPos, yPos + options.layerGap]);
+//     yPos += options.layerGap;
 //   });
 
 //   return points;
 // };
 
-Renderer.prototype.nodePos = function(node){
+Renderer.prototype.layerPos = function(node){
   var options = this.options;
-  return node.getLevel() * (options.rowGap + options.labelHeight) + options.rowGap;
+  return node.getLevel() * (options.layerGap + options.labelHeight) + options.layerGap;
 };
 
 Renderer.prototype.verticalPath = function(node){
@@ -76,9 +72,9 @@ Renderer.prototype.verticalPath = function(node){
     }
     steps.push(verticalConnect(
       hop.idealPos, yPos,
-      hop.currentPos, yPos + options.rowGap
+      hop.currentPos, yPos + options.layerGap
     ));
-    yPos += options.rowGap;
+    yPos += options.layerGap;
   });
 
   return steps.join(' ');

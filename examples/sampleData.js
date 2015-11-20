@@ -1,5 +1,5 @@
 var SAMPLE_DATA = {
-  oneRow: [
+  simple: [
     new labella.Node(1,50),
     new labella.Node(2,50),
     new labella.Node(3,50),

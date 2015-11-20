@@ -1368,7 +1368,7 @@ core_distributor = function (helper, IntervalTree) {
   //---------------------------------------------------
   var DEFAULT_OPTIONS = {
     algorithm: 'overlap',
-    rowWidth: 1000,
+    layerWidth: 1000,
     density: 0.75,
     nodeSpacing: 3,
     // bundleStubs: false,
@@ -1388,93 +1388,93 @@ core_distributor = function (helper, IntervalTree) {
         return d.width + options.nodeSpacing;
       }) - options.nodeSpacing;
     };
-    distributor.maxWidthPerRow = function () {
-      return options.density * options.rowWidth;
+    distributor.maxWidthPerLayer = function () {
+      return options.density * options.layerWidth;
     };
     distributor.needToSplit = function (nodes) {
-      return distributor.estimateRequiredRows(nodes) > 1;
+      return distributor.estimateRequiredLayers(nodes) > 1;
     };
-    distributor.estimateRequiredRows = function (nodes) {
-      return Math.ceil(distributor.computeRequiredWidth(nodes) / distributor.maxWidthPerRow());
+    distributor.estimateRequiredLayers = function (nodes) {
+      return Math.ceil(distributor.computeRequiredWidth(nodes) / distributor.maxWidthPerLayer());
     };
     var algorithms = {
       simple: function (nodes) {
-        var rowsNeeded = distributor.estimateRequiredRows(nodes);
-        var rows = [];
-        for (var i = 0; i < rowsNeeded; i++) {
-          rows.push([]);
+        var numLayers = distributor.estimateRequiredLayers(nodes);
+        var layers = [];
+        for (var i = 0; i < numLayers; i++) {
+          layers.push([]);
         }
         nodes.forEach(function (node, i) {
-          var mod = i % rowsNeeded;
-          rows[mod].push(node);
+          var mod = i % numLayers;
+          layers[mod].push(node);
           var stub = node;
           for (var j = mod - 1; j >= 0; j--) {
             stub = stub.createStub(options.stubWidth);
-            rows[j].push(stub);
+            layers[j].push(stub);
           }
         });
-        return rows;
+        return layers;
       },
       roundRobin: function (nodes) {
-        var rows = [];
-        return rows;
+        var layers = [];
+        return layers;
       },
       overlap: function (nodes) {
-        var rows = [];
-        var maxWidth = distributor.maxWidthPerRow();
+        var layers = [];
+        var maxWidth = distributor.maxWidthPerLayer();
         var puntedNodes = nodes.concat();
         var puntedWidth = distributor.computeRequiredWidth(puntedNodes);
         while (puntedWidth > maxWidth) {
           distributor.countIdealOverlaps(puntedNodes);
-          var nodesInCurrentRow = puntedNodes.concat();
-          var currentRowWidth = puntedWidth;
+          var nodesInCurrentLayer = puntedNodes.concat();
+          var currentlayerWidth = puntedWidth;
           puntedNodes = [];
-          while (nodesInCurrentRow.length > 2 && currentRowWidth > maxWidth) {
+          while (nodesInCurrentLayer.length > 2 && currentlayerWidth > maxWidth) {
             // Sort by overlaps
-            nodesInCurrentRow.sort(function (a, b) {
+            nodesInCurrentLayer.sort(function (a, b) {
               return b.overlapCount - a.overlapCount;
             });
             // Remove the node with most overlap
-            var first = nodesInCurrentRow.shift();
+            var first = nodesInCurrentLayer.shift();
             // Update width
-            currentRowWidth -= first.width;
-            currentRowWidth += options.stubWidth;
+            currentlayerWidth -= first.width;
+            currentlayerWidth += options.stubWidth;
             // Update overlap count for the remaining nodes
             first.overlaps.forEach(function (node) {
               node.overlapCount--;
             });
-            // Add removed node to the next row
+            // Add removed node to the next layer
             puntedNodes.push(first);
           }
-          rows.push(nodesInCurrentRow);
+          layers.push(nodesInCurrentLayer);
           puntedWidth = distributor.computeRequiredWidth(puntedNodes);
         }
         if (puntedNodes.length > 0) {
-          rows.push(puntedNodes);
+          layers.push(puntedNodes);
         }
         // Create stubs
-        // From last row
-        for (var i = rows.length - 1; i >= 1; i--) {
-          var row = rows[i];
-          // For each node in the row
-          for (var k = 0; k < row.length; k++) {
-            var node = row[k];
+        // From last layer
+        for (var i = layers.length - 1; i >= 1; i--) {
+          var layer = layers[i];
+          // For each node in the layer
+          for (var k = 0; k < layer.length; k++) {
+            var node = layer[k];
             // If it is not a stub
             if (node.isStub())
               continue;
-            // Create one stub for each row above it
+            // Create one stub for each layer above it
             var stub = node;
             for (var j = i - 1; j >= 0; j--) {
               stub = stub.createStub(options.stubWidth);
-              rows[j].push(stub);
+              layers[j].push(stub);
             }
           }
         }
-        return rows;
+        return layers;
       }
     };
     distributor.countIdealOverlaps = function (nodes) {
-      var iTree = new IntervalTree(options.rowWidth / 2);
+      var iTree = new IntervalTree(options.layerWidth / 2);
       nodes.forEach(function (node) {
         iTree.add([
           node.idealLeft(),
@@ -1523,15 +1523,15 @@ core_metrics = function (helper) {
   //---------------------------------------------------
   var module = function () {
     var metrics = {};
-    function convertNodesToRowsOfNodes(nodes) {
+    function toLayers(nodes) {
       return nodes.length === 0 || Array.isArray(nodes[0]) ? nodes : [nodes];
     }
     metrics.displacement = function (nodes) {
       if (nodes.length === 0)
         return 0;
-      var rows = convertNodesToRowsOfNodes(nodes);
-      return helper.sum(rows, function (row) {
-        return helper.sum(row, function (node) {
+      var layers = toLayers(nodes);
+      return helper.sum(layers, function (layer) {
+        return helper.sum(layer, function (node) {
           return Math.abs(node.displacement());
         });
       });
@@ -1539,9 +1539,9 @@ core_metrics = function (helper) {
     metrics.overflow = function (nodes, minPos, maxPos) {
       if (nodes.length === 0 || !helper.isDefined(minPos) && !helper.isDefined(maxPos))
         return 0;
-      var rows = convertNodesToRowsOfNodes(nodes);
-      return helper.sum(rows, function (row) {
-        return helper.sum(row, function (node) {
+      var layers = toLayers(nodes);
+      return helper.sum(layers, function (layer) {
+        return helper.sum(layer, function (node) {
           var l = node.currentLeft();
           var r = node.currentRight();
           if (helper.isDefined(minPos)) {
@@ -1562,13 +1562,13 @@ core_metrics = function (helper) {
         });
       });
     };
-    metrics.overDensity = function (nodes, density, rowWidth, nodeSpacing) {
+    metrics.overDensity = function (nodes, density, layerWidth, nodeSpacing) {
       if (nodes.length === 0)
         return 0;
-      var limit = density * rowWidth;
-      var rows = convertNodesToRowsOfNodes(nodes);
-      return helper.sum(rows, function (row) {
-        var width = helper.sum(row, function (node) {
+      var limit = density * layerWidth;
+      var layers = toLayers(nodes);
+      return helper.sum(layers, function (layer) {
+        var width = helper.sum(layer, function (node) {
           return node.width + nodeSpacing;
         }) - nodeSpacing;
         return width <= limit ? 0 : width - limit;
@@ -1577,12 +1577,12 @@ core_metrics = function (helper) {
     metrics.overlapCount = function (nodes, buffer) {
       if (nodes.length === 0)
         return 0;
-      var rows = convertNodesToRowsOfNodes(nodes);
-      return helper.sum(rows, function (row) {
+      var layers = toLayers(nodes);
+      return helper.sum(layers, function (layer) {
         var count = 0;
-        for (var i = 0; i < row.length; i++) {
-          for (var j = i + 1; j < row.length; j++) {
-            if (row[i].overlapWithNode(row[j], buffer)) {
+        for (var i = 0; i < layer.length; i++) {
+          for (var j = i + 1; j < layer.length; j++) {
+            if (layer[i].overlapWithNode(layer[j], buffer)) {
               count++;
             }
           }
@@ -1593,12 +1593,12 @@ core_metrics = function (helper) {
     metrics.overlapSpace = function (nodes) {
       if (nodes.length === 0)
         return 0;
-      var rows = convertNodesToRowsOfNodes(nodes);
-      return helper.sum(rows, function (row) {
+      var layers = toLayers(nodes);
+      return helper.sum(layers, function (layer) {
         var count = 0;
-        for (var i = 0; i < row.length; i++) {
-          for (var j = i + 1; j < row.length; j++) {
-            var distance = row[i].distanceFrom(row[j]);
+        for (var i = 0; i < layer.length; i++) {
+          for (var j = i + 1; j < layer.length; j++) {
+            var distance = layer[i].distanceFrom(layer[j]);
             count += distance < 0 ? Math.abs(distance) : 0;
           }
         }
@@ -1608,11 +1608,11 @@ core_metrics = function (helper) {
     metrics.weightedAllocatedSpace = function (nodes) {
       if (nodes.length === 0)
         return 0;
-      var rows = convertNodesToRowsOfNodes(nodes);
+      var layers = toLayers(nodes);
       console.log('nodes', nodes);
-      return helper.sum(rows, function (row, rowIndex) {
-        console.log('rowIndex', rowIndex);
-        return rowIndex * helper.sum(row, function (d) {
+      return helper.sum(layers, function (layer, layerIndex) {
+        console.log('layerIndex', layerIndex);
+        return layerIndex * helper.sum(layer, function (d) {
           return d.width;
         });
       });
@@ -1639,30 +1639,30 @@ core_force = function (Simulator, Distributor, metrics, helper, Spring) {
     pullForce: new Spring(1),
     roundsPerTick: 100,
     algorithm: 'overlap',
-    rowWidth: 1000,
+    layerWidth: 1000,
     density: 0.85,
     // bundleStubs: false,
     stubWidth: 1
   };
   var Force = function (options) {
     var force = {};
-    var dispatch = helper.dispatch('start', 'tick', 'endRow', 'end');
+    var dispatch = helper.dispatch('start', 'tick', 'endLayer', 'end');
     options = helper.extend({}, DEFAULT_OPTIONS, options);
     var distributor = new Distributor(helper.extractKeys(options, Object.keys(Distributor.DEFAULT_OPTIONS)));
     var simulators = [];
     var nodes = [];
-    var rows = null;
+    var layers = null;
     var isRunning = false;
     force.nodes = function (x) {
       if (!arguments.length)
         return nodes;
       nodes = x;
-      rows = null;
+      layers = null;
       simulators = [];
       return force;
     };
-    force.getRows = function () {
-      return rows;
+    force.getLayers = function () {
+      return layers;
     };
     force.options = function (x) {
       if (!arguments.length)
@@ -1679,10 +1679,10 @@ core_force = function (Simulator, Distributor, metrics, helper, Spring) {
       if (isRunning) {
         throw 'This function cannot be called while the simulator is running. Stop it first.';
       }
-      rows = distributor.distribute(nodes);
+      layers = distributor.distribute(nodes);
       var simOptions = helper.extractKeys(options, Object.keys(Simulator.DEFAULT_OPTIONS));
-      simulators = rows.map(function (row) {
-        return new Simulator(simOptions).nodes(row);
+      simulators = layers.map(function (layer) {
+        return new Simulator(simOptions).nodes(layer);
       });
       return force;
     };
@@ -1711,32 +1711,32 @@ core_force = function (Simulator, Distributor, metrics, helper, Spring) {
       if (isRunning) {
         throw 'This function cannot be called while the simulator is running. Stop it first.';
       }
-      if (!rows) {
+      if (!layers) {
         force.distribute();
       }
       return force.initialize().resume(maxRound);
     };
     force.resume = function (additionalRound) {
-      if (rows.length === 0)
+      if (layers.length === 0)
         return force;
       if (!isRunning) {
-        var rowIndex = 0;
+        var layerIndex = 0;
         dispatch.start({ type: 'start' });
         var simulate = function () {
-          var sim = simulators[rowIndex];
+          var sim = simulators[layerIndex];
           if (!sim)
             return;
           sim.on('tick', function (event) {
-            dispatch.tick(helper.extend({}, event, { row: rowIndex }));
+            dispatch.tick(helper.extend({}, event, { layerIndex: layerIndex }));
           });
           sim.on('end', function (event) {
-            dispatch.endRow(helper.extend({}, event, {
-              type: 'endRow',
-              row: rowIndex
+            dispatch.endLayer(helper.extend({}, event, {
+              type: 'endLayer',
+              layerIndex: layerIndex
             }));
-            rowIndex++;
-            // Still have row(s) left
-            if (rowIndex < rows.length) {
+            layerIndex++;
+            // Still have layer(s) left
+            if (layerIndex < layers.length) {
               simulate();
             }  // really end
             else {
@@ -1744,7 +1744,7 @@ core_force = function (Simulator, Distributor, metrics, helper, Spring) {
               isRunning = false;
             }
           });
-          if (rowIndex > 0) {
+          if (layerIndex > 0) {
             sim.start(additionalRound);
           } else {
             sim.resume(additionalRound);
@@ -1776,13 +1776,13 @@ core_force = function (Simulator, Distributor, metrics, helper, Spring) {
     force.metric = function (name) {
       switch (name) {
       case 'overflow':
-        return metrics[name](rows, options.minPos, options.maxPos);
+        return metrics[name](layers, options.minPos, options.maxPos);
       case 'overDensity':
-        return metrics[name](rows, options.density, options.rowWidth, options.nodeSpacing - 1);
+        return metrics[name](layers, options.density, options.layerWidth, options.nodeSpacing - 1);
       case 'overlapCount':
-        return metrics[name](rows, options.nodeSpacing - 1);
+        return metrics[name](layers, options.nodeSpacing - 1);
       default:
-        return metrics[name] ? metrics[name](rows) : null;
+        return metrics[name] ? metrics[name](layers) : null;
       }
     };
     helper.rebind(force, dispatch, 'on');
@@ -1800,28 +1800,33 @@ core_renderer = function (helper) {
   //---------------------------------------------------
   function Renderer(options) {
     this.options = helper.extend({
-      rowGap: 60,
+      layerGap: 60,
       labelHeight: 10
     }, options);
   }
-  function pos(x, y) {
+  function L(x, y) {
     return [
+      'L',
       x,
       y
-    ].join(',');
-  }
-  function L(x, y) {
-    return 'L ' + pos(x, y);
+    ].join(' ');
   }
   function M(x, y) {
-    return 'M ' + pos(x, y);
+    return [
+      'M',
+      x,
+      y
+    ].join(' ');
   }
   function C(cx1, cy1, cx2, cy2, x, y) {
     return [
       'C',
-      pos(cx1, cy1),
-      pos(cx2, cy2),
-      pos(x, y)
+      cx1,
+      cy1,
+      cx2,
+      cy2,
+      x,
+      y
     ].join(' ');
   }
   function verticalConnect(x1, y1, x2, y2) {
@@ -1840,14 +1845,14 @@ core_renderer = function (helper) {
   //       yPos += options.labelHeight;
   //       steps.push([hop.idealPos, yPos]);
   //     }
-  //     steps.push([hop.currentPos, yPos + options.rowGap]);
-  //     yPos += options.rowGap;
+  //     steps.push([hop.currentPos, yPos + options.layerGap]);
+  //     yPos += options.layerGap;
   //   });
   //   return points;
   // };
-  Renderer.prototype.nodePos = function (node) {
+  Renderer.prototype.layerPos = function (node) {
     var options = this.options;
-    return node.getLevel() * (options.rowGap + options.labelHeight) + options.rowGap;
+    return node.getLevel() * (options.layerGap + options.labelHeight) + options.layerGap;
   };
   Renderer.prototype.verticalPath = function (node) {
     var options = this.options;
@@ -1861,8 +1866,8 @@ core_renderer = function (helper) {
         yPos += options.labelHeight;
         steps.push(L(hop.idealPos, yPos));
       }
-      steps.push(verticalConnect(hop.idealPos, yPos, hop.currentPos, yPos + options.rowGap));
-      yPos += options.rowGap;
+      steps.push(verticalConnect(hop.idealPos, yPos, hop.currentPos, yPos + options.layerGap));
+      yPos += options.layerGap;
     });
     return steps.join(' ');
   };

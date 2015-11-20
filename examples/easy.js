@@ -36,9 +36,13 @@ var vis = d3.select('#timeline')
     .attr('transform', 'translate('+options.margin.left+','+options.margin.top+')');
 
 var renderer = new labella.Renderer({
-  rowGap: 60,
+  layerGap: 60,
   labelHeight: options.labelHeight
 });
+
+// ---------------------------------------------------
+// Draw dots on the timeline
+// ---------------------------------------------------
 
 vis.append('line')
   .attr('x2', innerWidth)
@@ -49,31 +53,24 @@ var linkLayer = vis.append('g');
 var labelLayer = vis.append('g');
 var dotLayer = vis.append('g');
 
+dotLayer.selectAll('circle.dot')
+  .data(nodes)
+.enter().append('circle')
+  .classed('dot', true)
+  .attr('r', 3)
+  .attr('cx', function(d){return d.getRoot().idealPos;})
+  .style('fill', '#222');
+
 function color(d,i){
   return colorScale(i);
 }
 
 function draw(nodes){
   nodes.forEach(function(node){
-    node.y = renderer.nodePos(node);
+    node.y = renderer.layerPos(node);
   });
 
-  // ---------------------------------------------------
-  // Draw dots on the timeline
-  // ---------------------------------------------------
-
-  dotLayer.selectAll('circle.dot')
-    .data(nodes)
-  .enter().append('circle')
-    .classed('dot', true)
-    .attr('r', 3)
-    .attr('cx', function(d){return d.getRoot().idealPos;})
-    .style('fill', '#222');
-
-  // ---------------------------------------------------
   // Draw label rectangles
-  // ---------------------------------------------------
-
   labelLayer.selectAll('rect.flag')
     .data(nodes)
   .enter().append('rect')
@@ -85,10 +82,7 @@ function draw(nodes){
     .style('opacity', function(d){return d.isStub() ? 0.6: 1;})
     .style('fill', color);
 
-  // ---------------------------------------------------
   // Draw path from point on the timeline to the label rectangle
-  // ---------------------------------------------------
-
   linkLayer.selectAll('path')
     .data(nodes)
   .enter().append('path')

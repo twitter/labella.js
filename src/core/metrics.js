@@ -9,15 +9,15 @@ function(helper){
 var module = (function(){
   var metrics = {};
 
-  function convertNodesToRowsOfNodes(nodes){
+  function toLayers(nodes){
     return nodes.length===0 || Array.isArray(nodes[0]) ? nodes : [nodes];
   }
 
   metrics.displacement = function(nodes){
     if(nodes.length===0) return 0;
-    var rows = convertNodesToRowsOfNodes(nodes);
-    return helper.sum(rows, function(row){
-      return helper.sum(row, function(node){
+    var layers = toLayers(nodes);
+    return helper.sum(layers, function(layer){
+      return helper.sum(layer, function(node){
         return Math.abs(node.displacement());
       });
     });
@@ -25,10 +25,10 @@ var module = (function(){
 
   metrics.overflow = function(nodes, minPos, maxPos){
     if(nodes.length===0 || (!helper.isDefined(minPos) && !helper.isDefined(maxPos))) return 0;
-    var rows = convertNodesToRowsOfNodes(nodes);
+    var layers = toLayers(nodes);
 
-    return helper.sum(rows, function(row){
-      return helper.sum(row, function(node){
+    return helper.sum(layers, function(layer){
+      return helper.sum(layer, function(node){
         var l = node.currentLeft();
         var r = node.currentRight();
 
@@ -56,14 +56,14 @@ var module = (function(){
 
   };
 
-  metrics.overDensity = function(nodes, density, rowWidth, nodeSpacing){
+  metrics.overDensity = function(nodes, density, layerWidth, nodeSpacing){
     if(nodes.length===0) return 0;
 
-    var limit = density * rowWidth;
+    var limit = density * layerWidth;
 
-    var rows = convertNodesToRowsOfNodes(nodes);
-    return helper.sum(rows, function(row){
-      var width = helper.sum(row, function(node){
+    var layers = toLayers(nodes);
+    return helper.sum(layers, function(layer){
+      var width = helper.sum(layer, function(node){
         return node.width + nodeSpacing;
       }) - nodeSpacing;
       return width <= limit ? 0 : width - limit;
@@ -72,12 +72,12 @@ var module = (function(){
 
   metrics.overlapCount = function(nodes, buffer){
     if(nodes.length===0) return 0;
-    var rows = convertNodesToRowsOfNodes(nodes);
-    return helper.sum(rows, function(row){
+    var layers = toLayers(nodes);
+    return helper.sum(layers, function(layer){
       var count = 0;
-      for(var i=0; i<row.length;i++){
-        for(var j=i+1; j<row.length; j++){
-          if(row[i].overlapWithNode(row[j], buffer)){
+      for(var i=0; i<layer.length;i++){
+        for(var j=i+1; j<layer.length; j++){
+          if(layer[i].overlapWithNode(layer[j], buffer)){
             count++;
           }
         }
@@ -88,12 +88,12 @@ var module = (function(){
 
   metrics.overlapSpace = function(nodes){
     if(nodes.length===0) return 0;
-    var rows = convertNodesToRowsOfNodes(nodes);
-    return helper.sum(rows, function(row){
+    var layers = toLayers(nodes);
+    return helper.sum(layers, function(layer){
       var count = 0;
-      for(var i=0; i<row.length;i++){
-        for(var j=i+1; j<row.length; j++){
-          var distance = row[i].distanceFrom(row[j]);
+      for(var i=0; i<layer.length;i++){
+        for(var j=i+1; j<layer.length; j++){
+          var distance = layer[i].distanceFrom(layer[j]);
           count += distance<0 ? Math.abs(distance) : 0;
         }
       }
@@ -103,12 +103,12 @@ var module = (function(){
 
   metrics.weightedAllocatedSpace = function(nodes){
     if(nodes.length===0) return 0;
-    var rows = convertNodesToRowsOfNodes(nodes);
+    var layers = toLayers(nodes);
     console.log('nodes', nodes);
 
-    return helper.sum(rows, function(row, rowIndex){
-      console.log('rowIndex', rowIndex);
-      return rowIndex * helper.sum(row, function(d){return d.width;});
+    return helper.sum(layers, function(layer, layerIndex){
+      console.log('layerIndex', layerIndex);
+      return layerIndex * helper.sum(layer, function(d){return d.width;});
     });
   };
 

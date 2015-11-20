@@ -1,7 +1,7 @@
 var HorizontalTimeline = d3Kit.factory.createChart({
   margin: {left: 20, right: 20, top: 20, bottom: 30},
   initialHeight: 100,
-  rowGap: 60,
+  layerGap: 60,
   labelHeight: 12
 }, [], function(skeleton){
 
@@ -10,7 +10,7 @@ var HorizontalTimeline = d3Kit.factory.createChart({
   layers.create(['line', 'path', 'label', 'dot']);
   var colorScale = d3.scale.category10();
   var renderer = new labella.Renderer({
-    rowGap: options.rowGap,
+    layerGap: options.layerGap,
     labelHeight: options.labelHeight
   });
 
@@ -25,7 +25,7 @@ var HorizontalTimeline = d3Kit.factory.createChart({
 
     var nodes = skeleton.data();
     nodes.forEach(function(node){
-      node.y = renderer.nodePos(node);
+      node.y = renderer.layerPos(node);
     });
     var height = d3.max(nodes, function(d){return d.y;});
 
