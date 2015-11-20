@@ -1707,14 +1707,21 @@ core_force = function (Simulator, Distributor, metrics, helper, Spring) {
       });
       return force;
     };
-    force.start = function (maxRound) {
+    force.start = function (maxRound, sync) {
       if (isRunning) {
         throw 'This function cannot be called while the simulator is running. Stop it first.';
       }
-      if (!layers) {
-        force.distribute();
+      if (sync) {
+        if (!layers) {
+          force.distribute();
+        }
+        force.initialize().resume(maxRound);
+      } else {
+        setTimeout(function () {
+          force.start(maxRound, true);
+        }, 0);
       }
-      return force.initialize().resume(maxRound);
+      return force;
     };
     force.resume = function (additionalRound) {
       if (layers.length === 0)

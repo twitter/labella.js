@@ -105,10 +105,13 @@ var Force = function(options){
     if(isRunning){
       throw 'This function cannot be called while the simulator is running. Stop it first.';
     }
-    if(!layers){
-      force.distribute();
-    }
-    return force.initialize().resume(maxRound);
+    setTimeout(function(){
+      if(!layers){
+        force.distribute();
+      }
+      force.initialize().resume(maxRound);
+    }, 0);
+    return force;
   };
 
   force.resume = function(additionalRound){
