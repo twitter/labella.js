@@ -1,6 +1,7 @@
 module.exports = {
   options: {
-    base: 'examples'
+    base: 'examples',
+    message: 'Auto-generated commit'
   },
   src: ['**']
 };
