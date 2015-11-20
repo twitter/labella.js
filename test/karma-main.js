@@ -18,15 +18,10 @@ require.config({
   // Karma serves files under /base, which is the "basePath" from your config file
   baseUrl: '/base/src',
   paths: {
-    'd3':                    '../bower_components/d3/d3.min',
-    'jquery':                '../bower_components/jquery/dist/jquery.min',
-    // dev dependencies
-    'chai':                  '../bower_components/chai/chai',
-    'chai-as-promised':      '../bower_components/chai-as-promised/lib/chai-as-promised'
+    'chai': '../node_modules/chai/chai'
   },
   shim: {
-    'chai':                   {exports: 'chai'},
-    'chai-as-promised':       {deps: ['chai']}
+    'chai': {exports: 'chai'}
   }
 });
 
