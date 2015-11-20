@@ -1,0 +1,19 @@
+{
+  "name": "angular-bacon",
+  "version": "2.0.0",
+  "main": "dist/angular-bacon.js",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "components"
+  ],
+  "dependencies": {
+    "bacon": "~0.7",
+    "angular": ">=1.2"
+  },
+  "devDependencies": {
+    "mocha": "1.9.0",
+    "chai": "1.6.0",
+    "angular-mocks": ">=1.2"
+  }
+}

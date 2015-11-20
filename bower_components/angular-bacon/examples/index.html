@@ -1,0 +1,39 @@
+<html>
+    <head>
+        <title>angular-bacon example</title>
+        <script type="text/javascript" src="../components/angular/angular.js"></script>
+        <script type="text/javascript" src="../components/bacon/dist/Bacon.js"></script>
+        <script type="text/javascript" src="../dist/angular-bacon.js"></script>
+        <script type="text/javascript" src="form-validation.js"></script>
+    </head>
+    <body ng-app="example">
+        <form ng-controller="form">
+            <label>Username</label>
+            <br />
+
+            <input type="text" ng-model="username" />
+            <div ng-switch="usernameState">
+                <span ng-switch-when="empty"></span>
+                <span ng-switch-when="loading">Loading</span>
+                <span ng-switch-when="taken">Username '{{username}}' is taken. Try 'user' instead...</span>
+                <span ng-switch-when="free">Free!</span>
+            </div>
+
+            <label>Password</label>
+            <br />
+
+            <input type="password" ng-model="password" />
+            <span ng-show="passwordInvalid">Password must be at least five characters long</span>
+            <br />
+
+            <label>Confirm password</label>
+            <br />
+
+            <input type="password" ng-model="passwordConfirm" />
+            <span ng-show="passwordsDontMatch">Passwords don't match</span>
+            <br />
+
+            <input type="submit" ng-disabled="!formValid" />
+        </form>
+    </body>
+</html>
