@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Labella.js</title>
+  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<a href="https://github.com/twitter/labella.js"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
+
+<header>
+  <h1>
+    <a href="index.html">
+      <b>Labella</b>.js
+    </a>
+  </h1>
+  <h2>Labels should be beautiful.</h2>
+</header>
+
+<div class="block">
+  <p>
+    Please
+    <a href="#" onClick='window.location="view-source:" + window.location.href'>view source</a>
+    to see how it was implemented.
+  </p>
+  <p>
+    See label placements in other directions:
+    <a href="basic_up.html">up</a> |
+    <a href="basic_down.html">down</a> |
+    <a href="basic_left.html">left</a> |
+    right
+  </p>
+</div>
+
+<div class="chart-container">
+  <div id="timeline"></div>
+</div>
+
+<footer>
+  Created by Krist Wongsuphasawat / <a href="https://twitter.com/kristw">@kristw</a>
+</footer>
+
+<script type="text/javascript" src="dist/labella.js"></script>
+<script type="text/javascript" src="bower_components/d3/d3.min.js"></script>
+<script type="text/javascript">
+
+// ---------------------------------------------------
+// Create dummy data
+// ---------------------------------------------------
+
+var nodes = [
+  // new labella.Node(idealPosition, width)
+  new labella.Node(1,50),
+  new labella.Node(2,50),
+  new labella.Node(3,50),
+  new labella.Node(3,50),
+  new labella.Node(3,50),
+  new labella.Node(304,50),
+  new labella.Node(454,50),
+  new labella.Node(454,50),
+  new labella.Node(454,50),
+  new labella.Node(804,50),
+  new labella.Node(804,70),
+  new labella.Node(804,50),
+  new labella.Node(804,50),
+  new labella.Node(854,50),
+  new labella.Node(854,50)
+];
+
+var options =   {
+  margin: {left: 20, right: 20, top: 20, bottom: 20},
+  initialWidth: 112,
+  initialHeight: 1000
+};
+
+var innerWidth =  options.initialWidth - options.margin.left - options.margin.right;
+var innerHeight = options.initialHeight - options.margin.top - options.margin.bottom;
+var colorScale = d3.scale.category10();
+
+var vis = d3.select('#timeline')
+  .append('svg')
+    .attr('width',  options.initialWidth)
+    .attr('height', options.initialHeight)
+  .append('g')
+    .attr('transform', 'translate('+(options.margin.left)+','+(options.margin.top)+')');
+
+// ---------------------------------------------------
+// Draw dots on the timeline
+// ---------------------------------------------------
+
+vis.append('line')
+  .classed('timeline', true)
+  .attr('y2', innerHeight);
+
+var linkLayer = vis.append('g');
+var labelLayer = vis.append('g');
+var dotLayer = vis.append('g');
+
+dotLayer.selectAll('circle.dot')
+  .data(nodes)
+.enter().append('circle')
+  .classed('dot', true)
+  .attr('r', 3)
+  .attr('cy', function(d){return d.getRoot().idealPos;});
+
+function color(d,i){
+  return colorScale(i);
+}
+
+//---------------------------------------------------
+// Labella has utility to help rendering
+//---------------------------------------------------
+
+var renderer = new labella.Renderer({
+  layerGap: 60,
+  labelHeight: 12,
+  direction: 'right'
+});
+
+function draw(nodes){
+  // Add x,y,dx,dy to node
+  renderer.layout(nodes);
+
+  // Draw label rectangles
+  labelLayer.selectAll('rect.flag')
+    .data(nodes)
+  .enter().append('rect')
+    .classed('flag', true)
+    .attr('x', function(d){ return d.x; })
+    .attr('y', function(d){ return d.y - d.dy/2; })
+    .attr('width', function(d){ return d.dx; })
+    .attr('height', function(d){ return d.dy; })
+    .style('fill', color);
+
+  // Draw path from point on the timeline to the label rectangle
+  linkLayer.selectAll('path.link')
+    .data(nodes)
+  .enter().append('path')
+    .classed('link', true)
+    .attr('d', function(d){return renderer.generatePath(d);})
+    .style('stroke', color)
+    .style('stroke-width',2)
+    .style('opacity', 0.6)
+    .style('fill', 'none');
+}
+
+//---------------------------------------------------
+// Use labella.Force to place the labels
+//---------------------------------------------------
+
+var force = new labella.Force({
+  minPos: 0,
+  maxPos: 960
+});
+
+force
+  .nodes(nodes)
+  // Listen when the nodes' positions are fully updated.
+  .on('end', function(){
+    // The rendering is independent from the library.
+    // User can use canvas, svg or any library to draw the labels.
+    // In this example, the draw() function is defined above
+    // using the built-in utility labella.Renderer.
+    draw(force.nodes());
+  })
+  // Run simulation at most 100 rounds. It may end earlier if equillibrium is reached.
+  .start(100);
+
+</script>
+</body>
+
+</html>
