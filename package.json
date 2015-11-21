@@ -1,6 +1,6 @@
 {
   "name": "labella",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "May the force label you.",
   "main": "dist/labella.min.js",
   "directories": {
