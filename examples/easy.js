@@ -1,5 +1,8 @@
+// ---------------------------------------------------
 // Create dummy data
+// ---------------------------------------------------
 var nodes = [
+  // new labella.Node(idealPosition, width)
   new labella.Node(1,50),
   new labella.Node(2,50),
   new labella.Node(3,50),
@@ -20,8 +23,7 @@ var nodes = [
 var options =   {
   margin: {left: 20, right: 20, top: 20, bottom: 20},
   initialWidth: 1000,
-  initialHeight: 112,
-  labelHeight: 12
+  initialHeight: 112
 };
 
 var innerWidth =  options.initialWidth - options.margin.left - options.margin.right;
@@ -34,11 +36,6 @@ var vis = d3.select('#timeline')
     .attr('height', options.initialHeight)
   .append('g')
     .attr('transform', 'translate('+options.margin.left+','+options.margin.top+')');
-
-var renderer = new labella.Renderer({
-  layerGap: 60,
-  labelHeight: options.labelHeight
-});
 
 // ---------------------------------------------------
 // Draw dots on the timeline
@@ -65,28 +62,35 @@ function color(d,i){
   return colorScale(i);
 }
 
+//---------------------------------------------------
+// Labella has utility to help rendering
+//---------------------------------------------------
+
+var renderer = new labella.Renderer({
+  layerGap: 60,
+  labelHeight: 12
+});
+
 function draw(nodes){
-  nodes.forEach(function(node){
-    node.y = renderer.layerPos(node);
-  });
+  // Add x,y,dx,dy to node
+  renderer.layout(nodes);
 
   // Draw label rectangles
   labelLayer.selectAll('rect.flag')
     .data(nodes)
   .enter().append('rect')
     .classed('flag', true)
-    .attr('x', function(d){ return d.currentPos - d.width/2; })
+    .attr('x', function(d){ return d.x - d.dx/2; })
     .attr('y', function(d){ return d.y; })
-    .attr('width', function(d){return d.width;})
-    .attr('height', options.labelHeight)
-    .style('opacity', function(d){return d.isStub() ? 0.6: 1;})
+    .attr('width', function(d){ return d.dx; })
+    .attr('height', function(d){ return d.dy; })
     .style('fill', color);
 
   // Draw path from point on the timeline to the label rectangle
   linkLayer.selectAll('path')
     .data(nodes)
   .enter().append('path')
-    .attr('d', function(d){return renderer.verticalPath(d);})
+    .attr('d', function(d){return renderer.generatePath(d);})
     .style('stroke', color)
     .style('stroke-width',2)
     .style('opacity', 0.6)
@@ -94,7 +98,7 @@ function draw(nodes){
 }
 
 //---------------------------------------------------
-// Labelling code here
+// Use labella.Force to place the labels
 //---------------------------------------------------
 
 var force = new labella.Force({
@@ -104,9 +108,8 @@ var force = new labella.Force({
 
 force
   .nodes(nodes)
-  // Listen when the nodes' positions are updated.
+  // Listen when the nodes' positions are fully updated.
   .on('end', function(){
-    // Each node.currentPos should be the position to place label
     // The rendering is independent from the library.
     // User can use canvas, svg or any library to draw the labels.
     // In this example, the draw() function is defined above

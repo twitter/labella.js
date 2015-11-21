@@ -9,73 +9,160 @@ function(helper){
 function Renderer(options){
   this.options = helper.extend({
     layerGap: 60,
-    labelHeight: 10
+    labelHeight: 10,
+    direction: 'down'
   }, options);
 }
 
-function L(x, y){
-  return ['L', x, y].join(' ');
+function lineTo(point){
+  return 'L ' + point.join(' ');
 }
 
-function M(x, y){
-  return ['M', x, y].join(' ');
+function moveTo(point){
+  return 'M ' + point.join(' ');
 }
 
-function C(cx1, cy1, cx2, cy2, x, y){
-  return ['C', cx1, cy1, cx2, cy2, x, y].join(' ');
+function curveTo(c1, c2, point2){
+  return 'C ' + c1.join(' ') + ' ' + c2.join(' ') + ' ' + point2.join(' ');
 }
 
-function verticalConnect(x1, y1, x2, y2){
-  var midY = (y1+y2)/2;
-  return C(x1, midY, x2, midY, x2, y2);
+function vCurveBetween(point1, point2){
+  var midY = (point1[1] + point2[1]) / 2;
+  return curveTo(
+    [point1[0], midY],
+    [point2[0], midY],
+    point2
+  );
 }
 
-// Renderer.prototype.generatePoints = function(node){
-//   var points = [];
-//   var options = this.options;
+function hCurveBetween(point1, point2){
+  var midY = (point1[0] + point2[0]) / 2;
+  return curveTo(
+    [midX, point1[1]],
+    [midX, point2[1]],
+    point2
+  );
+}
 
-//   var yPos = 0;
-//   node.getPathFromRoot().forEach(function(hop, level){
-//     if(level===0){
-//       steps.push([hop.idealPos, yPos]);
-//     }
-//     else{
-//       yPos += options.labelHeight;
-//       steps.push([hop.idealPos, yPos]);
-//     }
-//     steps.push([hop.currentPos, yPos + options.layerGap]);
-//     yPos += options.layerGap;
-//   });
-
-//   return points;
-// };
-
-Renderer.prototype.layerPos = function(node){
+Renderer.prototype.getWaypoints = function(node){
   var options = this.options;
-  return node.getLevel() * (options.layerGap + options.labelHeight) + options.layerGap;
-};
-
-Renderer.prototype.verticalPath = function(node){
-  var options = this.options;
+  var direction = options.direction;
 
   var hops = node.getPathFromRoot();
-  var steps = [];
+  var gap = options.labelHeight + options.layerGap;
 
-  var yPos = 0;
-  hops.forEach(function(hop, level){
-    if(level===0){
-      steps.push(M(hop.idealPos, yPos));
-    }
-    else{
-      yPos += options.labelHeight;
-      steps.push(L(hop.idealPos, yPos));
-    }
-    steps.push(verticalConnect(
-      hop.idealPos, yPos,
-      hop.currentPos, yPos + options.layerGap
-    ));
-    yPos += options.layerGap;
-  });
+  if(direction==='left'){
+    return [[[0, hops[0].idealPos]]].concat(hops.map(function(hop, level){
+      var xPos = gap * (level+1) * -1;
+      return [
+        [xPos + options.labelHeight, hop.currentPos],
+        [xPos, hop.currentPos]
+      ];
+    }));
+  }
+  if(direction==='right'){
+    return [[[0, hops[0].idealPos]]].concat(hops.map(function(hop, level){
+      var xPos = gap * (level+1);
+      return [
+        [xPos - options.labelHeight, hop.currentPos],
+        [xPos, hop.currentPos]
+      ];
+    }));
+  }
+  else if(direction==='up'){
+    return [[[hops[0].idealPos, 0]]].concat(hops.map(function(hop, level){
+      var yPos = gap * (level+1) * -1;
+      return [
+        [hop.currentPos, yPos + options.labelHeight],
+        [hop.currentPos, yPos]
+      ];
+    }));
+  }
+  else{
+    return [[[hops[0].idealPos, 0]]].concat(hops.map(function(hop, level){
+      var yPos = gap * (level+1);
+      return [
+        [hop.currentPos, yPos - options.labelHeight],
+        [hop.currentPos, yPos]
+      ];
+    }));
+  }
+};
+
+Renderer.prototype.layout = function(nodes){
+  var options = this.options;
+
+  var gap = options.layerGap + options.labelHeight;
+
+  switch(options.direction){
+    case 'left':
+      nodes.forEach(function(node){
+        var pos = node.getLevel() * gap + options.layerGap;
+        node.x = -pos - options.labelHeight;
+        node.y = node.currentPos;
+        node.dx = options.labelHeight;
+        node.dy = node.width;
+      });
+      break;
+    case 'right':
+      nodes.forEach(function(node){
+        var pos = node.getLevel() * gap + options.layerGap;
+        node.x = pos;
+        node.y = node.currentPos;
+        node.dx = options.labelHeight;
+        node.dy = node.width;
+      });
+      break;
+    case 'up':
+      nodes.forEach(function(node){
+        var pos = node.getLevel() * gap + options.layerGap;
+        node.x = node.currentPos;
+        node.y = -pos - options.labelHeight;
+        node.dx = node.width;
+        node.dy = options.labelHeight;
+      });
+      break;
+    default:
+    case 'down':
+      nodes.forEach(function(node){
+        var pos = node.getLevel() * gap + options.layerGap;
+        node.x = node.currentPos;
+        node.y = pos;
+        node.dx = node.width;
+        node.dy = options.labelHeight;
+      });
+      break;
+  }
+
+  return nodes;
+};
+
+Renderer.prototype.generatePath = function(node){
+  var options = this.options;
+  var direction = options.direction;
+
+  var waypoints = this.getWaypoints(node, direction);
+
+  var steps = [moveTo(waypoints[0][0])];
+
+  if(direction==='left' || direction==='right'){
+    waypoints.reduce(function(prev, current, level){
+      steps.push(hCurveBetween(prev[prev.length-1], current[0]));
+      if(level < waypoints.length-1){
+        steps.push(lineTo(current[1]));
+      }
+      return current;
+    });
+  }
+  else{
+    waypoints.reduce(function(prev, current, level){
+      steps.push(vCurveBetween(prev[prev.length-1], current[0]));
+      if(level < waypoints.length-1){
+        steps.push(lineTo(current[1]));
+      }
+      return current;
+    });
+  }
 
   return steps.join(' ');
 };

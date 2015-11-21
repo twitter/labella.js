@@ -24,9 +24,8 @@ var HorizontalTimeline = d3Kit.factory.createChart({
     if(!skeleton.hasData()) return;
 
     var nodes = skeleton.data();
-    nodes.forEach(function(node){
-      node.y = renderer.layerPos(node);
-    });
+    renderer.layout(nodes);
+
     var height = d3.max(nodes, function(d){return d.y;});
 
     skeleton.height(height + options.margin.top + options.margin.bottom);
@@ -64,7 +63,7 @@ var HorizontalTimeline = d3Kit.factory.createChart({
       .style('fill', color);
 
     rect
-      .attr('x', function(d){ return d.currentPos - d.width/2; })
+      .attr('x', function(d){ return d.x - d.width/2; })
       .attr('y', function(d){ return d.y; })
       .attr('width', function(d){return d.width;});
 
@@ -91,7 +90,7 @@ var HorizontalTimeline = d3Kit.factory.createChart({
   }
 
   function pathFn(d){
-    return renderer.verticalPath(d);
+    return renderer.generatePath(d);
   }
 
   return skeleton;
