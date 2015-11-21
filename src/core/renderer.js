@@ -36,7 +36,7 @@ function vCurveBetween(point1, point2){
 }
 
 function hCurveBetween(point1, point2){
-  var midY = (point1[0] + point2[0]) / 2;
+  var midX = (point1[0] + point2[0]) / 2;
   return curveTo(
     [midX, point1[1]],
     [midX, point2[1]],

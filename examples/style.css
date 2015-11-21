@@ -19,7 +19,7 @@ h1, h2, h3{
   color: #C2A53C;
 }
 
-h1{
+h1, h1 a, h1 a:link, h1 a:visited{
   font-weight: 300;
   font-size: 50px;
   margin-top: 20px;
@@ -27,6 +27,12 @@ h1{
   padding: 0px 6px 4px 6px;
   color: #C2A53C;
 }
+
+h1 a:hover{
+  color: #D5C59F;
+  text-decoration: none;
+}
+
 h2{
   font-weight: 100;
   font-size: 24px;
@@ -77,6 +83,16 @@ a:hover{
 svg {
   background: #eee;
   background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1IiBoZWlnaHQ9IjUiPgo8cmVjdCB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSIjZmZmIj48L3JlY3Q+CjxyZWN0IHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9IiNjY2MiPjwvcmVjdD4KPC9zdmc+");
+
+}
+
+line.timeline{
+  stroke-width: 2px;
+  stroke: #222;
+}
+
+circle.dot{
+  fill: #222;
 }
 
 .form-control, button.btn{
