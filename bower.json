@@ -1,16 +1,16 @@
 {
-  "name": "labella.js",
-  "version": "1.0.0",
+  "name": "labella",
+  "version": "0.0.0",
   "authors": [
-    "Krist Wongsuphasawat <kristw@twitter.com>"
+    "Krist Wongsuphasawat <krist.wongz@gmail.com>"
   ],
   "description": "May the force label you",
   "main": "dist/labella.min.js",
   "moduleType": [
-    "amd"
+    "umd"
   ],
   "keywords": [
-    "d3",
+    "labella.js",
     "visualization",
     "javascript"
   ],
