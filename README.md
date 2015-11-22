@@ -21,7 +21,7 @@ bower install labella --save
 
 ### Example
 
-```
+```javascript
 // idealPos: The most preferred position for that label, if possible
 // width:    The width of each label
 var nodes = [
