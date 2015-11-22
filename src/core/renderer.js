@@ -9,7 +9,7 @@ function(helper){
 function Renderer(options){
   this.options = helper.extend({
     layerGap: 60,
-    labelHeight: 10,
+    nodeHeight: 10,
     direction: 'down'
   }, options);
 }
@@ -49,13 +49,13 @@ Renderer.prototype.getWaypoints = function(node){
   var direction = options.direction;
 
   var hops = node.getPathFromRoot();
-  var gap = options.labelHeight + options.layerGap;
+  var gap = options.nodeHeight + options.layerGap;
 
   if(direction==='left'){
     return [[[0, hops[0].idealPos]]].concat(hops.map(function(hop, level){
       var xPos = gap * (level+1) * -1;
       return [
-        [xPos + options.labelHeight, hop.currentPos],
+        [xPos + options.nodeHeight, hop.currentPos],
         [xPos, hop.currentPos]
       ];
     }));
@@ -64,7 +64,7 @@ Renderer.prototype.getWaypoints = function(node){
     return [[[0, hops[0].idealPos]]].concat(hops.map(function(hop, level){
       var xPos = gap * (level+1);
       return [
-        [xPos - options.labelHeight, hop.currentPos],
+        [xPos - options.nodeHeight, hop.currentPos],
         [xPos, hop.currentPos]
       ];
     }));
@@ -73,7 +73,7 @@ Renderer.prototype.getWaypoints = function(node){
     return [[[hops[0].idealPos, 0]]].concat(hops.map(function(hop, level){
       var yPos = gap * (level+1) * -1;
       return [
-        [hop.currentPos, yPos + options.labelHeight],
+        [hop.currentPos, yPos + options.nodeHeight],
         [hop.currentPos, yPos]
       ];
     }));
@@ -82,7 +82,7 @@ Renderer.prototype.getWaypoints = function(node){
     return [[[hops[0].idealPos, 0]]].concat(hops.map(function(hop, level){
       var yPos = gap * (level+1);
       return [
-        [hop.currentPos, yPos - options.labelHeight],
+        [hop.currentPos, yPos - options.nodeHeight],
         [hop.currentPos, yPos]
       ];
     }));
@@ -92,15 +92,15 @@ Renderer.prototype.getWaypoints = function(node){
 Renderer.prototype.layout = function(nodes){
   var options = this.options;
 
-  var gap = options.layerGap + options.labelHeight;
+  var gap = options.layerGap + options.nodeHeight;
 
   switch(options.direction){
     case 'left':
       nodes.forEach(function(node){
         var pos = node.getLevel() * gap + options.layerGap;
-        node.x = -pos - options.labelHeight;
+        node.x = -pos - options.nodeHeight;
         node.y = node.currentPos;
-        node.dx = options.labelHeight;
+        node.dx = options.nodeHeight;
         node.dy = node.width;
       });
       break;
@@ -109,7 +109,7 @@ Renderer.prototype.layout = function(nodes){
         var pos = node.getLevel() * gap + options.layerGap;
         node.x = pos;
         node.y = node.currentPos;
-        node.dx = options.labelHeight;
+        node.dx = options.nodeHeight;
         node.dy = node.width;
       });
       break;
@@ -117,9 +117,9 @@ Renderer.prototype.layout = function(nodes){
       nodes.forEach(function(node){
         var pos = node.getLevel() * gap + options.layerGap;
         node.x = node.currentPos;
-        node.y = -pos - options.labelHeight;
+        node.y = -pos - options.nodeHeight;
         node.dx = node.width;
-        node.dy = options.labelHeight;
+        node.dy = options.nodeHeight;
       });
       break;
     default:
@@ -129,7 +129,7 @@ Renderer.prototype.layout = function(nodes){
         node.x = node.currentPos;
         node.y = pos;
         node.dx = node.width;
-        node.dy = options.labelHeight;
+        node.dy = options.nodeHeight;
       });
       break;
   }

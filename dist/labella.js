@@ -1807,7 +1807,7 @@ core_renderer = function (helper) {
   function Renderer(options) {
     this.options = helper.extend({
       layerGap: 60,
-      labelHeight: 10,
+      nodeHeight: 10,
       direction: 'down'
     }, options);
   }
@@ -1844,7 +1844,7 @@ core_renderer = function (helper) {
     var options = this.options;
     var direction = options.direction;
     var hops = node.getPathFromRoot();
-    var gap = options.labelHeight + options.layerGap;
+    var gap = options.nodeHeight + options.layerGap;
     if (direction === 'left') {
       return [[[
             0,
@@ -1853,7 +1853,7 @@ core_renderer = function (helper) {
         var xPos = gap * (level + 1) * -1;
         return [
           [
-            xPos + options.labelHeight,
+            xPos + options.nodeHeight,
             hop.currentPos
           ],
           [
@@ -1871,7 +1871,7 @@ core_renderer = function (helper) {
         var xPos = gap * (level + 1);
         return [
           [
-            xPos - options.labelHeight,
+            xPos - options.nodeHeight,
             hop.currentPos
           ],
           [
@@ -1889,7 +1889,7 @@ core_renderer = function (helper) {
         return [
           [
             hop.currentPos,
-            yPos + options.labelHeight
+            yPos + options.nodeHeight
           ],
           [
             hop.currentPos,
@@ -1906,7 +1906,7 @@ core_renderer = function (helper) {
         return [
           [
             hop.currentPos,
-            yPos - options.labelHeight
+            yPos - options.nodeHeight
           ],
           [
             hop.currentPos,
@@ -1918,14 +1918,14 @@ core_renderer = function (helper) {
   };
   Renderer.prototype.layout = function (nodes) {
     var options = this.options;
-    var gap = options.layerGap + options.labelHeight;
+    var gap = options.layerGap + options.nodeHeight;
     switch (options.direction) {
     case 'left':
       nodes.forEach(function (node) {
         var pos = node.getLevel() * gap + options.layerGap;
-        node.x = -pos - options.labelHeight;
+        node.x = -pos - options.nodeHeight;
         node.y = node.currentPos;
-        node.dx = options.labelHeight;
+        node.dx = options.nodeHeight;
         node.dy = node.width;
       });
       break;
@@ -1934,7 +1934,7 @@ core_renderer = function (helper) {
         var pos = node.getLevel() * gap + options.layerGap;
         node.x = pos;
         node.y = node.currentPos;
-        node.dx = options.labelHeight;
+        node.dx = options.nodeHeight;
         node.dy = node.width;
       });
       break;
@@ -1942,9 +1942,9 @@ core_renderer = function (helper) {
       nodes.forEach(function (node) {
         var pos = node.getLevel() * gap + options.layerGap;
         node.x = node.currentPos;
-        node.y = -pos - options.labelHeight;
+        node.y = -pos - options.nodeHeight;
         node.dx = node.width;
-        node.dy = options.labelHeight;
+        node.dy = options.nodeHeight;
       });
       break;
     default:
@@ -1954,7 +1954,7 @@ core_renderer = function (helper) {
         node.x = node.currentPos;
         node.y = pos;
         node.dx = node.width;
-        node.dy = options.labelHeight;
+        node.dy = options.nodeHeight;
       });
       break;
     }

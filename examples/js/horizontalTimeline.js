@@ -2,7 +2,7 @@ var HorizontalTimeline = d3Kit.factory.createChart({
   margin: {left: 20, right: 20, top: 20, bottom: 30},
   initialHeight: 100,
   layerGap: 60,
-  labelHeight: 12
+  nodeHeight: 12
 }, [], function(skeleton){
 
   var options = skeleton.options();
@@ -11,7 +11,7 @@ var HorizontalTimeline = d3Kit.factory.createChart({
   var colorScale = d3.scale.category10();
   var renderer = new labella.Renderer({
     layerGap: options.layerGap,
-    labelHeight: options.labelHeight
+    nodeHeight: options.nodeHeight
   });
 
   skeleton.on('data', visualize);
@@ -57,7 +57,7 @@ var HorizontalTimeline = d3Kit.factory.createChart({
 
     rect.enter().append('rect')
       .classed('flag', true)
-      .attr('height', options.labelHeight)
+      .attr('height', options.nodeHeight)
       .on('click', function(d){return console.log(d);})
       .style('opacity', function(d){return d.isStub() ? 0.6: 1;})
       .style('fill', color);
