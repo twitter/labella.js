@@ -11,7 +11,7 @@ API Reference ▸
 
 Node is an instance to wrap each of your label. You have to specify a desired position (*idealPos*) and *width* for each label. You may also attach *data* to the node, such as label text.
 
-<a name="constructor" href="#constructor">#</a> var node = new **labella.Node**(*idealPos:Number*, *width:Number* [, *data:Any*]);
+<a name="constructor" href="#constructor">#</a> var node = new **labella.Node**(idealPos:Number, width:Number [, data:Any]);
 
 ### Fields
 
@@ -28,7 +28,7 @@ Current position of this node, set to *idealPos* automatically in the beginning.
 The width of this node. Note that this width means the width along the main axis, so if the axis is vertical, this field should be the height of the label.
 
 <a name="data" href="#data">#</a> node.**data**
-(optional)
+
 
 Attach data about each label. This can be any value (String, Number, etc.)
 
