@@ -104,10 +104,8 @@ var module = (function(){
   metrics.weightedAllocatedSpace = function(nodes){
     if(nodes.length===0) return 0;
     var layers = toLayers(nodes);
-    console.log('nodes', nodes);
 
     return helper.sum(layers, function(layer, layerIndex){
-      console.log('layerIndex', layerIndex);
       return layerIndex * helper.sum(layer, function(d){return d.width;});
     });
   };

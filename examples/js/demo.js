@@ -63,7 +63,6 @@ angular.module('app', [])
           console.log('completed in ' + (t2 - t1) + 'ms');
           chart.data(force.nodes());
           $scope.metrics = force.metrics();
-          console.log('$scope.metrics', $scope.metrics);
         }, 0);
       });
 
