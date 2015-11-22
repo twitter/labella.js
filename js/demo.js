@@ -9,14 +9,14 @@ angular.module('app', [])
     $scope.autoLayout = true;
 
     $scope.options = {
-      amount: 30,
-      minWidth: 50,
-      maxWidth: 50,
+      amount: 20,
+      minWidth: 40,
+      maxWidth: 60,
 
       nodeSpacing: 3,
       roundsPerTick: 5,
       minPos: 0,
-      maxPos: 900,
+      maxPos: 960,
       maxRound: 100,
 
       density: 0.75,
@@ -31,7 +31,8 @@ angular.module('app', [])
     function generate(options){
       nodes = labella.util.generateNodes(+options.amount, {
         minWidth: +options.minWidth,
-        maxWidth: +options.maxWidth
+        maxWidth: +options.maxWidth,
+        maxPos: 960
       });
     }
 
@@ -63,7 +64,6 @@ angular.module('app', [])
           console.log('completed in ' + (t2 - t1) + 'ms');
           chart.data(force.nodes());
           $scope.metrics = force.metrics();
-          console.log('$scope.metrics', $scope.metrics);
         }, 0);
       });
 
