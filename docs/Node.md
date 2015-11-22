@@ -1,32 +1,36 @@
-Documentation ▸ 
-[Introduction](Introduction.md) | 
-[Development Guide](Development.md) | 
-[Demo](http://twitter.github.io/labella.js/)
-
-API Reference ▸ 
-[Force](Force.md) | 
-**Node** | 
+Docs ▸
+[Introduction](../README.md) |
+[Development](Development.md) |
+[Demo](http://twitter.github.io/labella.js/) ////
+API Reference ▸
+[Force](Force.md) |
+**Node** |
 [Renderer](Renderer.md)
 
 ## labella.Node
 
-Node is an instance to wrap each of your label. You have to specify a desired position (*idealPos*) and *width* for each label. You may also attach *data* to the node. This can be any value (String, Number, etc.)
+Node is an instance to wrap each of your label. You have to specify a desired position (*idealPos*) and *width* for each label. You may also attach *data* to the node, such as label text.
 
 <a name="constructor" href="#constructor">#</a> var node = new **labella.Node**(*idealPos:Number*, *width:Number* [, *data:Any*]);
 
 ### Fields
 
 <a name="idealPos" href="#idealPos">#</a> node.**idealPos**
-: description
+
+Desired position for this node
 
 <a name="currentPos" href="#currentPos">#</a> node.**currentPos**
-: description
+
+Current position of this node, set to *idealPos* automatically in the beginning. This field will be updated by the force to the position appropriate for drawing this node.
 
 <a name="width" href="#width">#</a> node.**width**
-: description
+
+The width of this node. Note that this width means the width along the main axis, so if the axis is vertical, this field should be the height of the label.
 
 <a name="data" href="#data">#</a> node.**data**
-: description
+(optional)
+
+Attach data about each label. This can be any value (String, Number, etc.)
 
 ### Functions
 

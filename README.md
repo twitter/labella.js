@@ -1,3 +1,8 @@
+Docs ▸
+**Introduction** |
+[Development](docs/Development.md) |
+[Demo](http://twitter.github.io/labella.js/)
+
 # Labella.js
 
 *"Labels should be beautiful."*
@@ -22,7 +27,7 @@ bower install labella --save
 ### Example
 
 ```javascript
-// idealPos: The most preferred position for that label, if possible
+// idealPos: The most preferred position for each label
 // width:    The width of each label
 var nodes = [
   new labella.Node(1, 50), // idealPos, width
