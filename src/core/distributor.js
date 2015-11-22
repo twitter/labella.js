@@ -42,7 +42,7 @@ var Distributor = function(options){
   };
 
   distributor.estimateRequiredLayers = function(nodes){
-    return Math.ceil(distributor.computeRequiredWidth(nodes) / distributor.maxWidthPerLayer());
+    return options.layerWidth ? Math.ceil(distributor.computeRequiredWidth(nodes) / distributor.maxWidthPerLayer()) : 1;
   };
 
   var algorithms = {

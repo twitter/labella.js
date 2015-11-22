@@ -1395,7 +1395,7 @@ core_distributor = function (helper, IntervalTree) {
       return distributor.estimateRequiredLayers(nodes) > 1;
     };
     distributor.estimateRequiredLayers = function (nodes) {
-      return Math.ceil(distributor.computeRequiredWidth(nodes) / distributor.maxWidthPerLayer());
+      return options.layerWidth ? Math.ceil(distributor.computeRequiredWidth(nodes) / distributor.maxWidthPerLayer()) : 1;
     };
     var algorithms = {
       simple: function (nodes) {
@@ -1609,9 +1609,7 @@ core_metrics = function (helper) {
       if (nodes.length === 0)
         return 0;
       var layers = toLayers(nodes);
-      console.log('nodes', nodes);
       return helper.sum(layers, function (layer, layerIndex) {
-        console.log('layerIndex', layerIndex);
         return layerIndex * helper.sum(layer, function (d) {
           return d.width;
         });
@@ -1639,16 +1637,14 @@ core_force = function (Simulator, Distributor, metrics, helper, Spring) {
     pullForce: new Spring(1),
     roundsPerTick: 100,
     algorithm: 'overlap',
-    layerWidth: 1000,
     density: 0.85,
-    // bundleStubs: false,
     stubWidth: 1
   };
-  var Force = function (options) {
+  var Force = function (_options) {
     var force = {};
     var dispatch = helper.dispatch('start', 'tick', 'endLayer', 'end');
-    options = helper.extend({}, DEFAULT_OPTIONS, options);
-    var distributor = new Distributor(helper.extractKeys(options, Object.keys(Distributor.DEFAULT_OPTIONS)));
+    var options = helper.extend({}, DEFAULT_OPTIONS);
+    var distributor = new Distributor();
     var simulators = [];
     var nodes = [];
     var layers = null;
@@ -1668,13 +1664,20 @@ core_force = function (Simulator, Distributor, metrics, helper, Spring) {
       if (!arguments.length)
         return options;
       options = helper.extend(options, x);
-      distributor.options(helper.extractKeys(x, Object.keys(Distributor.DEFAULT_OPTIONS)));
-      var simOptions = helper.extractKeys(x, Object.keys(Simulator.DEFAULT_OPTIONS));
+      var disOptions = helper.extractKeys(options, Object.keys(Distributor.DEFAULT_OPTIONS));
+      if (helper.isDefined(options.minPos) && helper.isDefined(options.maxPos)) {
+        disOptions.layerWidth = options.maxPos - options.minPos;
+      } else {
+        disOptions.layerWidth = null;
+      }
+      distributor.options(disOptions);
+      var simOptions = helper.extractKeys(options, Object.keys(Simulator.DEFAULT_OPTIONS));
       simulators.forEach(function (sim) {
         sim.options(simOptions);
       });
       return force;
     };
+    force.options(_options);
     force.distribute = function () {
       if (isRunning) {
         throw 'This function cannot be called while the simulator is running. Stop it first.';
