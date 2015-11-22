@@ -2,7 +2,7 @@ Docs ▸
 [Introduction](../README.md) |
 [Development](Development.md) |
 [Demo](http://twitter.github.io/labella.js/)
-////
+&nbsp;&nbsp;////&nbsp;&nbsp;
 API Reference ▸
 **Force** |
 [Node](Node.md) |
@@ -36,13 +36,13 @@ There are many options that you can customize when creating a force. All of them
 
 | option  | default | description |
 | ------- | ------- | ----------- |
-| minPos  | 0       | minimum position for the node | 
-| maxPos  | null    | maximum position for the node |
+| minPos  | 0       | minimum position for left edge of node |
+| maxPos  | null    | maximum position for right edge of node |
 | damping | 0.1     | damping value for the simulation |
 | epsilon | 0.003   | maximum kinetic energy that is considered stable. |
 | nodeSpacing | 3   | gap between nodes |
-| roundsPerTick | 100 | number of rounds in the simulation before notifying via event "tick" | 
-| algorithm | 'overlap' | algorithm to determine how to split labels into multiple rows. Choose between ```'overlap'```, ```'simple'``` and ```'none'``` |
+| roundsPerTick | 100 | number of rounds in the simulation before notifying via event "tick" |
+| algorithm | 'overlap' | algorithm to determine how to split nodes into multiple layers. Choose between ```'overlap'```, ```'simple'``` and ```'none'``` |
 | density | 0.85 | If ```maxPos``` is set, will fill each layer at most 85% of ```maxPos - minPos``` |
 | stubWidth | 1 | width of stubs for nodes pushed to the next level |
 
@@ -54,6 +54,6 @@ Getter/Setter. Use ```force.nodes(nodes)``` to set the nodes to place and obtain
 
 <a name="options" href="#options">#</a> force.**options**([options:Object])
 
-Getter/Setter.
+Getter/Setter. Use ```force.options(options)``` to set the options and obtain them back via ```force.options()```.
 
 TBD

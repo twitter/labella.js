@@ -1,7 +1,8 @@
 Docs ▸
 [Introduction](../README.md) |
 [Development](Development.md) |
-[Demo](http://twitter.github.io/labella.js/) ////
+[Demo](http://twitter.github.io/labella.js/)
+&nbsp;&nbsp;////&nbsp;&nbsp;
 API Reference ▸
 [Force](Force.md) |
 **Node** |
