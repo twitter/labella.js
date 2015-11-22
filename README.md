@@ -2,6 +2,11 @@ Docs ▸
 **Introduction** |
 [Development](docs/Development.md) |
 [Demo](http://twitter.github.io/labella.js/)
+&nbsp;&nbsp;////&nbsp;&nbsp;
+API Reference ▸
+[Force](docs/Force.md) |
+[Node](docs/Node.md) |
+[Renderer](docs/Renderer.md)
 
 # Labella.js
 
