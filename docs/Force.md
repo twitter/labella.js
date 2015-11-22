@@ -56,4 +56,8 @@ Getter/Setter. Use ```force.nodes(nodes)``` to set the nodes to place and obtain
 
 Getter/Setter. Use ```force.options(options)``` to set the options and obtain them back via ```force.options()```.
 
+<a name="start" href="#start">#</a> force.**start**(maxRound:Number)
+
+Run simulation at most ```maxRound``` rounds. It may end earlier if equillibrium is reached.
+
 TBD
