@@ -1,3 +1,6 @@
+.bowerrc
+.DS_Store
+bower.json
 src
 coverage
 node_modules
@@ -6,8 +9,7 @@ karma.conf.js
 Gruntfile.js
 grunt/*.js
 test
-vendor
 tmp
-*.sublime-workspace
 *.sublime-project
 examples
+docs

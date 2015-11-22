@@ -17,16 +17,17 @@
   "private": true,
   "ignore": [
     "**/.*",
+    "package.json",
+    "src",
     "node_modules",
     "bower_components",
-    "examples",
-    "src",
-    "grunt",
     "karma.conf.js",
     "Gruntfile.js",
-    "package.json",
+    "grunt",
     "test",
-    "tests"
+    "*.sublime-project",
+    "examples",
+    "docs"
   ],
   "devDependencies": {
     "angular": "~1.4.0",
