@@ -7,10 +7,13 @@
   "description": "May the force label you",
   "main": "dist/labella.min.js",
   "moduleType": [
-    "umd"
+    "amd",
+    "globals",
+    "node"
   ],
   "keywords": [
     "labella.js",
+    "labelling",
     "visualization",
     "javascript"
   ],
