@@ -15,7 +15,7 @@ API Reference ▸
 If you try to place labels for points on a timeline (or any 1D space), one common problem is the labels often overlap.
 How about making the labels push each other. Use the force, jedi-style.
 
-See [interactive demo](http://twitter.github.io/labella.js/) or [simpler example](http://twitter.github.io/labella.js/easy.html).
+See [interactive demo](http://twitter.github.io/labella.js/) or [simple example](http://twitter.github.io/labella.js/easy.html).
 
 ### Install
 
@@ -27,6 +27,34 @@ or
 
 ```
 bower install labella --save
+```
+
+### Import to your project
+
+##### Choice 1. Global
+
+Adding this library via ```<script>``` tag is the simplest way. By doing this, ```labella``` is available in the global scope.
+
+```
+<script src="labella.min.js"></script>
+```
+
+##### Choice 2: AMD
+
+If you use requirejs, Labella.js support AMD out of the box.
+
+```
+require(['path/to/labella'], function(labella) {
+  // do something
+});
+```
+
+##### Choice 3: node.js / browserify
+
+Labella.js also supports usage in commonjs style.
+
+```
+var labella = require('path/to/labella');
 ```
 
 ### Example
