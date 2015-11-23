@@ -35,4 +35,6 @@ Attach data about each label. This can be any value (String, Number, etc.)
 
 ### Functions
 
-TBD
+<a name="getLevel" href="#getLevel">#</a> node.**getLevel**()
+
+Return index of the layer that this node was placed in. (In the beginning of the layout process, the force distribute nodes into multiple layers if all nodes cannot fit within one layer.)

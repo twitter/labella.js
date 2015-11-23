@@ -26,7 +26,7 @@ function draw(nodes){
   renderer.layout(nodes);
 
   // Draw label rectangles
-  labelLayer.selectAll('rect.label')
+  d3.selectAll('rect.label')
     .data(nodes)
   .enter().append('rect')
     .classed('label', true)
@@ -36,7 +36,7 @@ function draw(nodes){
     .attr('height', function(d){ return d.dy; });
 
   // Draw path from point on the timeline to the label rectangle
-  linkLayer.selectAll('path.link')
+  d3.selectAll('path.link')
     .data(nodes)
   .enter().append('path')
     .classed('link', true)
@@ -64,7 +64,7 @@ Generate value for ```<path>``` attribute ```d``` for given node to draw the rou
 
 <a name="getWaypoints" href="#getWaypoints">#</a> renderer.**getWaypoints(node:Node)**
 
-Return points on the route from axis to label. The returned value is an array of array of points. 
+Return points on the route from axis to label. The returned value is an array of array of points.
 
 ```
 [
@@ -78,4 +78,4 @@ Each point is also an array [x, y].
 
 <a name="layout" href="#layout">#</a> renderer.**layout(nodes:Array)**
 
-Add ```x```, ```y```, ```dx``` and ```dy``` to each of the node.
+Add ```x```, ```y```, ```dx``` and ```dy``` to each node in the input array.
