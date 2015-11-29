@@ -4,4 +4,5 @@ tmp
 coverage
 .DS_Store
 .grunt
+.sublime-workspace
 examples/dist
