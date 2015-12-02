@@ -105,6 +105,12 @@ circle.dot{
 .form-control.short-input{
   width: 60px;
   text-align: center;
+  display: inline-block;
+}
+
+select.form-control{
+  display: inline-block;
+  width: 180px;
 }
 
 .metrics-table{
