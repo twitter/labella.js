@@ -15,7 +15,7 @@ API Reference ▸
 If you try to place labels for points on a timeline (or any 1D space), one common problem is the labels often overlap.
 How about making the labels push each other. Use the force, jedi-style.
 
-See [interactive demo](http://twitter.github.io/labella.js/) or [simple example](http://twitter.github.io/labella.js/easy.html).
+See [interactive demo](http://twitter.github.io/labella.js/) or [simple example](http://twitter.github.io/labella.js/basic_up.html).
 
 ### Install
 
