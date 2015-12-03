@@ -71,7 +71,7 @@ var nodes = [
 ];
 
 var force = new labella.Force();
-  .nodes(nodes)
+  force.nodes(nodes)
   // Listen when the nodes' positions are updated.
   .on('end', function(){
     // The rendering is independent from this library.
