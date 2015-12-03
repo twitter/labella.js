@@ -70,7 +70,7 @@ var nodes = [
   new labella.Node(3, 50),
 ];
 
-var force = new labella.Force();
+var force = new labella.Force()
   .nodes(nodes)
   // Listen when the nodes' positions are updated.
   .on('end', function(){
