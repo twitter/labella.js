@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="style.css">
 </head>
 
-<body>
+<body class="page-starwars">
 
 <!-- http://tholman.com/github-corners/ -->
 <a href="https://github.com/twitter/labella.js" class="github-corner"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#fff; color:#151513; position: absolute; top: 0; border: 0; right: 0;"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
@@ -27,9 +27,9 @@
     See examples: &nbsp;
     <a href="basic_up.html">up</a> |
     <a href="basic_down.html">down</a> |
-    left |
+    <a href="basic_left.html">left</a> |
     <a href="basic_right.html">right</a> |
-    <a href="with_text.html">with text</a>
+    with text
   </p>
   <p>
     Please
@@ -56,29 +56,20 @@
 // Create dummy data
 // ---------------------------------------------------
 
-var nodes = [
-  // new labella.Node(idealPosition, width)
-  new labella.Node(1,50),
-  new labella.Node(2,50),
-  new labella.Node(3,50),
-  new labella.Node(3,50),
-  new labella.Node(3,50),
-  new labella.Node(304,50),
-  new labella.Node(454,50),
-  new labella.Node(454,50),
-  new labella.Node(454,50),
-  new labella.Node(804,50),
-  new labella.Node(804,70),
-  new labella.Node(804,50),
-  new labella.Node(804,50),
-  new labella.Node(854,50),
-  new labella.Node(854,50)
+var data = [
+  {date: new Date(1977, 4,25), episode: 4, name: 'A New Hope'},
+  {date: new Date(1980, 4,17), episode: 5, name: 'The Empire Strikes Back'},
+  {date: new Date(1984, 4,25), episode: 6, name: 'Return of the Jedi'},
+  {date: new Date(1999, 4,19), episode: 1, name: 'The Phantom Menace'},
+  {date: new Date(2002, 4,16), episode: 2, name: 'Attack of the Clones'},
+  {date: new Date(2005, 4,19), episode: 3, name: 'Revenge of the Sith'},
+  {date: new Date(2015,11,18), episode: 7, name: 'The Force Awakens'},
 ];
 
 var options =   {
   margin: {left: 20, right: 20, top: 20, bottom: 20},
-  initialWidth: 112,
-  initialHeight: 1000
+  initialWidth: 300,
+  initialHeight: 250
 };
 
 var innerWidth =  options.initialWidth - options.margin.left - options.margin.right;
@@ -90,7 +81,28 @@ var vis = d3.select('#timeline')
     .attr('width',  options.initialWidth)
     .attr('height', options.initialHeight)
   .append('g')
-    .attr('transform', 'translate('+(innerWidth+options.margin.left)+','+(options.margin.top)+')');
+    .attr('transform', 'translate('+(options.margin.left)+','+(options.margin.top)+')');
+
+function labelText(d){
+  return d.date.getFullYear() + ' - ' + d.name;
+}
+
+// compute labels dimension
+var dummyText = vis.append('text');
+
+var timeScale = d3.time.scale()
+  .domain(d3.extent(data, function(d){return d.date;}))
+  .range([0, innerHeight])
+  .nice();
+
+var nodes = data.map(function(movie){
+  var bbox = dummyText.text(labelText(movie))[0][0].getBBox();
+  movie.h = bbox.height;
+  movie.w = bbox.width;
+  return new labella.Node(timeScale(movie.date), movie.h + 4, movie);
+});
+
+dummyText.remove();
 
 // ---------------------------------------------------
 // Draw dots on the timeline
@@ -112,7 +124,7 @@ dotLayer.selectAll('circle.dot')
   .attr('cy', function(d){return d.getRoot().idealPos;});
 
 function color(d,i){
-  return colorScale(i);
+  return '#888';
 }
 
 //---------------------------------------------------
@@ -121,8 +133,8 @@ function color(d,i){
 
 var renderer = new labella.Renderer({
   layerGap: 60,
-  nodeHeight: 12,
-  direction: 'left'
+  nodeHeight: nodes[0].width,
+  direction: 'right'
 });
 
 function draw(nodes){
@@ -130,15 +142,25 @@ function draw(nodes){
   renderer.layout(nodes);
 
   // Draw label rectangles
-  labelLayer.selectAll('rect.flag')
+  var sEnter = labelLayer.selectAll('rect.flag')
     .data(nodes)
-  .enter().append('rect')
+  .enter().append('g')
+    .attr('transform', function(d){return 'translate('+(d.x)+','+(d.y-d.dy/2)+')';});
+
+  sEnter
+    .append('rect')
     .classed('flag', true)
-    .attr('x', function(d){ return d.x; })
-    .attr('y', function(d){ return d.y - d.dy/2; })
-    .attr('width', function(d){ return d.dx; })
+    .attr('width', function(d){ return d.data.w + 9; })
     .attr('height', function(d){ return d.dy; })
+    .attr('rx', 2)
+    .attr('ry', 2)
     .style('fill', color);
+
+  sEnter.append('text')
+    .attr('x', 4)
+    .attr('y', 15)
+    .style('fill', '#fff')
+    .text(function(d){return labelText(d.data);});
 
   // Draw path from point on the timeline to the label rectangle
   linkLayer.selectAll('path.link')
@@ -157,21 +179,12 @@ function draw(nodes){
 //---------------------------------------------------
 
 var force = new labella.Force({
-  minPos: 0,
-  maxPos: 960
-});
-
-force
+  minPos: -10
+})
   .nodes(nodes)
-  // Listen when the nodes' positions are fully updated.
   .on('end', function(){
-    // The rendering is independent from the library.
-    // User can use canvas, svg or any library to draw the labels.
-    // In this example, the draw() function is defined above
-    // using the built-in utility labella.Renderer.
     draw(force.nodes());
   })
-  // Run simulation at most 100 rounds. It may end earlier if equillibrium is reached.
   .start(100);
 
 </script>

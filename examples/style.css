@@ -98,6 +98,19 @@ circle.dot{
   fill: #222;
 }
 
+body.page-starwars .chart-container svg{
+  background: none;
+}
+
+body.page-starwars line.timeline{
+  stroke-width: 2px;
+  stroke: #C2A53C;
+}
+
+body.page-starwars circle.dot{
+  fill: #C2A53C;
+}
+
 .form-control, button.btn{
   border-radius: 0;
 }
