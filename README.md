@@ -17,10 +17,11 @@ How about making the labels push each other. Use the force, jedi-style.
 
 * Play with [interactive demo](http://twitter.github.io/labella.js/) to learn more
 * See examples: [up](http://twitter.github.io/labella.js/basic_up.html) |
-[down](http://twitter.github.io/labella.js/basic_down.html) | 
-[left](http://twitter.github.io/labella.js/basic_left.html) | 
-[right](http://twitter.github.io/labella.js/basic_right.html) | 
+[down](http://twitter.github.io/labella.js/basic_down.html) |
+[left](http://twitter.github.io/labella.js/basic_left.html) |
+[right](http://twitter.github.io/labella.js/basic_right.html) |
 [with text](http://twitter.github.io/labella.js/with_text.html)
+* If you are looking for a ready-to-use timeline component with Labella's smart labeling instead of building your timeline from scratch, check out [d3Kit-timeline](https://github.com/kristw/d3kit-timeline)
 
 ### Install
 
