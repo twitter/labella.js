@@ -21,7 +21,9 @@ How about making the labels push each other. Use the force, jedi-style.
 [left](http://twitter.github.io/labella.js/basic_left.html) |
 [right](http://twitter.github.io/labella.js/basic_right.html) |
 [with text](http://twitter.github.io/labella.js/with_text.html)
-* If you are looking for a ready-to-use timeline component with Labella's smart labeling instead of building your timeline from scratch, check out [d3Kit-timeline](https://github.com/kristw/d3kit-timeline)
+* Read the instructions on this page or API reference.
+
+Moreover, if you are looking for a ready-to-use timeline component with Labella's smart labeling instead of building your own timeline from scratch, check out [d3Kit-timeline](https://github.com/kristw/d3kit-timeline)
 
 ### Install
 
