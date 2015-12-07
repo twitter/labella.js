@@ -18,7 +18,7 @@ In the distribute step, the nodes are split into multiple layers if all nodes ca
 ### Common usage
 
 ```javascript
-var force = new labella.Force();
+var force = new labella.Force()
   .nodes(nodes)
   // Listen when the nodes' positions are updated.
   .on('end', function(){
