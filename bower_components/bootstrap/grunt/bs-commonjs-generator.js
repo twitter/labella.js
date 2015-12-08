@@ -1,12 +1,4 @@
-/*!
- * Bootstrap Grunt task for the CommonJS module generation
- * http://getbootstrap.com
- * Copyright 2014-2015 Twitter, Inc.
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
- */
-
 'use strict';
-
 var fs = require('fs');
 var path = require('path');
 
@@ -23,7 +15,8 @@ module.exports = function generateCommonJSModule(grunt, srcFiles, destFilepath) 
   var moduleOutputJs = COMMONJS_BANNER + srcFiles.map(srcPathToDestRequire).join('\n');
   try {
     fs.writeFileSync(destFilepath, moduleOutputJs);
-  } catch (err) {
+  }
+  catch (err) {
     grunt.fail.warn(err);
   }
   grunt.log.writeln('File ' + destFilepath.cyan + ' created.');
