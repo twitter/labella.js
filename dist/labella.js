@@ -68,7 +68,7 @@ lib_extend = function () {
     return toStr.call(arr) === '[object Array]';
   };
   var isPlainObject = function isPlainObject(obj) {
-    'use strict';
+    
     if (!obj || toStr.call(obj) !== '[object Object]') {
       return false;
     }
@@ -86,7 +86,7 @@ lib_extend = function () {
     return key === undefined || hasOwn.call(obj, key);
   };
   return function extend() {
-    'use strict';
+    
     var options, name, src, copy, copyIsArray, clone, target = arguments[0], i = 1, length = arguments.length, deep = false;
     // Handle a deep copy situation
     if (typeof target === 'boolean') {
@@ -118,7 +118,7 @@ lib_extend = function () {
               clone = src && isPlainObject(src) ? src : {};
             }
             // Never move original objects, clone them
-            target[name] = extend(deep, clone, copy);
+            target[name] = extend(deep, clone, copy);  // Don't bring in undefined values
           } else if (copy !== undefined) {
             target[name] = copy;
           }
@@ -127,7 +127,9 @@ lib_extend = function () {
     }
     // Return the modified object
     return target;
-  };
+  };  //---------------------------------------------------
+      // END code for this module
+      //---------------------------------------------------
 }();
 var lib_d3Dispatch;
 lib_d3Dispatch = function () {
@@ -272,7 +274,9 @@ lib_d3Dispatch = function () {
     };
     return event;
   }
-  return d3.dispatch;
+  return d3.dispatch;  //---------------------------------------------------
+                       // END code for this module
+                       //---------------------------------------------------
 }();
 var lib_d3Rebind;
 lib_d3Rebind = function () {
@@ -292,7 +296,9 @@ lib_d3Rebind = function () {
     };
   }
   // return module
-  return rebind;
+  return rebind;  //---------------------------------------------------
+                  // END code for this module
+                  //---------------------------------------------------
 }();
 var core_helper;
 core_helper = function (extend, d3Dispatch, d3Rebind) {
@@ -324,7 +330,9 @@ core_helper = function (extend, d3Dispatch, d3Rebind) {
     return helper;
   }();
   // return module
-  return module;
+  return module;  //---------------------------------------------------
+                  // END code for this module
+                  //---------------------------------------------------
 }(lib_extend, lib_d3Dispatch, lib_d3Rebind);
 var core_node;
 core_node = function (helper) {
@@ -467,10 +475,12 @@ core_node = function (helper) {
     var f1 = this.force || 0;
     var f2 = b.force || 0;
     /* jshint ignore:start */
-    return this.overlapWithNode(b, buffer) && (f1 * f2 > 0 || f1 === 0 && f2 < 0 || f1 > 0 && f2 === 0 || f1 > 0 && f2 < 0);
+    return this.overlapWithNode(b, buffer) && (f1 * f2 > 0 || f1 === 0 && f2 < 0 || f1 > 0 && f2 === 0 || f1 > 0 && f2 < 0);  /* jshint ignore:end */
   };
   // return module
-  return Node;
+  return Node;  //---------------------------------------------------
+                // END code for this module
+                //---------------------------------------------------
 }(core_helper);
 var core_nodeGroup;
 core_nodeGroup = function () {
@@ -520,7 +530,7 @@ core_nodeGroup = function () {
     var f1 = this.force || 0;
     var f2 = b.force || 0;
     /* jshint ignore:start */
-    return this.overlapWithGroup(b, buffer) && (f1 * f2 > 0 || f1 === 0 && f2 < 0 || f1 > 0 && f2 === 0 || f1 > 0 && f2 < 0);
+    return this.overlapWithGroup(b, buffer) && (f1 * f2 > 0 || f1 === 0 && f2 < 0 || f1 > 0 && f2 === 0 || f1 > 0 && f2 < 0);  /* jshint ignore:end */
   };
   NodeGroup.groupAdjacentNodes = function (nodes, conditionFn) {
     if (nodes && nodes.length > 0) {
@@ -564,7 +574,9 @@ core_nodeGroup = function () {
     return groups;
   };
   // return module
-  return NodeGroup;
+  return NodeGroup;  //---------------------------------------------------
+                     // END code for this module
+                     //---------------------------------------------------
 }();
 var core_physics_spring;
 core_physics_spring = function () {
@@ -577,7 +589,9 @@ core_physics_spring = function () {
   SpringForce.prototype.computeForce = function (displacement) {
     return this.springK * displacement;
   };
-  return SpringForce;
+  return SpringForce;  //---------------------------------------------------
+                       // END code for this module
+                       //---------------------------------------------------
 }();
 var core_simulator;
 core_simulator = function (NodeGroup, Spring, helper) {
@@ -623,7 +637,8 @@ core_simulator = function (NodeGroup, Spring, helper) {
           // if there is enough gap for it to move to its ideal position immediately
           if (!nextNode || node.idealRight() < nextNode.currentLeft()) {
             node.moveToIdealPosition();
-          } else {
+          }  // otherwise
+          else {
             // push node next to the node on its right, if that is closer to ideal position
             var newPos = node.positionBefore(nextNode, options.nodeSpacing);
             if (Math.abs(node.idealPos - newPos) < Math.abs(node.displacement())) {
@@ -644,7 +659,8 @@ core_simulator = function (NodeGroup, Spring, helper) {
           // if there is enough gap for it to move to its ideal position immediately
           if (!prevNode || node.idealLeft() > prevNode.currentRight()) {
             node.moveToIdealPosition();
-          } else {
+          }  // otherwise
+          else {
             // move node next to the node on its left, if that is closer to ideal position
             var newPos = node.positionAfter(prevNode, options.nodeSpacing);
             if (Math.abs(node.idealPos - newPos) < Math.abs(node.displacement())) {
@@ -829,7 +845,9 @@ core_simulator = function (NodeGroup, Spring, helper) {
     return simulator;
   };
   Simulator.DEFAULT_OPTIONS = DEFAULT_OPTIONS;
-  return Simulator;
+  return Simulator;  //---------------------------------------------------
+                     // END code for this module
+                     //---------------------------------------------------
 }(core_nodeGroup, core_physics_spring, core_helper);
 /*
 This file is modified from https://github.com/shinout/SortedList
@@ -1216,7 +1234,8 @@ lib_intervalTree = function (SortedList) {
         return bool;
       });
       return _pointSearch.call(this, node.right, idx, arr);
-    } else {
+    }  // exact equal
+    else {
       node.starts.map(function (itvl) {
         arr.push(itvl.result());
       });
@@ -1338,7 +1357,9 @@ lib_intervalTree = function (SortedList) {
     }
     return ret;
   };
-  return IntervalTree;
+  return IntervalTree;  //---------------------------------------------------
+                        // END code for this module
+                        //---------------------------------------------------
 }(lib_sortedList);
 var core_distributor;
 core_distributor = function (helper, IntervalTree) {
@@ -1491,7 +1512,9 @@ core_distributor = function (helper, IntervalTree) {
   };
   Distributor.DEFAULT_OPTIONS = DEFAULT_OPTIONS;
   // return module
-  return Distributor;
+  return Distributor;  //---------------------------------------------------
+                       // END code for this module
+                       //---------------------------------------------------
 }(core_helper, lib_intervalTree);
 var core_metrics;
 core_metrics = function (helper) {
@@ -1595,7 +1618,9 @@ core_metrics = function (helper) {
     return metrics;
   }();
   // return module
-  return module;
+  return module;  //---------------------------------------------------
+                  // END code for this module
+                  //---------------------------------------------------
 }(core_helper);
 var core_force;
 core_force = function (Simulator, Distributor, metrics, helper, Spring) {
@@ -1719,7 +1744,8 @@ core_force = function (Simulator, Distributor, metrics, helper, Spring) {
             // Still have layer(s) left
             if (layerIndex < layers.length) {
               simulate();
-            } else {
+            }  // really end
+            else {
               dispatch.end({ type: 'end' });
               isRunning = false;
             }
@@ -1769,7 +1795,9 @@ core_force = function (Simulator, Distributor, metrics, helper, Spring) {
     return force;
   };
   Force.DEFAULT_OPTIONS = DEFAULT_OPTIONS;
-  return Force;
+  return Force;  //---------------------------------------------------
+                 // END code for this module
+                 //---------------------------------------------------
 }(core_simulator, core_distributor, core_metrics, core_helper, core_physics_spring);
 var core_renderer;
 core_renderer = function (helper) {
@@ -1957,7 +1985,9 @@ core_renderer = function (helper) {
     return steps.join(' ');
   };
   // return module
-  return Renderer;
+  return Renderer;  //---------------------------------------------------
+                    // END code for this module
+                    //---------------------------------------------------
 }(core_helper);
 var core_util;
 core_util = function (helper, Node) {
@@ -2085,7 +2115,9 @@ core_util = function (helper, Node) {
     return util;
   }();
   // return module
-  return module;
+  return module;  //---------------------------------------------------
+                  // END code for this module
+                  //---------------------------------------------------
 }(core_helper, core_node);
 var labella;
 labella = function (Node, NodeGroup, Force, Simulator, Distributor, Renderer, metrics, util) {
@@ -2103,7 +2135,9 @@ labella = function (Node, NodeGroup, Force, Simulator, Distributor, Renderer, me
     Renderer: Renderer,
     metrics: metrics,
     util: util
-  };
+  };  //---------------------------------------------------
+      // END code for this module
+      //---------------------------------------------------
 }(core_node, core_nodeGroup, core_force, core_simulator, core_distributor, core_renderer, core_metrics, core_util);
 
 
