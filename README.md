@@ -44,7 +44,7 @@ bower install labella --save
 
 Adding this library via ```<script>``` tag is the simplest way. By doing this, ```labella``` is available in the global scope.
 
-```
+```html
 <script src="labella.min.js"></script>
 ```
 
@@ -52,7 +52,7 @@ Adding this library via ```<script>``` tag is the simplest way. By doing this, `
 
 If you use requirejs, Labella.js support AMD out of the box.
 
-```
+```javascript
 require(['path/to/labella'], function(labella) {
   // do something
 });
@@ -62,7 +62,7 @@ require(['path/to/labella'], function(labella) {
 
 Labella.js also supports usage in commonjs style.
 
-```
+```javascript
 var labella = require('path/to/labella');
 ```
 
