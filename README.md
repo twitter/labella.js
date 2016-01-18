@@ -8,7 +8,7 @@ API Reference ▸
 [Node](docs/Node.md) |
 [Renderer](docs/Renderer.md)
 
-# Labella.js
+# Labella.js [![NPM version][npm-image]][npm-url]
 
 *"Labels should be beautiful."*
 
@@ -97,3 +97,7 @@ var force = new labella.Force()
 Krist Wongsuphasawat / [@kristw](https://twitter.com/kristw)
 
 Copyright 2015 Twitter, Inc. Licensed under the [Apache License Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)
+
+[npm-image]: https://badge.fury.io/js/labella.svg
+[npm-url]: https://npmjs.org/package/labella
+
