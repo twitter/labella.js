@@ -38,7 +38,33 @@ or
 bower install labella --save
 ```
 
-### Import to your project
+### Example
+
+```javascript
+// idealPos: The most preferred position for each label
+// width:    The width of each label
+var nodes = [
+  new labella.Node(1, 50), // idealPos, width
+  new labella.Node(2, 50),
+  new labella.Node(3, 50),
+  new labella.Node(3, 50),
+  new labella.Node(3, 50),
+];
+
+var force = new labella.Force()
+  .nodes(nodes)
+  // Listen when the nodes' positions are updated.
+  .on('end', function(){
+    // The rendering is independent from this library.
+    // User can use canvas, svg or any library to draw the labels.
+    // There is also a built-in helper labella.Renderer for this purpose. See the examples
+    draw(force.nodes());
+  })
+  // Run simulation at most 100 rounds. It may end earlier if equillibrium is reached.
+  .start(100);
+```
+
+### Import into your project
 
 ##### Choice 1. Global
 
@@ -64,32 +90,6 @@ Labella.js also supports usage in commonjs style.
 
 ```javascript
 var labella = require('path/to/labella');
-```
-
-### Example
-
-```javascript
-// idealPos: The most preferred position for each label
-// width:    The width of each label
-var nodes = [
-  new labella.Node(1, 50), // idealPos, width
-  new labella.Node(2, 50),
-  new labella.Node(3, 50),
-  new labella.Node(3, 50),
-  new labella.Node(3, 50),
-];
-
-var force = new labella.Force()
-  .nodes(nodes)
-  // Listen when the nodes' positions are updated.
-  .on('end', function(){
-    // The rendering is independent from this library.
-    // User can use canvas, svg or any library to draw the labels.
-    // There is also a built-in helper labella.Renderer for this purpose. See the examples
-    draw(force.nodes());
-  })
-  // Run simulation at most 100 rounds. It may end earlier if equillibrium is reached.
-  .start(100);
 ```
 
 ### Author
