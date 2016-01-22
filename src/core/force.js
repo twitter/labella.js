@@ -1,8 +1,9 @@
-var Simulator = require('./simulator.js');
+// var Simulator = require('./simulator.js');
 var Distributor = require('./distributor.js');
 var metrics = require('./metrics.js');
 var helper = require('./helper.js');
 var Spring = require('./physics/spring.js');
+var removeOverlap = require('./removeOverlap.js');
 
 var DEFAULT_OPTIONS = {
   damping: 0.1,
@@ -24,7 +25,7 @@ var Force = function(_options){
   var dispatch = helper.dispatch('start', 'tick', 'endLayer', 'end');
   var options = helper.extend({}, DEFAULT_OPTIONS);
   var distributor = new Distributor();
-  var simulators = [];
+  // var simulators = [];
   var nodes = [];
   var layers = null;
   var isRunning = false;
@@ -33,7 +34,7 @@ var Force = function(_options){
     if (!arguments.length) return nodes;
     nodes = x;
     layers = null;
-    simulators = [];
+    // simulators = [];
     return force;
   };
 
@@ -54,10 +55,10 @@ var Force = function(_options){
     }
     distributor.options(disOptions);
 
-    var simOptions = helper.extractKeys(options, Object.keys(Simulator.DEFAULT_OPTIONS));
-    simulators.forEach(function(sim){
-      sim.options(simOptions);
-    });
+    // var simOptions = helper.extractKeys(options, Object.keys(Simulator.DEFAULT_OPTIONS));
+    // simulators.forEach(function(sim){
+    //   sim.options(simOptions);
+    // });
 
     return force;
   };
@@ -101,15 +102,34 @@ var Force = function(_options){
   };
 
   force.start = function(maxRound){
-    if(isRunning){
-      throw 'This function cannot be called while the simulator is running. Stop it first.';
-    }
+    var opt = {
+      nodeSpacing: options.nodeSpacing,
+      minPos: options.minPos,
+      maxPos: options.maxPos
+    };
+
     setTimeout(function(){
-      if(!layers){
-        force.distribute();
-      }
-      force.initialize().resume(maxRound);
-    }, 0);
+      dispatch.start({type: 'start'});
+      layers = distributor.distribute(nodes);
+      layers.map(function(layer, index){
+        removeOverlap(layer, opt);
+        dispatch.endLayer({
+          type: 'endLayer',
+          layerIndex: index
+        });
+      });
+      dispatch.end({type: 'end'});
+    });
+
+    // if(isRunning){
+    //   throw 'This function cannot be called while the simulator is running. Stop it first.';
+    // }
+    // setTimeout(function(){
+    //   if(!layers){
+    //     force.distribute();
+    //   }
+    //   force.initialize().resume(maxRound);
+    // }, 0);
     return force;
   };
 
