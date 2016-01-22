@@ -1,14 +1,14 @@
 'use strict';
 
-var extend      = require('deep-extend');
-var del         = require('del');
-var browserSync = require('browser-sync');
-var gulp        = require('gulp');
-var $           = require('gulp-load-plugins')();
-var Server      = require('karma').Server;
-var webpack     = require('webpack-stream');
-var argv        = require('yargs').argv;
-var runSequence = require('run-sequence');
+var _             = require('lodash');
+var del           = require('del');
+var browserSync   = require('browser-sync');
+var gulp          = require('gulp');
+var $             = require('gulp-load-plugins')();
+var Server        = require('karma').Server;
+var webpack       = require('webpack-stream');
+var argv          = require('yargs').argv;
+var runSequence   = require('run-sequence');
 var webpackConfig = require('./webpack.config.js')();
 
 // -------------------------------------------
@@ -35,7 +35,7 @@ gulp.task('clean', function () {
 
 gulp.task('webpack', function() {
   return gulp.src(paths.src + '/main.js')
-    .pipe(webpack(extend(webpackConfig, {
+    .pipe(webpack(_.extend(webpackConfig, {
       output: {
         filename: 'labella.js',
         sourceMapFilename: '[file].map',

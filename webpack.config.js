@@ -1,6 +1,6 @@
 var webpack = require('webpack');
 
-module.exports = function(isTest){
+module.exports = function(){
   return {
     module:{
       loaders: [

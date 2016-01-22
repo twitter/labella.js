@@ -1,8 +1,7 @@
 // Karma configuration
 'use strict';
 
-var extend = require('deep-extend');
-var webpackConfig = require('./webpack.config.js')(true);
+var webpackConfig = require('./webpack.config.js')();
 
 webpackConfig.module.preLoaders = [
   // instrument only source files with Istanbul
