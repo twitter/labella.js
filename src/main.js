@@ -4,7 +4,6 @@
 module.exports = {
   Node: require('./core/node.js'),
   Force: require('./core/force.js'),
-  Simulator: require('./core/simulator.js'),
   Distributor: require('./core/distributor.js'),
   Renderer: require('./core/renderer.js'),
 

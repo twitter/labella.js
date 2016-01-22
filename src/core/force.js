@@ -102,17 +102,16 @@ var Force = function(_options){
   };
 
   force.start = function(maxRound){
-    var opt = {
-      nodeSpacing: options.nodeSpacing,
-      minPos: options.minPos,
-      maxPos: options.maxPos
-    };
+    var simOptions = helper.extractKeys(options, Object.keys(removeOverlap.DEFAULT_OPTIONS));
 
+    if(isRunning){
+      throw 'This function cannot be called while the simulator is running. Stop it first.';
+    }
     setTimeout(function(){
       dispatch.start({type: 'start'});
       layers = distributor.distribute(nodes);
       layers.map(function(layer, index){
-        removeOverlap(layer, opt);
+        removeOverlap(layer, simOptions);
         dispatch.endLayer({
           type: 'endLayer',
           layerIndex: index
@@ -121,15 +120,6 @@ var Force = function(_options){
       dispatch.end({type: 'end'});
     });
 
-    // if(isRunning){
-    //   throw 'This function cannot be called while the simulator is running. Stop it first.';
-    // }
-    // setTimeout(function(){
-    //   if(!layers){
-    //     force.distribute();
-    //   }
-    //   force.initialize().resume(maxRound);
-    // }, 0);
     return force;
   };
 

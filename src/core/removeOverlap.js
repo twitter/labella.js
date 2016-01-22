@@ -11,7 +11,7 @@ function last(arr){
   return arr[arr.length-1];
 }
 
-module.exports = function removeOverlap(nodes, options){
+function removeOverlap(nodes, options){
   if(nodes.length>0){
     options = helper.extend(DEFAULT_OPTIONS, options);
 
@@ -66,4 +66,8 @@ module.exports = function removeOverlap(nodes, options){
   }
 
   return nodes;
-};
+}
+
+removeOverlap.DEFAULT_OPTIONS = DEFAULT_OPTIONS;
+
+module.exports = removeOverlap;
