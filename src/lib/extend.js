@@ -24,11 +24,6 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-define(function(){
-//---------------------------------------------------
-// BEGIN code for this module
-//---------------------------------------------------
-
 var hasOwn = Object.prototype.hasOwnProperty;
 var toStr = Object.prototype.toString;
 
@@ -61,7 +56,7 @@ var isPlainObject = function isPlainObject(obj) {
   return key === undefined || hasOwn.call(obj, key);
 };
 
-return function extend() {
+module.exports = function extend() {
   'use strict';
   var options, name, src, copy, copyIsArray, clone,
     target = arguments[0],
@@ -116,8 +111,3 @@ return function extend() {
   // Return the modified object
   return target;
 };
-
-//---------------------------------------------------
-// END code for this module
-//---------------------------------------------------
-});

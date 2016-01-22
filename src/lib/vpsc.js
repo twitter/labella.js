@@ -462,3 +462,5 @@ var cola;
         vpsc.Solver = Solver;
     })(vpsc = cola.vpsc || (cola.vpsc = {}));
 })(cola || (cola = {}));
+
+module.exports = cola.vpsc;

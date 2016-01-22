@@ -1,10 +1,4 @@
-define([
-  'core/helper'
-],
-function(helper){
-//---------------------------------------------------
-// BEGIN code for this module
-//---------------------------------------------------
+var helper = require('./helper.js');
 
 function Renderer(options){
   this.options = helper.extend({
@@ -168,9 +162,4 @@ Renderer.prototype.generatePath = function(node){
 };
 
 // return module
-return Renderer;
-
-//---------------------------------------------------
-// END code for this module
-//---------------------------------------------------
-});
+module.exports = Renderer;

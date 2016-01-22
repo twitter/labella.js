@@ -1,14 +1,8 @@
-define([
-  'core/simulator',
-  'core/distributor',
-  'core/metrics',
-  'core/helper',
-  'core/physics/spring',
-],
-function(Simulator, Distributor, metrics, helper, Spring){
-//---------------------------------------------------
-// BEGIN code for this module
-//---------------------------------------------------
+var Simulator = require('./simulator.js');
+var Distributor = require('./distributor.js');
+var metrics = require('./metrics.js');
+var helper = require('./helper.js');
+var Spring = require('./physics/spring.js');
 
 var DEFAULT_OPTIONS = {
   damping: 0.1,
@@ -207,9 +201,4 @@ var Force = function(_options){
 
 Force.DEFAULT_OPTIONS = DEFAULT_OPTIONS;
 
-return Force;
-
-//---------------------------------------------------
-// END code for this module
-//---------------------------------------------------
-});
+module.exports = Force;

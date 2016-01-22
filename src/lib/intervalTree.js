@@ -25,13 +25,7 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-define([
-  'lib/sortedList'
-],
-function(SortedList){
-//---------------------------------------------------
-// BEGIN code for this module
-//---------------------------------------------------
+var SortedList = require('./sortedList.js');
 
 /**
  * IntervalTree
@@ -318,9 +312,4 @@ Interval.prototype.result = function(start, end) {
   return ret;
 };
 
-return IntervalTree;
-
-//---------------------------------------------------
-// END code for this module
-//---------------------------------------------------
-});
+module.exports = IntervalTree;

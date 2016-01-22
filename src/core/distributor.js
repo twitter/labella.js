@@ -1,11 +1,5 @@
-define([
-  'core/helper',
-  'lib/intervalTree'
-],
-function(helper, IntervalTree){
-//---------------------------------------------------
-// BEGIN code for this module
-//---------------------------------------------------
+var helper = require('./helper.js');
+var IntervalTree = require('../lib/intervalTree.js');
 
 var DEFAULT_OPTIONS = {
   algorithm: 'overlap',
@@ -185,9 +179,4 @@ var Distributor = function(options){
 Distributor.DEFAULT_OPTIONS = DEFAULT_OPTIONS;
 
 // return module
-return Distributor;
-
-//---------------------------------------------------
-// END code for this module
-//---------------------------------------------------
-});
+module.exports = Distributor;

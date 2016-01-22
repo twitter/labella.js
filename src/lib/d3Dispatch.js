@@ -1,11 +1,3 @@
-define([
-
-],
-function(){
-//---------------------------------------------------
-// BEGIN code for this module
-//---------------------------------------------------
-
 var d3 = { version: '3.4.4' };
 function d3_class(ctor, properties) {
   try {
@@ -145,9 +137,4 @@ function d3_dispatch_event(dispatch) {
   return event;
 }
 
-return d3.dispatch;
-
-//---------------------------------------------------
-// END code for this module
-//---------------------------------------------------
-});
+module.exports = d3.dispatch;

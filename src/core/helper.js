@@ -1,14 +1,8 @@
-define([
-  'lib/extend',
-  'lib/d3Dispatch',
-  'lib/d3Rebind'
-],
-function(extend, d3Dispatch, d3Rebind){
-//---------------------------------------------------
-// BEGIN code for this module
-//---------------------------------------------------
+var extend = require('../lib/extend.js');
+var d3Dispatch = require('../lib/d3Dispatch.js');
+var d3Rebind = require('../lib/d3Rebind.js');
 
-var module = (function(){
+module.exports = (function(){
   var helper = {};
 
   helper.sum = function(array, accessor){
@@ -41,11 +35,3 @@ var module = (function(){
 
   return helper;
 }());
-
-// return module
-return module;
-
-//---------------------------------------------------
-// END code for this module
-//---------------------------------------------------
-});

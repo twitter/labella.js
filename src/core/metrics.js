@@ -1,10 +1,4 @@
-define([
-  'core/helper'
-],
-function(helper){
-//---------------------------------------------------
-// BEGIN code for this module
-//---------------------------------------------------
+var helper = require('./helper.js');
 
 var module = (function(){
   var metrics = {};
@@ -114,9 +108,4 @@ var module = (function(){
 }());
 
 // return module
-return module;
-
-//---------------------------------------------------
-// END code for this module
-//---------------------------------------------------
-});
+module.exports = module;

@@ -1,12 +1,6 @@
-define([
-  'core/nodeGroup',
-  'core/physics/spring',
-  'core/helper'
-],
-function(NodeGroup, Spring, helper){
-//---------------------------------------------------
-// BEGIN code for this module
-//---------------------------------------------------
+var NodeGroup = require('./nodeGroup.js');
+var Spring = require('./physics/spring.js');
+var helper = require('./helper.js');
 
 var DEFAULT_OPTIONS = {
   damping: 0.1,
@@ -312,9 +306,4 @@ var Simulator = function(options){
 
 Simulator.DEFAULT_OPTIONS = DEFAULT_OPTIONS;
 
-return Simulator;
-
-//---------------------------------------------------
-// END code for this module
-//---------------------------------------------------
-});
+module.exports = Simulator;

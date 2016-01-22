@@ -1,10 +1,4 @@
-define([
-  'core/helper'
-],
-function(helper){
-//---------------------------------------------------
-// BEGIN code for this module
-//---------------------------------------------------
+var helper = require('./helper.js');
 
 var Node = function(idealPos, width, data){
   if(arguments.length===1 && helper.isObject(idealPos)){
@@ -177,9 +171,4 @@ proto.isBumping = function(b, buffer){
 };
 
 // return module
-return Node;
-
-//---------------------------------------------------
-// END code for this module
-//---------------------------------------------------
-});
+module.exports = Node;

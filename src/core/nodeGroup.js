@@ -1,10 +1,3 @@
-define([
-],
-function(){
-//---------------------------------------------------
-// BEGIN code for this module
-//---------------------------------------------------
-
 var NodeGroup = function(nodes){
   this.nodes = nodes || [];
   this.force = 0;
@@ -117,9 +110,4 @@ NodeGroup.mergeAdjacentGroups = function(groups, conditionFn){
 };
 
 // return module
-return NodeGroup;
-
-//---------------------------------------------------
-// END code for this module
-//---------------------------------------------------
-});
+module.exports = NodeGroup;

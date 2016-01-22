@@ -1,13 +1,7 @@
-define([
-  'core/helper',
-  'core/node'
-],
-function(helper, Node){
-//---------------------------------------------------
-// BEGIN code for this module
-//---------------------------------------------------
+var Node = require('./node.js');
+var helper = require('./helper.js');
 
-var module = (function(){
+module.exports = (function(){
   var util = {};
 
   var OPTIONS = {
@@ -150,11 +144,3 @@ var module = (function(){
 
   return util;
 }());
-
-// return module
-return module;
-
-//---------------------------------------------------
-// END code for this module
-//---------------------------------------------------
-});
