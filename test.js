@@ -19,14 +19,21 @@ var labels = [
   [854,50]
 ];
 
-var variables = labels.map(function(label){
+var variables = [new vpsc.Variable(0, 1e10)].concat(labels.map(function(label){
   return new vpsc.Variable(label[0]);
-});
+}));
 
 var constraints = [];
-for(var i=1;i<labels.length;i++){
-  var l1 = labels[i-1];
-  var l2 = labels[i];
+
+constraints.push(new vpsc.Constraint(
+  variables[0],
+  variables[1],
+  1e-6 + labels[0][1]/2
+));
+
+for(var i=2;i<variables.length;i++){
+  var l1 = labels[i-2];
+  var l2 = labels[i-1];
   constraints.push(new vpsc.Constraint(variables[i-1], variables[i], (l1[1]+l2[1])/2 + 3));
 }
 
