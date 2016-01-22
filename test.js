@@ -1,43 +1,65 @@
-var vpsc = require('./src/lib/vpsc.js');
 var labella = require('./dist/labella.js');
+var removeOverlap = require('./src/core/removeOverlap.js');
 
-var labels = [
-  [1,50],
-  [2,50],
-  [3,50],
-  [3,50],
-  [3,50],
-  [304,50],
-  [454,50],
-  [454,50],
-  [454,50],
-  [804,50],
-  [804,70],
-  [804,50],
-  [804,50],
-  [854,50],
-  [854,50]
-];
+var nodes = removeOverlap([
+  new labella.Node(1,50),
+  new labella.Node(2,50),
+  new labella.Node(3,50),
+  new labella.Node(3,50),
+  new labella.Node(3,50),
+  new labella.Node(304,50),
+  new labella.Node(454,50),
+  new labella.Node(454,50),
+  new labella.Node(454,50),
+  new labella.Node(804,50),
+  new labella.Node(804,70),
+  new labella.Node(804,50),
+  new labella.Node(804,50),
+  new labella.Node(854,50),
+  new labella.Node(854,50)
+]);
 
-var variables = [new vpsc.Variable(0, 1e10)].concat(labels.map(function(label){
-  return new vpsc.Variable(label[0]);
-}));
+console.log('nodes', nodes);
 
-var constraints = [];
+// var vpsc = require('./src/lib/vpsc.js');
 
-constraints.push(new vpsc.Constraint(
-  variables[0],
-  variables[1],
-  1e-6 + labels[0][1]/2
-));
+// var labels = [
+//   [1,50],
+//   [2,50],
+//   [3,50],
+//   [3,50],
+//   [3,50],
+//   [304,50],
+//   [454,50],
+//   [454,50],
+//   [454,50],
+//   [804,50],
+//   [804,70],
+//   [804,50],
+//   [804,50],
+//   [854,50],
+//   [854,50]
+// ];
 
-for(var i=2;i<variables.length;i++){
-  var l1 = labels[i-2];
-  var l2 = labels[i-1];
-  constraints.push(new vpsc.Constraint(variables[i-1], variables[i], (l1[1]+l2[1])/2 + 3));
-}
+// var variables = [new vpsc.Variable(0, 1e10)].concat(labels.map(function(label){
+//   return new vpsc.Variable(label[0]);
+// }));
 
-var solver = new vpsc.Solver(variables, constraints);
-solver.solve();
+// var constraints = [];
 
-console.log(variables.map(function(d){return d.position();}));
+// constraints.push(new vpsc.Constraint(
+//   variables[0],
+//   variables[1],
+//   1e-6 + labels[0][1]/2
+// ));
+
+// for(var i=2;i<variables.length;i++){
+//   var l1 = labels[i-2];
+//   var l2 = labels[i-1];
+//   constraints.push(new vpsc.Constraint(variables[i-1], variables[i], (l1[1]+l2[1])/2 + 3));
+// }
+
+// var solver = new vpsc.Solver(variables, constraints);
+// solver.solve();
+
+// console.log(variables.map(function(d){return d.position();}));
