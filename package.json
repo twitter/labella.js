@@ -17,6 +17,7 @@
     "bower": "^1.6.5",
     "browser-sync": "~2.10.1",
     "del": "^2.2.0",
+    "exports-loader": "^0.6.2",
     "gulp": "~3.9.0",
     "gulp-gh-pages": "~0.5.4",
     "gulp-load-plugins": "~1.1.0",
@@ -36,6 +37,8 @@
     "phantomjs": "~1.9.18",
     "pkgfiles": "^2.3.0",
     "run-sequence": "~1.1.5",
+    "ts-loader": "^0.8.0",
+    "typescript": "^1.7.5",
     "webpack": "~1.12.9",
     "webpack-stream": "~3.1.0",
     "yargs": "~3.31.0"
