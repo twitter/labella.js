@@ -9,9 +9,7 @@ var Server      = require('karma').Server;
 var webpack     = require('webpack-stream');
 var argv        = require('yargs').argv;
 var runSequence = require('run-sequence');
-var webpackConfig = extend({}, require('./webpack.config.js'));
-
-console.log('webpackConfig', webpackConfig);
+var webpackConfig = require('./webpack.config.js')();
 
 // -------------------------------------------
 // Configuration

@@ -2,7 +2,16 @@
 'use strict';
 
 var extend = require('deep-extend');
-var webpackConfig = require('./webpack.config.js');
+var webpackConfig = require('./webpack.config.js')(true);
+
+webpackConfig.module.preLoaders = [
+  // instrument only source files with Istanbul
+  {
+    test: /[^(spec)]\.js$/,
+    loader: 'istanbul-instrumenter'
+  }
+];
+webpackConfig.devtool = 'inline-source-map';
 
 module.exports = function(config) {
   config.set({
@@ -26,18 +35,7 @@ module.exports = function(config) {
       'src/**/*.spec.js': ['webpack', 'sourcemap']
     },
 
-    webpack: extend(extend({}, webpackConfig), {
-      module: {
-        preLoaders: [
-          // instrument only source files with Istanbul
-          {
-            test: /[^(spec)]\.js$/,
-            loader: 'istanbul-instrumenter'
-          }
-        ]
-      },
-      devtool: 'inline-source-map'
-    }),
+    webpack: webpackConfig,
 
     // test results reporter to use
     // possible values: 'dots', 'progress', 'mocha', 'coverage'
