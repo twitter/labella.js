@@ -7,9 +7,10 @@
 
 Replace *force-directed simulation* with *constraint-based layout* and use [VPSC](https://github.com/tgdwyer/WebCola/wiki/What-is-VPSC%3F) quadratic solver to compute positions that best satisfy the constraints. This method is much faster and does not rely on number of iterations like a simulation, therefore the computation can return results immediately and does not need to be asynchronous anymore. This improves overall performance and leads to several changes to the API.
 
+<a name="migrate-0.x.x-1.x.x"></a>
 #### New API
 
-- `force.compute()` is a replacement for `force.start()`. Usage is slightly different.
+- `force.compute()` is a replacement for `force.start()` and `force.on()`. Usage is slightly different.
 
 ```diff
 var force = new labella.Force()
