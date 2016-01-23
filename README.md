@@ -97,4 +97,5 @@ Copyright 2015 Twitter, Inc. Licensed under the [Apache License Version 2.0](htt
 
 [npm-image]: https://badge.fury.io/js/labella.svg
 [npm-url]: https://npmjs.org/package/labella
-
+[travis-image]: https://travis-ci.org/twitter/labella.js.svg?branch=master
+[travis-url]: https://travis-ci.org/twitter/labella.js
