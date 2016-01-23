@@ -52,7 +52,7 @@ angular.module('app', [])
       force.nodes(inputNodes);
 
       var t1 = new Date().getTime();
-      force.start();
+      force.compute();
       var t2 = new Date().getTime();
       console.log('completed in ' + (t2 - t1) + 'ms');
       chart.data(force.nodes());

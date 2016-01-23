@@ -429,11 +429,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  force.options(_options);
 
-	  force.start = function () {
+	  force.compute = function () {
 	    var simOptions = helper.extractKeys(options, Object.keys(removeOverlap.DEFAULT_OPTIONS));
 
 	    layers = distributor.distribute(nodes);
-	    layers.map(function (layer, index) {
+	    layers.map(function (layer) {
 	      removeOverlap(layer, simOptions);
 	    });
 
