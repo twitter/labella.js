@@ -1,7 +1,8 @@
-var vpsc = require('../lib/vpsc.js');
 var helper = require('./helper.js');
+var vpsc = require('../lib/vpsc.js');
 
 var DEFAULT_OPTIONS = {
+  lineSpacing: 2,
   nodeSpacing: 3,
   minPos: 0,
   maxPos: null
@@ -37,7 +38,15 @@ function removeOverlap(nodes, options){
     for(var i=1;i<variables.length;i++){
       var v1 = variables[i-1];
       var v2 = variables[i];
-      constraints.push(new vpsc.Constraint(v1, v2, (v1.node.width+v2.node.width)/2 + options.nodeSpacing));
+
+      var gap;
+      if(v1.node.isStub()&&v2.node.isStub()){
+        gap = (v1.node.width+v2.node.width)/2 + options.lineSpacing;
+      }
+      else{
+        gap = (v1.node.width+v2.node.width)/2 + options.nodeSpacing;
+      }
+      constraints.push(new vpsc.Constraint(v1, v2, gap));
     }
 
     if(helper.isDefined(options.minPos)){

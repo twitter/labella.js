@@ -61,10 +61,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  Node: __webpack_require__(1),
 	  Force: __webpack_require__(6),
 	  Distributor: __webpack_require__(7),
-	  Renderer: __webpack_require__(14),
+	  Renderer: __webpack_require__(13),
 
 	  // metrics: require('./core/metrics.js'),
-	  util: __webpack_require__(15)
+	  util: __webpack_require__(14)
 	};
 
 /***/ },
@@ -571,18 +571,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	var Distributor = __webpack_require__(7);
 	var metrics = __webpack_require__(10);
 	var helper = __webpack_require__(2);
-	var Spring = __webpack_require__(11);
-	var removeOverlap = __webpack_require__(12);
+	var removeOverlap = __webpack_require__(11);
 
 	var DEFAULT_OPTIONS = {
-	  damping: 0.1,
-	  epsilon: 0.003,
-	  timestep: 1,
 	  nodeSpacing: 3,
 	  minPos: 0,
 	  maxPos: null,
-	  pullForce: new Spring(1),
-	  roundsPerTick: 100,
 
 	  algorithm: 'overlap',
 	  density: 0.85,
@@ -591,13 +585,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var Force = function (_options) {
 	  var force = {};
-	  var dispatch = helper.dispatch('start', 'tick', 'endLayer', 'end');
+	  var dispatch = helper.dispatch('start', 'end');
 	  var options = helper.extend({}, DEFAULT_OPTIONS);
 	  var distributor = new Distributor();
-	  // var simulators = [];
 	  var nodes = [];
 	  var layers = null;
-	  var isRunning = false;
 
 	  force.nodes = function (x) {
 	    if (!arguments.length) return nodes;
@@ -605,10 +597,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    layers = null;
 	    // simulators = [];
 	    return force;
-	  };
-
-	  force.getLayers = function () {
-	    return layers;
 	  };
 
 	  force.options = function (x) {
@@ -623,135 +611,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	    distributor.options(disOptions);
 
-	    // var simOptions = helper.extractKeys(options, Object.keys(Simulator.DEFAULT_OPTIONS));
-	    // simulators.forEach(function(sim){
-	    //   sim.options(simOptions);
-	    // });
-
 	    return force;
 	  };
 
 	  force.options(_options);
 
-	  force.distribute = function () {
-	    if (isRunning) {
-	      throw 'This function cannot be called while the simulator is running. Stop it first.';
-	    }
-	    layers = distributor.distribute(nodes);
-	    var simOptions = helper.extractKeys(options, Object.keys(Simulator.DEFAULT_OPTIONS));
-	    simulators = layers.map(function (layer) {
-	      return new Simulator(simOptions).nodes(layer);
-	    });
-	    return force;
-	  };
-
-	  force.initialize = function () {
-	    if (isRunning) {
-	      throw 'This function cannot be called while the simulator is running. Stop it first.';
-	    }
-	    simulators.forEach(function (sim) {
-	      sim.initialize();
-	    });
-	    return force;
-	  };
-
-	  force.step = function () {
-	    simulators.forEach(function (sim) {
-	      sim.step();
-	    });
-	    return force;
-	  };
-
-	  force.stop = function () {
-	    simulators.forEach(function (sim) {
-	      sim.stop();
-	    });
-	    return force;
-	  };
-
-	  force.start = function (maxRound) {
+	  force.start = function () {
 	    var simOptions = helper.extractKeys(options, Object.keys(removeOverlap.DEFAULT_OPTIONS));
 
-	    if (isRunning) {
-	      throw 'This function cannot be called while the simulator is running. Stop it first.';
-	    }
 	    setTimeout(function () {
 	      dispatch.start({ type: 'start' });
 	      layers = distributor.distribute(nodes);
 	      layers.map(function (layer, index) {
 	        removeOverlap(layer, simOptions);
-	        dispatch.endLayer({
-	          type: 'endLayer',
-	          layerIndex: index
-	        });
 	      });
 	      dispatch.end({ type: 'end' });
-	    });
+	    }, 0);
 
 	    return force;
 	  };
-
-	  force.resume = function (additionalRound) {
-	    if (layers.length === 0) return force;
-
-	    if (!isRunning) {
-	      var layerIndex = 0;
-	      dispatch.start({ type: 'start' });
-
-	      var simulate = function () {
-	        var sim = simulators[layerIndex];
-	        if (!sim) return;
-
-	        sim.on('tick', function (event) {
-	          dispatch.tick(helper.extend({}, event, {
-	            layerIndex: layerIndex
-	          }));
-	        });
-	        sim.on('end', function (event) {
-	          dispatch.endLayer(helper.extend({}, event, {
-	            type: 'endLayer',
-	            layerIndex: layerIndex
-	          }));
-
-	          layerIndex++;
-
-	          // Still have layer(s) left
-	          if (layerIndex < layers.length) {
-	            simulate();
-	          }
-	          // really end
-	          else {
-	              dispatch.end({ type: 'end' });
-	              isRunning = false;
-	            }
-	        });
-
-	        if (layerIndex > 0) {
-	          sim.start(additionalRound);
-	        } else {
-	          sim.resume(additionalRound);
-	        }
-	      };
-
-	      simulate();
-	    }
-
-	    return force;
-	  };
-
-	  force.energy = function () {
-	    return helper.sum(simulators, function (sim) {
-	      return sim.energy();
-	    });
-	  };
-
-	  force.isStable = function () {
-	    return simulators.every(function (d) {
-	      return d.isStable();
-	    });
-	  };
-
-	  force.reset = force.initialize;
 
 	  force.metrics = function () {
 	    return Object.keys(metrics).map(function (name) {
@@ -1612,34 +1490,11 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function () {
-	  //---------------------------------------------------
-	  // BEGIN code for this module
-	  //---------------------------------------------------
-
-	  function SpringForce(springK) {
-	    this.springK = springK;
-	  }
-
-	  SpringForce.prototype.computeForce = function (displacement) {
-	    return this.springK * displacement;
-	  };
-
-	  return SpringForce;
-
-	  //---------------------------------------------------
-	  // END code for this module
-	  //---------------------------------------------------
-	}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-
-/***/ },
-/* 12 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var vpsc = __webpack_require__(13);
 	var helper = __webpack_require__(2);
+	var vpsc = __webpack_require__(12);
 
 	var DEFAULT_OPTIONS = {
+	  lineSpacing: 2,
 	  nodeSpacing: 3,
 	  minPos: 0,
 	  maxPos: null
@@ -1674,7 +1529,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    for (var i = 1; i < variables.length; i++) {
 	      var v1 = variables[i - 1];
 	      var v2 = variables[i];
-	      constraints.push(new vpsc.Constraint(v1, v2, (v1.node.width + v2.node.width) / 2 + options.nodeSpacing));
+
+	      var gap;
+	      if (v1.node.isStub() && v2.node.isStub()) {
+	        gap = (v1.node.width + v2.node.width) / 2 + options.lineSpacing;
+	      } else {
+	        gap = (v1.node.width + v2.node.width) / 2 + options.nodeSpacing;
+	      }
+	      constraints.push(new vpsc.Constraint(v1, v2, gap));
 	    }
 
 	    if (helper.isDefined(options.minPos)) {
@@ -1710,7 +1572,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = removeOverlap;
 
 /***/ },
-/* 13 */
+/* 12 */
 /***/ function(module, exports) {
 
 	var vpsc = {};
@@ -2198,7 +2060,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = vpsc;
 
 /***/ },
-/* 14 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var helper = __webpack_require__(2);
@@ -2345,7 +2207,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Renderer;
 
 /***/ },
-/* 15 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Node = __webpack_require__(1);

@@ -2,18 +2,12 @@
 var Distributor = require('./distributor.js');
 var metrics = require('./metrics.js');
 var helper = require('./helper.js');
-var Spring = require('./physics/spring.js');
 var removeOverlap = require('./removeOverlap.js');
 
 var DEFAULT_OPTIONS = {
-  damping: 0.1,
-  epsilon: 0.003,
-  timestep: 1,
   nodeSpacing: 3,
   minPos: 0,
   maxPos: null,
-  pullForce: new Spring(1),
-  roundsPerTick: 100,
 
   algorithm: 'overlap',
   density: 0.85,
@@ -22,13 +16,11 @@ var DEFAULT_OPTIONS = {
 
 var Force = function(_options){
   var force = {};
-  var dispatch = helper.dispatch('start', 'tick', 'endLayer', 'end');
+  var dispatch = helper.dispatch('start', 'end');
   var options = helper.extend({}, DEFAULT_OPTIONS);
   var distributor = new Distributor();
-  // var simulators = [];
   var nodes = [];
   var layers = null;
-  var isRunning = false;
 
   force.nodes = function(x) {
     if (!arguments.length) return nodes;
@@ -36,10 +28,6 @@ var Force = function(_options){
     layers = null;
     // simulators = [];
     return force;
-  };
-
-  force.getLayers = function(){
-    return layers;
   };
 
   force.options = function(x){
@@ -55,132 +43,25 @@ var Force = function(_options){
     }
     distributor.options(disOptions);
 
-    // var simOptions = helper.extractKeys(options, Object.keys(Simulator.DEFAULT_OPTIONS));
-    // simulators.forEach(function(sim){
-    //   sim.options(simOptions);
-    // });
-
     return force;
   };
 
   force.options(_options);
 
-  force.distribute = function(){
-    if(isRunning){
-      throw 'This function cannot be called while the simulator is running. Stop it first.';
-    }
-    layers = distributor.distribute(nodes);
-    var simOptions = helper.extractKeys(options, Object.keys(Simulator.DEFAULT_OPTIONS));
-    simulators = layers.map(function(layer){
-      return new Simulator(simOptions).nodes(layer);
-    });
-    return force;
-  };
-
-  force.initialize = function(){
-    if(isRunning){
-      throw 'This function cannot be called while the simulator is running. Stop it first.';
-    }
-    simulators.forEach(function(sim){
-      sim.initialize();
-    });
-    return force;
-  };
-
-  force.step = function(){
-    simulators.forEach(function(sim){
-      sim.step();
-    });
-    return force;
-  };
-
-  force.stop = function(){
-    simulators.forEach(function(sim){
-      sim.stop();
-    });
-    return force;
-  };
-
-  force.start = function(maxRound){
+  force.start = function(){
     var simOptions = helper.extractKeys(options, Object.keys(removeOverlap.DEFAULT_OPTIONS));
 
-    if(isRunning){
-      throw 'This function cannot be called while the simulator is running. Stop it first.';
-    }
     setTimeout(function(){
       dispatch.start({type: 'start'});
       layers = distributor.distribute(nodes);
       layers.map(function(layer, index){
         removeOverlap(layer, simOptions);
-        dispatch.endLayer({
-          type: 'endLayer',
-          layerIndex: index
-        });
       });
       dispatch.end({type: 'end'});
-    });
+    }, 0);
 
     return force;
   };
-
-  force.resume = function(additionalRound){
-    if(layers.length===0) return force;
-
-    if(!isRunning){
-      var layerIndex = 0;
-      dispatch.start({type: 'start'});
-
-      var simulate = function(){
-        var sim = simulators[layerIndex];
-        if(!sim) return;
-
-        sim.on('tick', function(event){
-          dispatch.tick(helper.extend({}, event, {
-            layerIndex: layerIndex
-          }));
-        });
-        sim.on('end', function(event){
-          dispatch.endLayer(helper.extend({}, event, {
-            type: 'endLayer',
-            layerIndex: layerIndex
-          }));
-
-          layerIndex++;
-
-          // Still have layer(s) left
-          if(layerIndex < layers.length){
-            simulate();
-          }
-          // really end
-          else{
-            dispatch.end({type: 'end'});
-            isRunning = false;
-          }
-        });
-
-        if(layerIndex>0){
-          sim.start(additionalRound);
-        }
-        else{
-          sim.resume(additionalRound);
-        }
-      };
-
-      simulate();
-    }
-
-    return force;
-  };
-
-  force.energy = function(){
-    return helper.sum(simulators, function(sim){ return sim.energy(); });
-  };
-
-  force.isStable = function(){
-    return simulators.every(function(d){return d.isStable();});
-  };
-
-  force.reset = force.initialize;
 
   force.metrics = function(){
     return Object.keys(metrics).map(function(name){

@@ -52,12 +52,6 @@ angular.module('app', [])
       force.on('start', function(event){
         t1 = new Date().getTime();
       });
-      force.on('tick', function(event){
-        chart.data(force.nodes());
-      });
-      // force.on('endLayer', function(event){
-      //   chart.data(force.getLayers());
-      // });
       force.on('end', function(event){
         $timeout(function(){
           var t2 = new Date().getTime();
