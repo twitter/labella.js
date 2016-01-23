@@ -6,7 +6,6 @@ var DEFAULT_OPTIONS = {
   layerWidth: 1000,
   density: 0.75,
   nodeSpacing: 3,
-  // bundleStubs: false,
   stubWidth: 1
 };
 
@@ -162,7 +161,7 @@ var Distributor = function(options){
     if(typeof options.algorithm == 'function'){
       return options.algorithm(nodes, options);
     }
-    else if(options.algorithm=='none'){
+    else if(options.algorithm=='none' || !helper.isDefined(options.algorithm)){
       return nodes;
     }
     else if(algorithms.hasOwnProperty(options.algorithm)){

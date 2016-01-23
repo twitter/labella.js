@@ -54,8 +54,11 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	// Library for placing labels using the force
-	// Author: Krist Wongsuphasawat
+	/*
+	Copyright 2015 Twitter, Inc.
+	Licensed under the Apache License, Version 2.0
+	http://www.apache.org/licenses/LICENSE-2.0
+	*/
 
 	module.exports = {
 	  Node: __webpack_require__(1),
@@ -474,7 +477,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  layerWidth: 1000,
 	  density: 0.75,
 	  nodeSpacing: 3,
-	  // bundleStubs: false,
 	  stubWidth: 1
 	};
 
@@ -629,7 +631,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    if (typeof options.algorithm == 'function') {
 	      return options.algorithm(nodes, options);
-	    } else if (options.algorithm == 'none') {
+	    } else if (options.algorithm == 'none' || !helper.isDefined(options.algorithm)) {
 	      return nodes;
 	    } else if (algorithms.hasOwnProperty(options.algorithm)) {
 	      return algorithms[options.algorithm](nodes);

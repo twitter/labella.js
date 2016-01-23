@@ -3,7 +3,8 @@ angular.module('app', [])
     $scope.distributorAlgorithms = [
       // 'fifo',
       'simple',
-      'overlap'
+      'overlap',
+      'none'
     ];
 
     $scope.autoLayout = true;
