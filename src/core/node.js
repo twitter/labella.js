@@ -74,20 +74,6 @@ proto.idealLeft = function(){
   return this.idealPos - this.width/2;
 };
 
-proto.halfWidth = function(){
-  return this.width/2;
-};
-
-proto.velocity = function(timeStep){
-  timeStep = timeStep || 1;
-  return (this.currentPos - this.previousPos)/timeStep;
-};
-
-proto.kineticEnergy = function(){
-  var v = this.velocity();
-  return v*v;
-};
-
 proto.clearStub = function(){
   this.parent = null;
   return this;
