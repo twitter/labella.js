@@ -1,6 +1,4 @@
 var extend = require('../lib/extend.js');
-var d3Dispatch = require('../lib/d3Dispatch.js');
-var d3Rebind = require('../lib/d3Rebind.js');
 
 module.exports = (function(){
   var helper = {};
@@ -21,10 +19,6 @@ module.exports = (function(){
   };
 
   helper.extend = extend;
-
-  helper.dispatch = d3Dispatch;
-
-  helper.rebind = d3Rebind;
 
   helper.extractKeys = function(object, keys){
     return keys.reduce(function(prev, key){

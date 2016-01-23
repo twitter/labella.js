@@ -16,7 +16,6 @@ var DEFAULT_OPTIONS = {
 
 var Force = function(_options){
   var force = {};
-  var dispatch = helper.dispatch('start', 'end');
   var options = helper.extend({}, DEFAULT_OPTIONS);
   var distributor = new Distributor();
   var nodes = [];
@@ -26,8 +25,11 @@ var Force = function(_options){
     if (!arguments.length) return nodes;
     nodes = x;
     layers = null;
-    // simulators = [];
     return force;
+  };
+
+  force.getLayers = function(){
+    return layers;
   };
 
   force.options = function(x){
@@ -51,14 +53,10 @@ var Force = function(_options){
   force.start = function(){
     var simOptions = helper.extractKeys(options, Object.keys(removeOverlap.DEFAULT_OPTIONS));
 
-    setTimeout(function(){
-      dispatch.start({type: 'start'});
-      layers = distributor.distribute(nodes);
-      layers.map(function(layer, index){
-        removeOverlap(layer, simOptions);
-      });
-      dispatch.end({type: 'end'});
-    }, 0);
+    layers = distributor.distribute(nodes);
+    layers.map(function(layer, index){
+      removeOverlap(layer, simOptions);
+    });
 
     return force;
   };
@@ -84,8 +82,6 @@ var Force = function(_options){
         return metrics[name] ? metrics[name](layers) : null;
     }
   };
-
-  helper.rebind(force, dispatch, 'on');
 
   return force;
 };

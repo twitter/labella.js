@@ -59,12 +59,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	module.exports = {
 	  Node: __webpack_require__(1),
-	  Force: __webpack_require__(6),
-	  Distributor: __webpack_require__(7),
-	  Renderer: __webpack_require__(13),
+	  Force: __webpack_require__(4),
+	  Distributor: __webpack_require__(5),
+	  Renderer: __webpack_require__(11),
 
 	  // metrics: require('./core/metrics.js'),
-	  util: __webpack_require__(14)
+	  util: __webpack_require__(12)
 	};
 
 /***/ },
@@ -160,6 +160,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return v * v;
 	};
 
+	proto.clearStub = function () {
+	  this.parent = null;
+	  return this;
+	};
+
 	proto.createStub = function (width) {
 	  var stub = new Node({
 	    idealPos: this.idealPos,
@@ -220,24 +225,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  });
 	};
 
-	/**
-	 * Check if two adjacent objects are running into each other
-	 * Either a hits b or b hits a.
-	 * The false case are when both are running away from each other,
-	 * or one runs away and another stops
-	 * Object#1's position must be before Object#2
-	 * @param  Number f1 Object#1's force
-	 * @param  Number f2 Object#2's force
-	 * @return Boolean true if both object are running into each other
-	 */
-	proto.isBumping = function (b, buffer) {
-	  var f1 = this.force || 0;
-	  var f2 = b.force || 0;
-	  /* jshint ignore:start */
-	  return this.overlapWithNode(b, buffer) && (f1 * f2 > 0 || f1 === 0 && f2 < 0 || f1 > 0 && f2 === 0 || f1 > 0 && f2 < 0);
-	  /* jshint ignore:end */
-	};
-
 	// return module
 	module.exports = Node;
 
@@ -246,8 +233,6 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	var extend = __webpack_require__(3);
-	var d3Dispatch = __webpack_require__(4);
-	var d3Rebind = __webpack_require__(5);
 
 	module.exports = function () {
 	  var helper = {};
@@ -267,10 +252,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 
 	  helper.extend = extend;
-
-	  helper.dispatch = d3Dispatch;
-
-	  helper.rebind = d3Rebind;
 
 	  helper.extractKeys = function (object, keys) {
 	    return keys.reduce(function (prev, key) {
@@ -409,169 +390,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 4 */
-/***/ function(module, exports) {
-
-	var d3 = { version: '3.4.4' };
-	function d3_class(ctor, properties) {
-	  try {
-	    for (var key in properties) {
-	      Object.defineProperty(ctor.prototype, key, {
-	        value: properties[key],
-	        enumerable: false
-	      });
-	    }
-	  } catch (e) {
-	    ctor.prototype = properties;
-	  }
-	}
-	d3.map = function (object) {
-	  var map = new d3_Map();
-	  if (object instanceof d3_Map) object.forEach(function (key, value) {
-	    map.set(key, value);
-	  });else for (var key in object) map.set(key, object[key]);
-	  return map;
-	};
-	function d3_Map() {}
-	d3_class(d3_Map, {
-	  has: d3_map_has,
-	  get: function (key) {
-	    return this[d3_map_prefix + key];
-	  },
-	  set: function (key, value) {
-	    return this[d3_map_prefix + key] = value;
-	  },
-	  remove: d3_map_remove,
-	  keys: d3_map_keys,
-	  values: function () {
-	    var values = [];
-	    this.forEach(function (key, value) {
-	      values.push(value);
-	    });
-	    return values;
-	  },
-	  entries: function () {
-	    var entries = [];
-	    this.forEach(function (key, value) {
-	      entries.push({
-	        key: key,
-	        value: value
-	      });
-	    });
-	    return entries;
-	  },
-	  size: d3_map_size,
-	  empty: d3_map_empty,
-	  forEach: function (f) {
-	    for (var key in this) if (key.charCodeAt(0) === d3_map_prefixCode) f.call(this, key.substring(1), this[key]);
-	  }
-	});
-	var d3_map_prefix = '\0',
-	    d3_map_prefixCode = d3_map_prefix.charCodeAt(0);
-	function d3_map_has(key) {
-	  return d3_map_prefix + key in this;
-	}
-	function d3_map_remove(key) {
-	  key = d3_map_prefix + key;
-	  return key in this && delete this[key];
-	}
-	function d3_map_keys() {
-	  var keys = [];
-	  this.forEach(function (key) {
-	    keys.push(key);
-	  });
-	  return keys;
-	}
-	function d3_map_size() {
-	  var size = 0;
-	  for (var key in this) if (key.charCodeAt(0) === d3_map_prefixCode) ++size;
-	  return size;
-	}
-	function d3_map_empty() {
-	  for (var key in this) if (key.charCodeAt(0) === d3_map_prefixCode) return false;
-	  return true;
-	}
-	d3.dispatch = function () {
-	  var dispatch = new d3_dispatch(),
-	      i = -1,
-	      n = arguments.length;
-	  while (++i < n) dispatch[arguments[i]] = d3_dispatch_event(dispatch);
-	  return dispatch;
-	};
-	function d3_dispatch() {}
-	d3_dispatch.prototype.on = function (type, listener) {
-	  var i = type.indexOf('.'),
-	      name = '';
-	  if (i >= 0) {
-	    name = type.substring(i + 1);
-	    type = type.substring(0, i);
-	  }
-	  if (type) return arguments.length < 2 ? this[type].on(name) : this[type].on(name, listener);
-	  if (arguments.length === 2) {
-	    if (listener == null) for (type in this) {
-	      if (this.hasOwnProperty(type)) this[type].on(name, null);
-	    }
-	    return this;
-	  }
-	};
-	function d3_dispatch_event(dispatch) {
-	  var listeners = [],
-	      listenerByName = new d3_Map();
-	  function event() {
-	    var z = listeners,
-	        i = -1,
-	        n = z.length,
-	        l;
-	    while (++i < n) if (l = z[i].on) l.apply(this, arguments);
-	    return dispatch;
-	  }
-	  event.on = function (name, listener) {
-	    var l = listenerByName.get(name),
-	        i;
-	    if (arguments.length < 2) return l && l.on;
-	    if (l) {
-	      l.on = null;
-	      listeners = listeners.slice(0, i = listeners.indexOf(l)).concat(listeners.slice(i + 1));
-	      listenerByName.remove(name);
-	    }
-	    if (listener) listeners.push(listenerByName.set(name, { on: listener }));
-	    return dispatch;
-	  };
-	  return event;
-	}
-
-	module.exports = d3.dispatch;
-
-/***/ },
-/* 5 */
-/***/ function(module, exports) {
-
-	var rebind = function (target, source) {
-	  var i = 1,
-	      n = arguments.length,
-	      method;
-	  while (++i < n) target[method = arguments[i]] = d3_rebind(target, source, source[method]);
-	  return target;
-	};
-
-	function d3_rebind(target, source, method) {
-	  return function () {
-	    var value = method.apply(source, arguments);
-	    return value === source ? target : value;
-	  };
-	}
-
-	// return module
-	module.exports = rebind;
-
-/***/ },
-/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// var Simulator = require('./simulator.js');
-	var Distributor = __webpack_require__(7);
-	var metrics = __webpack_require__(10);
+	var Distributor = __webpack_require__(5);
+	var metrics = __webpack_require__(8);
 	var helper = __webpack_require__(2);
-	var removeOverlap = __webpack_require__(11);
+	var removeOverlap = __webpack_require__(9);
 
 	var DEFAULT_OPTIONS = {
 	  nodeSpacing: 3,
@@ -585,7 +410,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var Force = function (_options) {
 	  var force = {};
-	  var dispatch = helper.dispatch('start', 'end');
 	  var options = helper.extend({}, DEFAULT_OPTIONS);
 	  var distributor = new Distributor();
 	  var nodes = [];
@@ -595,8 +419,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (!arguments.length) return nodes;
 	    nodes = x;
 	    layers = null;
-	    // simulators = [];
 	    return force;
+	  };
+
+	  force.getLayers = function () {
+	    return layers;
 	  };
 
 	  force.options = function (x) {
@@ -619,14 +446,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  force.start = function () {
 	    var simOptions = helper.extractKeys(options, Object.keys(removeOverlap.DEFAULT_OPTIONS));
 
-	    setTimeout(function () {
-	      dispatch.start({ type: 'start' });
-	      layers = distributor.distribute(nodes);
-	      layers.map(function (layer, index) {
-	        removeOverlap(layer, simOptions);
-	      });
-	      dispatch.end({ type: 'end' });
-	    }, 0);
+	    layers = distributor.distribute(nodes);
+	    layers.map(function (layer, index) {
+	      removeOverlap(layer, simOptions);
+	    });
 
 	    return force;
 	  };
@@ -653,8 +476,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  };
 
-	  helper.rebind(force, dispatch, 'on');
-
 	  return force;
 	};
 
@@ -663,11 +484,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Force;
 
 /***/ },
-/* 7 */
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var helper = __webpack_require__(2);
-	var IntervalTree = __webpack_require__(8);
+	var IntervalTree = __webpack_require__(6);
 
 	var DEFAULT_OPTIONS = {
 	  algorithm: 'overlap',
@@ -847,7 +668,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Distributor;
 
 /***/ },
-/* 8 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -877,7 +698,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 	*/
 
-	var SortedList = __webpack_require__(9);
+	var SortedList = __webpack_require__(7);
 
 	/**
 	 * IntervalTree
@@ -1147,7 +968,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = IntervalTree;
 
 /***/ },
-/* 9 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*
@@ -1372,7 +1193,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 
 /***/ },
-/* 10 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var helper = __webpack_require__(2);
@@ -1487,11 +1308,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = module;
 
 /***/ },
-/* 11 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var helper = __webpack_require__(2);
-	var vpsc = __webpack_require__(12);
+	var vpsc = __webpack_require__(10);
 
 	var DEFAULT_OPTIONS = {
 	  lineSpacing: 2,
@@ -1572,7 +1393,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = removeOverlap;
 
 /***/ },
-/* 12 */
+/* 10 */
 /***/ function(module, exports) {
 
 	var vpsc = {};
@@ -2060,7 +1881,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = vpsc;
 
 /***/ },
-/* 13 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var helper = __webpack_require__(2);
@@ -2207,7 +2028,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Renderer;
 
 /***/ },
-/* 14 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Node = __webpack_require__(1);
@@ -2232,122 +2053,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      nodes.push(new Node(Math.floor(Math.random() * diffPos) + options.minPos, Math.floor(Math.random() * diffWidth) + options.minWidth));
 	    }
 	    return nodes;
-	  };
-
-	  util.convertNodesToGraph = function (nodes) {
-	    yGap = 60;
-	    var graph = {
-	      nodes: [],
-	      links: [],
-	      constraints: []
-	    };
-
-	    var alignmentConstraint1 = {
-	      type: 'alignment',
-	      axis: 'y',
-	      offsets: []
-	    };
-
-	    var alignmentConstraint2 = {
-	      type: 'alignment',
-	      axis: 'y',
-	      offsets: []
-	    };
-
-	    // graph.constraints.push(alignmentConstraint1);
-	    graph.constraints.push(alignmentConstraint2);
-
-	    // minPos
-	    graph.nodes.push({
-	      index: 0,
-	      x: 1,
-	      y: yGap,
-	      width: 1,
-	      height: 1,
-	      fixed: true
-	    });
-
-	    // maxPos
-	    graph.nodes.push({
-	      index: 0,
-	      x: 900 + 25,
-	      y: yGap,
-	      width: 1,
-	      height: 1,
-	      fixed: true
-	    });
-
-	    nodes.forEach(function (node) {
-	      var node1 = {
-	        index: graph.nodes.length,
-	        x: node.idealPos,
-	        y: 0,
-	        width: 1,
-	        height: 1,
-	        fixed: true
-	      };
-
-	      // alignmentConstraint1.offsets.push({
-	      //   node: node1.index,
-	      //   offset: 0
-	      // });
-	      graph.nodes.push(node1);
-
-	      var node2 = {
-	        index: graph.nodes.length,
-	        x: node.currentPos,
-	        y: yGap,
-	        width: node.width,
-	        height: 12,
-	        originalNode: node
-	      };
-
-	      alignmentConstraint2.offsets.push({
-	        node: node2.index,
-	        offset: 0
-	      });
-	      graph.nodes.push(node2);
-
-	      graph.links.push({
-	        source: node1.index,
-	        target: node2.index
-	      });
-
-	      graph.constraints.push({
-	        axis: 'y',
-	        left: node1.index,
-	        right: node2.index,
-	        gap: yGap,
-	        equality: true
-	      });
-
-	      // min pos constraint
-	      graph.constraints.push({
-	        axis: 'x',
-	        left: 0,
-	        right: node2.index,
-	        gap: 0
-	      });
-
-	      // max pos constraint
-	      graph.constraints.push({
-	        axis: 'x',
-	        left: node2.index,
-	        right: 1,
-	        gap: 0
-	      });
-	    });
-
-	    return graph;
-	  };
-
-	  util.updateNodesInGraph = function (group) {
-	    return graph.nodes.filter(function (d) {
-	      return d.originalNode;
-	    }).map(function (d) {
-	      d.originalNode.currentPos = d.x;
-	      return d.originalNode;
-	    });
 	  };
 
 	  return util;

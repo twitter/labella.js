@@ -49,21 +49,14 @@ angular.module('app', [])
         algorithm: options.algorithm
       });
 
-      force.on('start', function(event){
-        t1 = new Date().getTime();
-      });
-      force.on('end', function(event){
-        $timeout(function(){
-          var t2 = new Date().getTime();
-          console.log('completed in ' + (t2 - t1) + 'ms');
-          chart.data(force.nodes());
-          $scope.metrics = force.metrics();
-        }, 0);
-      });
+      force.nodes(inputNodes);
 
-      force
-        .nodes(inputNodes)
-        .start(+options.maxRound);
+      var t1 = new Date().getTime();
+      force.start();
+      var t2 = new Date().getTime();
+      console.log('completed in ' + (t2 - t1) + 'ms');
+      chart.data(force.nodes());
+      // $scope.metrics = force.metrics();
     }
 
     $scope.regenerate = function(){

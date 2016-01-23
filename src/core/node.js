@@ -88,6 +88,11 @@ proto.kineticEnergy = function(){
   return v*v;
 };
 
+proto.clearStub = function(){
+  this.parent = null;
+  return this;
+};
+
 proto.createStub = function(width){
   var stub = new Node({
     idealPos: this.idealPos,
@@ -146,28 +151,6 @@ proto.clone = function(){
     width: this.width,
     data: this.data
   });
-};
-
-/**
- * Check if two adjacent objects are running into each other
- * Either a hits b or b hits a.
- * The false case are when both are running away from each other,
- * or one runs away and another stops
- * Object#1's position must be before Object#2
- * @param  Number f1 Object#1's force
- * @param  Number f2 Object#2's force
- * @return Boolean true if both object are running into each other
- */
-proto.isBumping = function(b, buffer){
-  var f1 = this.force || 0;
-  var f2 = b.force || 0;
-  /* jshint ignore:start */
-  return this.overlapWithNode(b, buffer)
-    && (f1 * f2 > 0
-    || f1 === 0 && f2 < 0
-    || f1 > 0 && f2 === 0
-    || f1 > 0 && f2 < 0);
-  /* jshint ignore:end */
 };
 
 // return module
