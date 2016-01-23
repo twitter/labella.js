@@ -52,16 +52,13 @@ var nodes = [
 ];
 
 var force = new labella.Force()
-  .nodes(nodes)
-  // Listen when the nodes' positions are updated.
-  .on('end', function(){
-    // The rendering is independent from this library.
-    // User can use canvas, svg or any library to draw the labels.
-    // There is also a built-in helper labella.Renderer for this purpose. See the examples
-    draw(force.nodes());
-  })
-  // Run simulation at most 100 rounds. It may end earlier if equillibrium is reached.
-  .start(100);
+  .nodes(nodes);
+  .compute();
+
+// The rendering is independent from this library.
+// User can use canvas, svg or any library to draw the labels.
+// There is also a built-in helper for this purpose. See labella.Renderer
+draw(force.nodes());
 ```
 
 ### Import into your project

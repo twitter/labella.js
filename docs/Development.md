@@ -24,28 +24,23 @@ bower install
 
 ### Normal workflow
 
-- Run grunt to automatically build the distribution when one of the source files has changed. It also starts a server for the examples.
+- Run gulp to automatically build the distribution when one of the source files has changed. It also starts a server for the examples.
 
 ```
-grunt
+gulp
 ```
 
-- Run unit test. This will run once, then watch for file changes and re-run the tests automatically.
+- Unit test
 
-```
-grunt test
+```bash
+gulp test # Run once
+gulp tdd  # Run, watch for file changes and re-run the tests automatically.
 ```
 
 - Build library once (will create files in the dist folder)
 
 ```
-grunt build
-```
-
-- See all available grunt tasks:
-
-```
-grunt --help
+gulp build
 ```
 
 ### Releasing
@@ -53,13 +48,7 @@ grunt --help
 Use one of these commands to build, bump version and publish to both npm and bower.
 
 ```
-grunt publish:patch // will add version by 0.0.1
-grunt publish:minor // will add version by 0.1
-grunt publish:major // will add version by 1
-```
-
-#### Debugging version bump
-
-```
-grunt bump --dry-run
+gulp publish:patch // will add version by 0.0.1
+gulp publish:minor // will add version by 0.1
+gulp publish:major // will add version by 1
 ```

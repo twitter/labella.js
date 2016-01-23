@@ -47,7 +47,7 @@
   "scripts": {
     "prepublish": "pkgfiles",
     "start": "gulp --debug",
-    "test": "grunt test"
+    "test": "gulp test"
   },
   "repository": {
     "type": "git",
