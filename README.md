@@ -13,7 +13,7 @@ API Reference ▸
 > "Labels should be beautiful."
 
 If you try to place labels for points on a timeline (or any 1D space), one common problem is the labels often overlap.
-How about making the labels push each other and find where they can stay with overlapping.
+How about making the labels push each other and find where they can stay with overlapping?
 
 * Play with [interactive demo](http://twitter.github.io/labella.js/) to learn more
 * See examples: [up](http://twitter.github.io/labella.js/basic_up.html) |
