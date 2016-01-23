@@ -1,5 +1,8 @@
-// Library for placing labels using the force
-// Author: Krist Wongsuphasawat
+/*
+Copyright 2015 Twitter, Inc.
+Licensed under the Apache License, Version 2.0
+http://www.apache.org/licenses/LICENSE-2.0
+*/
 
 module.exports = {
   Node: require('./core/node.js'),
