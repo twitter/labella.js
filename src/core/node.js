@@ -109,7 +109,7 @@ proto.getRoot = function(){
   return previous;
 };
 
-proto.getLevel = function(){
+proto.getLayerIndex = function(){
   return this.layerIndex;
 };
 

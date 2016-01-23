@@ -30,11 +30,10 @@ The width of this node. Note that this width means the width along the main axis
 
 <a name="data" href="#data">#</a> node.**data**
 
-
 Attach data about each label. This can be any value (String, Number, etc.)
 
 ### Functions
 
-<a name="getLevel" href="#getLevel">#</a> node.**getLevel**()
+<a name="getLayerIndex" href="#getLayerIndex">#</a> node.**getLayerIndex**()
 
 Return index of the layer that this node was placed in. (In the beginning of the layout process, the force distribute nodes into multiple layers if all nodes cannot fit within one layer.)

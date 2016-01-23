@@ -182,7 +182,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return previous;
 	};
 
-	proto.getLevel = function () {
+	proto.getLayerIndex = function () {
 	  return this.layerIndex;
 	};
 
@@ -1953,7 +1953,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  switch (options.direction) {
 	    case 'left':
 	      nodes.forEach(function (node) {
-	        var pos = node.getLevel() * gap + options.layerGap;
+	        var pos = node.getLayerIndex() * gap + options.layerGap;
 	        node.x = -pos - options.nodeHeight;
 	        node.y = node.currentPos;
 	        node.dx = options.nodeHeight;
@@ -1962,7 +1962,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      break;
 	    case 'right':
 	      nodes.forEach(function (node) {
-	        var pos = node.getLevel() * gap + options.layerGap;
+	        var pos = node.getLayerIndex() * gap + options.layerGap;
 	        node.x = pos;
 	        node.y = node.currentPos;
 	        node.dx = options.nodeHeight;
@@ -1971,7 +1971,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      break;
 	    case 'up':
 	      nodes.forEach(function (node) {
-	        var pos = node.getLevel() * gap + options.layerGap;
+	        var pos = node.getLayerIndex() * gap + options.layerGap;
 	        node.x = node.currentPos;
 	        node.y = -pos - options.nodeHeight;
 	        node.dx = node.width;
@@ -1981,7 +1981,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    default:
 	    case 'down':
 	      nodes.forEach(function (node) {
-	        var pos = node.getLevel() * gap + options.layerGap;
+	        var pos = node.getLayerIndex() * gap + options.layerGap;
 	        node.x = node.currentPos;
 	        node.y = pos;
 	        node.dx = node.width;
