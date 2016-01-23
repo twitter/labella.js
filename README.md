@@ -8,7 +8,7 @@ API Reference ▸
 [Node](docs/Node.md) |
 [Renderer](docs/Renderer.md)
 
-# Labella.js [![NPM version][npm-image]][npm-url]
+# Labella.js [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url]
 
 > "Labels should be beautiful."
 
