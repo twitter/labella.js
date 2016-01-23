@@ -13,11 +13,10 @@ angular.module('app', [])
       minWidth: 40,
       maxWidth: 60,
 
+      lineSpacing: 2,
       nodeSpacing: 3,
-      roundsPerTick: 5,
       minPos: 0,
       maxPos: 960,
-      maxRound: 100,
 
       density: 0.75,
       algorithm: 'overlap'
@@ -43,9 +42,10 @@ angular.module('app', [])
       var force = new labella.Force({
         minPos: +options.minPos,
         maxPos: +options.maxPos,
+        lineSpacing: +options.lineSpacing,
         nodeSpacing: +options.nodeSpacing,
-        roundsPerTick: +options.roundsPerTick,
 
+        density: +options.density,
         algorithm: options.algorithm
       });
 
