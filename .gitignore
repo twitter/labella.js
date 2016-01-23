@@ -6,3 +6,4 @@ coverage
 .grunt
 *.sublime-workspace
 examples/dist
+.publish
