@@ -208,27 +208,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = function () {
 	  var helper = {};
 
-	  helper.sum = function (array, accessor) {
-	    return array.map(accessor).reduce(function (prev, current) {
-	      return prev + current;
-	    }, 0);
-	  };
-
-	  helper.isObject = function (x) {
-	    return typeof x === 'object' && x !== null;
-	  };
-
 	  helper.isDefined = function (x) {
 	    return x !== null && x !== undefined;
 	  };
 
 	  helper.extend = extend;
 
-	  helper.extractKeys = function (object, keys) {
+	  helper.pick = function (object, keys) {
 	    return keys.reduce(function (prev, key) {
 	      prev[key] = object[key];
 	      return prev;
 	    }, {});
+	  };
+
+	  helper.sum = function (array, accessor) {
+	    return array.map(accessor).reduce(function (prev, current) {
+	      return prev + current;
+	    }, 0);
 	  };
 
 	  return helper;
@@ -401,7 +397,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (!arguments.length) return options;
 	    options = helper.extend(options, x);
 
-	    var disOptions = helper.extractKeys(options, Object.keys(Distributor.DEFAULT_OPTIONS));
+	    var disOptions = helper.pick(options, Object.keys(Distributor.DEFAULT_OPTIONS));
 	    if (helper.isDefined(options.minPos) && helper.isDefined(options.maxPos)) {
 	      disOptions.layerWidth = options.maxPos - options.minPos;
 	    } else {
@@ -415,7 +411,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  force.options(_options);
 
 	  force.compute = function () {
-	    var simOptions = helper.extractKeys(options, Object.keys(removeOverlap.DEFAULT_OPTIONS));
+	    var simOptions = helper.pick(options, Object.keys(removeOverlap.DEFAULT_OPTIONS));
 
 	    nodes.forEach(function (node) {
 	      node.removeStub();

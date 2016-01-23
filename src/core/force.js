@@ -36,7 +36,7 @@ var Force = function(_options){
     if (!arguments.length) return options;
     options = helper.extend(options, x);
 
-    var disOptions = helper.extractKeys(options, Object.keys(Distributor.DEFAULT_OPTIONS));
+    var disOptions = helper.pick(options, Object.keys(Distributor.DEFAULT_OPTIONS));
     if(helper.isDefined(options.minPos)&&helper.isDefined(options.maxPos)){
       disOptions.layerWidth = options.maxPos - options.minPos;
     }
@@ -51,7 +51,7 @@ var Force = function(_options){
   force.options(_options);
 
   force.compute = function(){
-    var simOptions = helper.extractKeys(options, Object.keys(removeOverlap.DEFAULT_OPTIONS));
+    var simOptions = helper.pick(options, Object.keys(removeOverlap.DEFAULT_OPTIONS));
 
     nodes.forEach(function(node){
       node.removeStub();
