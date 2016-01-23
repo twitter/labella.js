@@ -12,14 +12,12 @@ Replace *force-directed simulation* with *constraint-based layout* and use [VPSC
 - `force.compute()` is a replacement for `force.start()`. Usage is slightly different.
 
 ```diff
-- var force = new labella.Force()
--   .nodes(nodes)
+var force = new labella.Force()
+  .nodes(nodes)
 -   .on('end', function(){
 -     draw(force.nodes());
 -   })
 -   .start(100);
-+ var force = new labella.Force()
-+   .nodes(nodes)
 +   .compute();
 + draw(force.nodes());
 ```
