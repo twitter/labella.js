@@ -1,21 +1,11 @@
 var helper = require('./helper.js');
 
 var Node = function(idealPos, width, data){
-  if(arguments.length===1 && helper.isObject(idealPos)){
-    var input = idealPos;
-    this.idealPos = input.idealPos;
-    this.currentPos = input.currentPos!==null && input.currentPos!==undefined ? input.currentPos : input.idealPos;
-    this.width = input.width;
-    this.data = input.data;
-  }
-  else{
-    this.idealPos = idealPos;
-    this.currentPos = idealPos;
-    this.width = width;
-    this.data = data;
-  }
-
-  this.previousPos = this.currentPos;
+  this.idealPos = idealPos;
+  this.currentPos = idealPos;
+  this.width = width;
+  this.data = data;
+  this.layerIndex = 0;
 };
 
 var proto = Node.prototype;
@@ -74,18 +64,17 @@ proto.idealLeft = function(){
   return this.idealPos - this.width/2;
 };
 
-proto.clearStub = function(){
-  this.parent = null;
+proto.removeStub = function(){
+  if(this.parent){
+    this.parent.child = null;
+    this.parent = null;
+  }
   return this;
 };
 
 proto.createStub = function(width){
-  var stub = new Node({
-    idealPos: this.idealPos,
-    currentPos: this.currentPos,
-    width: width,
-    data: this.data
-  });
+  var stub = new Node(this.idealPos, width, this.data);
+  stub.currentPos = this.currentPos;
   stub.child = this;
   this.parent = stub;
   return stub;
@@ -121,22 +110,14 @@ proto.getRoot = function(){
 };
 
 proto.getLevel = function(){
-  var level = 0;
-  var current = this.parent;
-  while(current){
-    current = current.parent;
-    level++;
-  }
-  return level;
+  return this.layerIndex;
 };
 
 proto.clone = function(){
-  return new Node({
-    idealPos: this.idealPos,
-    currentPos: this.currentPos,
-    width: this.width,
-    data: this.data
-  });
+  var node = new Node(this.idealPos, this.width, this.data);
+  node.currentPos = this.currentPos;
+  node.layerIndex = this.layerIndex;
+  return node;
 };
 
 // return module

@@ -74,20 +74,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	var helper = __webpack_require__(2);
 
 	var Node = function (idealPos, width, data) {
-	  if (arguments.length === 1 && helper.isObject(idealPos)) {
-	    var input = idealPos;
-	    this.idealPos = input.idealPos;
-	    this.currentPos = input.currentPos !== null && input.currentPos !== undefined ? input.currentPos : input.idealPos;
-	    this.width = input.width;
-	    this.data = input.data;
-	  } else {
-	    this.idealPos = idealPos;
-	    this.currentPos = idealPos;
-	    this.width = width;
-	    this.data = data;
-	  }
-
-	  this.previousPos = this.currentPos;
+	  this.idealPos = idealPos;
+	  this.currentPos = idealPos;
+	  this.width = width;
+	  this.data = data;
+	  this.layerIndex = 0;
 	};
 
 	var proto = Node.prototype;
@@ -146,18 +137,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return this.idealPos - this.width / 2;
 	};
 
-	proto.clearStub = function () {
-	  this.parent = null;
+	proto.removeStub = function () {
+	  if (this.parent) {
+	    this.parent.child = null;
+	    this.parent = null;
+	  }
 	  return this;
 	};
 
 	proto.createStub = function (width) {
-	  var stub = new Node({
-	    idealPos: this.idealPos,
-	    currentPos: this.currentPos,
-	    width: width,
-	    data: this.data
-	  });
+	  var stub = new Node(this.idealPos, width, this.data);
+	  stub.currentPos = this.currentPos;
 	  stub.child = this;
 	  this.parent = stub;
 	  return stub;
@@ -193,22 +183,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	proto.getLevel = function () {
-	  var level = 0;
-	  var current = this.parent;
-	  while (current) {
-	    current = current.parent;
-	    level++;
-	  }
-	  return level;
+	  return this.layerIndex;
 	};
 
 	proto.clone = function () {
-	  return new Node({
-	    idealPos: this.idealPos,
-	    currentPos: this.currentPos,
-	    width: this.width,
-	    data: this.data
-	  });
+	  var node = new Node(this.idealPos, this.width, this.data);
+	  node.currentPos = this.currentPos;
+	  node.layerIndex = this.layerIndex;
+	  return node;
 	};
 
 	// return module
@@ -432,12 +414,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	  force.compute = function () {
 	    var simOptions = helper.extractKeys(options, Object.keys(removeOverlap.DEFAULT_OPTIONS));
 
+	    nodes.forEach(function (node) {
+	      node.removeStub();
+	    });
+
 	    layers = distributor.distribute(nodes);
-	    layers.map(function (layer) {
-	      removeOverlap(layer, simOptions);
+	    layers.map(function (nodes, layerIndex) {
+	      nodes.forEach(function (node) {
+	        node.layerIndex = layerIndex;
+	      });
+	      removeOverlap(nodes, simOptions);
 	    });
 
 	    return force;
+	  };
+
+	  force.start = function () {
+	    console.log('[warning] force.start() is deprecated. Please use force.compute() instead.');
 	  };
 
 	  force.metrics = function () {

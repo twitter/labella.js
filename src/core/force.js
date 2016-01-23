@@ -53,12 +53,23 @@ var Force = function(_options){
   force.compute = function(){
     var simOptions = helper.extractKeys(options, Object.keys(removeOverlap.DEFAULT_OPTIONS));
 
+    nodes.forEach(function(node){
+      node.removeStub();
+    });
+
     layers = distributor.distribute(nodes);
-    layers.map(function(layer){
-      removeOverlap(layer, simOptions);
+    layers.map(function(nodes, layerIndex){
+      nodes.forEach(function(node){
+        node.layerIndex = layerIndex;
+      });
+      removeOverlap(nodes, simOptions);
     });
 
     return force;
+  };
+
+  force.start = function(){
+    console.log('[warning] force.start() is deprecated. Please use force.compute() instead.');
   };
 
   force.metrics = function(){
