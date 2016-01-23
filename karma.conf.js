@@ -6,7 +6,7 @@ var webpackConfig = require('./webpack.config.js')();
 webpackConfig.module.preLoaders = [
   // instrument only source files with Istanbul
   {
-    test: /[^(spec)]\.js$/,
+    test: /\/[A-Za-z0-9_\-\/]+(?!\.spec)\.js$/,
     loader: 'istanbul-instrumenter'
   }
 ];
