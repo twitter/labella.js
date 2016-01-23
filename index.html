@@ -71,10 +71,6 @@
         </div>
       </div>
 
-      <p>
-      </p>
-      <p>
-      </p>
     </div>
 
     <div class="content-block">
@@ -97,19 +93,19 @@
             </div>
 
             <div class="form-inline">
-              <label for="">Gap between labels&nbsp;</label>
-              <input type="text" class="form-control short-input" ng-model="options.nodeSpacing">
-              <label for="">Min. position&nbsp;</label>
+              <label for="">minPos&nbsp;</label>
               <input type="text" class="form-control short-input" ng-model="options.minPos">
-              <label for="">Max. position&nbsp;</label>
+              <label for="">maxPos&nbsp;</label>
               <input type="text" class="form-control short-input" ng-model="options.maxPos">
-              <label for="">Rounds/tick&nbsp;</label>
-              <input type="text" class="form-control short-input" ng-model="options.roundsPerTick">
-              <label for="">Max. round&nbsp;</label>
-              <input type="text" class="form-control short-input" ng-model="options.maxRound">
-              <label for="">Algorithm&nbsp;</label>
+              <label for="">nodeSpacing&nbsp;</label>
+              <input type="text" class="form-control short-input" ng-model="options.nodeSpacing">
+              <label for="">lineSpacing&nbsp;</label>
+              <input type="text" class="form-control short-input" ng-model="options.lineSpacing">
+              <label for="">density&nbsp;</label>
+              <input type="text" class="form-control short-input" ng-model="options.density">
+              <label for="">algorithm&nbsp;</label>
               <select name="" id="" class="form-control" ng-options="algo for algo in distributorAlgorithms track by algo" ng-model="options.algorithm"></select>
-              <button class="btn btn-default" ng-click="updateLayout()">Update layout</button>
+              <button class="btn btn-default" ng-click="updateLayout()">Compute layout</button>
             </div>
           </div>
         </div>

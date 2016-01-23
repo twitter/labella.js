@@ -1,1 +1,2062 @@
-!function(a,b){"function"==typeof define&&define.amd?define([],b):"object"==typeof exports?module.exports=b():a.labella=b()}(this,function(){var a;a=function(){var a=Object.prototype.hasOwnProperty,b=Object.prototype.toString,c=function(a){return"function"==typeof Array.isArray?Array.isArray(a):"[object Array]"===b.call(a)},d=function(c){if(!c||"[object Object]"!==b.call(c))return!1;var d=a.call(c,"constructor"),e=c.constructor&&c.constructor.prototype&&a.call(c.constructor.prototype,"isPrototypeOf");if(c.constructor&&!d&&!e)return!1;var f;for(f in c);return void 0===f||a.call(c,f)};return function e(){var a,b,f,g,h,i,j=arguments[0],k=1,l=arguments.length,m=!1;for("boolean"==typeof j?(m=j,j=arguments[1]||{},k=2):("object"!=typeof j&&"function"!=typeof j||null==j)&&(j={});l>k;++k)if(a=arguments[k],null!=a)for(b in a)f=j[b],g=a[b],j!==g&&(m&&g&&(d(g)||(h=c(g)))?(h?(h=!1,i=f&&c(f)?f:[]):i=f&&d(f)?f:{},j[b]=e(m,i,g)):void 0!==g&&(j[b]=g));return j}}();var b;b=function(){function a(a,b){try{for(var c in b)Object.defineProperty(a.prototype,c,{value:b[c],enumerable:!1})}catch(d){a.prototype=b}}function b(){}function c(a){return k+a in this}function d(a){return a=k+a,a in this&&delete this[a]}function e(){var a=[];return this.forEach(function(b){a.push(b)}),a}function f(){var a=0;for(var b in this)b.charCodeAt(0)===l&&++a;return a}function g(){for(var a in this)if(a.charCodeAt(0)===l)return!1;return!0}function h(){}function i(a){function c(){for(var b,c=d,e=-1,f=c.length;++e<f;)(b=c[e].on)&&b.apply(this,arguments);return a}var d=[],e=new b;return c.on=function(b,c){var f,g=e.get(b);return arguments.length<2?g&&g.on:(g&&(g.on=null,d=d.slice(0,f=d.indexOf(g)).concat(d.slice(f+1)),e.remove(b)),c&&d.push(e.set(b,{on:c})),a)},c}var j={version:"3.4.4"};j.map=function(a){var c=new b;if(a instanceof b)a.forEach(function(a,b){c.set(a,b)});else for(var d in a)c.set(d,a[d]);return c},a(b,{has:c,get:function(a){return this[k+a]},set:function(a,b){return this[k+a]=b},remove:d,keys:e,values:function(){var a=[];return this.forEach(function(b,c){a.push(c)}),a},entries:function(){var a=[];return this.forEach(function(b,c){a.push({key:b,value:c})}),a},size:f,empty:g,forEach:function(a){for(var b in this)b.charCodeAt(0)===l&&a.call(this,b.substring(1),this[b])}});var k="\x00",l=k.charCodeAt(0);return j.dispatch=function(){for(var a=new h,b=-1,c=arguments.length;++b<c;)a[arguments[b]]=i(a);return a},h.prototype.on=function(a,b){var c=a.indexOf("."),d="";if(c>=0&&(d=a.substring(c+1),a=a.substring(0,c)),a)return arguments.length<2?this[a].on(d):this[a].on(d,b);if(2===arguments.length){if(null==b)for(a in this)this.hasOwnProperty(a)&&this[a].on(d,null);return this}},j.dispatch}();var c;c=function(){function a(a,b,c){return function(){var d=c.apply(b,arguments);return d===b?a:d}}var b=function(b,c){for(var d,e=1,f=arguments.length;++e<f;)b[d=arguments[e]]=a(b,c,c[d]);return b};return b}();var d;d=function(a,b,c){var d=function(){var d={};return d.sum=function(a,b){return a.map(b).reduce(function(a,b){return a+b},0)},d.isObject=function(a){return"object"==typeof a&&null!==a},d.isDefined=function(a){return null!==a&&void 0!==a},d.extend=a,d.dispatch=b,d.rebind=c,d.extractKeys=function(a,b){return b.reduce(function(b,c){return b[c]=a[c],b},{})},d}();return d}(a,b,c);var e;e=function(a){var b=function(b,c,d){if(1===arguments.length&&a.isObject(b)){var e=b;this.idealPos=e.idealPos,this.currentPos=null!==e.currentPos&&void 0!==e.currentPos?e.currentPos:e.idealPos,this.width=e.width,this.data=e.data}else this.idealPos=b,this.currentPos=b,this.width=c,this.data=d;this.previousPos=this.currentPos},c=b.prototype;return c.distanceFrom=function(a){var b=this.width/2,c=a.width/2;return Math.max(this.currentPos-b,a.currentPos-c)-Math.min(this.currentPos+b,a.currentPos+c)},c.moveToIdealPosition=function(){return this.currentPos=this.idealPos,this},c.displacement=function(){return this.idealPos-this.currentPos},c.overlapWithNode=function(a,b){return b=null===b||void 0===b?0:b,this.distanceFrom(a)-b<0},c.overlapWithPoint=function(a){var b=this.width/2;return a>=this.currentPos-b&&a<=this.currentPos+b},c.positionBefore=function(a,b){return b=b?b:0,a.currentLeft()-this.width/2-b},c.positionAfter=function(a,b){return b=b?b:0,a.currentRight()+this.width/2+b},c.currentRight=function(){return this.currentPos+this.width/2},c.currentLeft=function(){return this.currentPos-this.width/2},c.idealRight=function(){return this.idealPos+this.width/2},c.idealLeft=function(){return this.idealPos-this.width/2},c.halfWidth=function(){return this.width/2},c.velocity=function(a){return a=a||1,(this.currentPos-this.previousPos)/a},c.kineticEnergy=function(){var a=this.velocity();return a*a},c.createStub=function(a){var c=new b({idealPos:this.idealPos,currentPos:this.currentPos,width:a,data:this.data});return c.child=this,this.parent=c,c},c.isStub=function(){return!!this.child},c.getPathToRoot=function(){for(var a=[],b=this;b;)a.push(b),b=b.parent;return a},c.getPathFromRoot=function(){return this.getPathToRoot().reverse()},c.getRoot=function(){for(var a=this,b=this;b;)a=b,b=b.parent;return a},c.getLevel=function(){for(var a=0,b=this.parent;b;)b=b.parent,a++;return a},c.clone=function(){return new b({idealPos:this.idealPos,currentPos:this.currentPos,width:this.width,data:this.data})},c.isBumping=function(a,b){var c=this.force||0,d=a.force||0;return this.overlapWithNode(a,b)&&(c*d>0||0===c&&0>d||c>0&&0===d||c>0&&0>d)},b}(d);var f;f=function(){var a=function(a){this.nodes=a||[],this.force=0},b=a.prototype;return b.push=function(a){return this.nodes.push(a),this},b.merge=function(b){var c=new a(this.nodes.concat(b.nodes));return c.force=this.force+b.force,c},b.overlapWithGroup=function(a,b){return this.nodes.length>0&&a.nodes.length>0&&this.nodes[this.nodes.length-1].overlapWithNode(a.nodes[0],b)},b.totalForce=function(){return this.nodes.map(function(a){return a.force}).reduce(function(a,b){return a+b},0)},b.assignForceToChildren=function(){var a=this;this.nodes.forEach(function(b){b.force=a.force})},b.isBumping=function(a,b){var c=this.force||0,d=a.force||0;return this.overlapWithGroup(a,b)&&(c*d>0||0===c&&0>d||c>0&&0===d||c>0&&0>d)},a.groupAdjacentNodes=function(b,c){if(b&&b.length>0){for(var d=new a([b[0]]),e=[d],f=1;f<b.length;f++){var g=b[f],h=b[f-1];c(h,g)?d.push(g):(d=new a([g]),e.push(d))}return e}return[]},a.mergeAdjacentGroups=function(a,b){if(a&&a.length>0){for(var c=[],d=a[0],e=1;e<a.length;e++){var f=a[e],g=a[e-1];b(g,f)?d=d.merge(f):(c.push(d),d=f)}return c.push(d),c}return a},a}();var g;g=function(){function a(a){this.springK=a}return a.prototype.computeForce=function(a){return this.springK*a},a}();var h;h=function(a,b,c){var d={damping:.1,epsilon:.003,timestep:1,nodeSpacing:3,minPos:0,maxPos:null,pullForce:new b(1),roundsPerTick:100},e=function(b){function e(a,c){return a.isBumping(c,b.nodeSpacing)}var f={},g=[],h=c.dispatch("start","tick","end"),i=!1,j=0;return b=c.extend({},d,b),f.nodes=function(a){return arguments.length?(g=a,f):g},f.options=function(a){return arguments.length?(b=c.extend(b,a),f):b},f.pushRightToIdealPositions=function(){for(var a=g.length-1;a>=0;a--){var c=g[a];if(c.currentPos<c.idealPos){var d=a===g.length-1?null:g[a+1];if(!d||c.idealRight()<d.currentLeft())c.moveToIdealPosition();else{var e=c.positionBefore(d,b.nodeSpacing);Math.abs(c.idealPos-e)<Math.abs(c.displacement())&&(c.currentPos=e)}}}return f},f.pushLeftToIdealPositions=function(){for(var a=0;a<g.length;a++){var c=g[a];if(c.currentPos>c.idealPos){var d=0===a?null:g[a-1];if(!d||c.idealLeft()>d.currentRight())c.moveToIdealPosition();else{var e=c.positionAfter(d,b.nodeSpacing);Math.abs(c.idealPos-e)<Math.abs(c.displacement())&&(c.currentPos=e)}}}return f},f.pushToIdealPositions=function(a){return a?f.pushRightToIdealPositions().pushLeftToIdealPositions():f.pushLeftToIdealPositions().pushRightToIdealPositions()},f.initialize=function(){if(i)throw"This function cannot be called while the simulator is running. Stop it first.";return g.filter(function(a){return!!a.parent}).forEach(function(a){a.idealPos=a.parent.currentPos}),g.sort(function(a,b){return a.idealPos-b.idealPos}).forEach(function(a,c){a.currentPos=0===c?a.halfWidth():a.positionAfter(g[c-1],b.nodeSpacing),a.previousPos=a.currentPos}),f},f.step=function(){g.forEach(function(a){a.force=b.pullForce.computeForce(a.displacement())});var d=a.groupAdjacentNodes(g,e);for(d.forEach(function(a){if(a.force=a.totalForce(),a.force<0&&c.isDefined(b.minPos)){var d=a.nodes[0].currentLeft()-b.minPos;0===d?a.force=0:0>d&&(a.force=b.pullForce.computeForce(-d))}});d.length>1;){var h=a.mergeAdjacentGroups(d,e);if(h.length===d.length)break;d=h}d.forEach(function(a){a.assignForceToChildren()});for(var i=g.length-1;i>=0;i--){var j=g[i],k=j.currentPos+j.force*b.damping*b.timestep*b.timestep;if(c.isDefined(b.minPos)&&(k=Math.max(b.minPos+j.halfWidth(),k)),c.isDefined(b.maxPos)&&(k=Math.min(b.maxPos-j.halfWidth(),k)),i>0){var l=g[i-1];k=Math.max(j.positionAfter(l,b.nodeSpacing-1),k)}if(i<g.length-1){var m=g[i+1];k=Math.min(j.positionBefore(m,b.nodeSpacing-1),k)}j.previousPos=j.currentPos,j.currentPos=k}return f},f.start=function(a){if(i)throw"This function cannot be called while the simulator is running. Stop it first.";return f.initialize().resume(a)},f.increaseMaxRound=function(a){a?j+=a:j=0},f.resume=function(a){if(f.increaseMaxRound(a),!i){i=!0,h.start({type:"start"});var c=0,d=function(){return i?c>0&&f.isStable()?"simulation stable, energy: "+f.energy():j&&c>=j?"maximum number of rounds reached: "+j:(f.step(),c++,!1):"stopped"},e=function(){for(var a=0;a<b.roundsPerTick;a++){var f=d();if(f)return h.end({type:"end",round:c,maxRound:j,reason:f}),i=!1,void(j=0)}h.tick({type:"tick",round:c,maxRound:j}),setTimeout(e,0)};e()}return f},f.stop=function(){return i=!1,f},f.energy=function(){return c.sum(g,function(a){return a.kineticEnergy()})},f.isStable=function(){return f.energy()<b.epsilon},f.reset=f.initialize,c.rebind(f,h,"on"),f};return e.DEFAULT_OPTIONS=d,e}(f,g,d);var i;!function(a,b){i=function(){return"function"==typeof b?b():b}()}(this,function(){var a=function b(){var a=null,c={},d=arguments;["0","1"].forEach(function(b){var e=d[b];Array.isArray(e)?a=e:e&&"object"==typeof e&&(c=e)}),"function"==typeof c.filter&&(this._filter=c.filter),"function"==typeof c.compare?this._compare=c.compare:"string"==typeof c.compare&&b.compares[c.compare]&&(this._compare=b.compares[c.compare]),this._unique=!!c.unique,c.resume&&a?a.forEach(function(a,b){this.push(a)},this):a&&this.insert.apply(this,a)};return a.create=function(b,c){return new a(b,c)},a.prototype=new Array,a.prototype.constructor=Array.prototype.constructor,a.prototype.insertOne=function(a){var b=this.bsearch(a);return this._unique&&null!=this.key(a,b)?!1:this._filter(a,b)?(this.splice(b+1,0,a),b+1):!1},a.prototype.insert=function(){return Array.prototype.map.call(arguments,function(a){return this.insertOne(a)},this)},a.prototype.remove=function(a){return this.splice(a,1),this},a.prototype.bsearch=function(a){if(!this.length)return-1;for(var b,c=0,d=this.length;d-c>1;){b=Math.floor((c+d)/2),mval=this[b];var e=this._compare(a,mval);if(0==e)return b;e>0?c=b:d=b}return 0==c&&this._compare(this[0],a)>0?-1:c},a.prototype.key=function(a,b){null==b&&(b=this.bsearch(a));var c=b;if(-1==c||this._compare(this[c],a)<0)return c+1<this.length&&0==this._compare(this[c+1],a)?c+1:null;for(;c>=1&&0==this._compare(this[c-1],a);)c--;return c},a.prototype.keys=function(a,b){var c=[];null==b&&(b=this.bsearch(a));for(var d=b;d>=0&&0==this._compare(this[d],a);)c.push(d),d--;var e=this.length;for(d=b+1;e>d&&0==this._compare(this[d],a);)c.push(d),d++;return c.length?c:null},a.prototype.unique=function(a){if(a)return this.filter(function(a,b){return 0==b||0!=this._compare(this[b-1],a)},this);var b=0;return this.map(function(a,c){return 0==c||0!=this._compare(this[c-1],a)?null:c-b++},this).forEach(function(a){null!=a&&this.remove(a)},this),this},a.prototype.toArray=function(){return this.slice()},a.prototype._filter=function(a,b){return!0},a.compares={number:function(a,b){var c=a-b;return c>0?1:0==c?0:-1},string:function(a,b){return a>b?1:a==b?0:-1}},a.prototype._compare=a.compares.string,a});var j;j=function(a){function b(b,c){if(c||(c={}),this.startKey=c.startKey||0,this.endKey=c.endKey||1,this.intervalHash={},this.pointTree=new a({compare:function(a,b){if(null==a)return-1;if(null==b)return 1;var c=a[0]-b[0];return c>0?1:0==c?0:-1}}),this._autoIncrement=0,!b||"number"!=typeof b)throw new Error("you must specify center index as the 2nd argument.");this.root=new f(b,this)}function c(a,b){return b.end<a.idx?(a.left||(a.left=new f(b.start+b.end>>1,this)),c.call(this,a.left,b)):a.idx<b.start?(a.right||(a.right=new f(b.start+b.end>>1,this)),c.call(this,a.right,b)):a.insert(b)}function d(a,b,c){return a?b<a.idx?(a.starts.every(function(a){var d=a.start<=b;return d&&c.push(a.result()),d}),d.call(this,a.left,b,c)):b>a.idx?(a.ends.every(function(a){var d=a.end>=b;return d&&c.push(a.result()),d}),d.call(this,a.right,b,c)):void a.starts.map(function(a){c.push(a.result())}):void 0}function e(a,b,c){if(0>=b-a)throw new Error("end must be greater than start. start: "+a+", end: "+b);var e={},f=[];d.call(this,this.root,a+b>>1,f,!0),f.forEach(function(a){e[a.id]=!0});for(var g=this.pointTree.bsearch([a,null]),h=this.pointTree;g>=0&&h[g][0]==a;)g--;var i=this.pointTree.bsearch([b,null]);if(i>=0){for(var j=h.length-1;j>=i&&h[i][0]<=b;)i++;h.slice(g+1,i).forEach(function(a){var b=a[1];e[b]=!0},this),Object.keys(e).forEach(function(d){var e=this.intervalHash[d];c.push(e.result(a,b))},this)}}function f(b){this.idx=b,this.starts=new a({compare:function(a,b){if(null==a)return-1;if(null==b)return 1;var c=a.start-b.start;return c>0?1:0==c?0:-1}}),this.ends=new a({compare:function(a,b){if(null==a)return-1;if(null==b)return 1;var c=a.end-b.end;return 0>c?1:0==c?0:-1}})}function g(a,b,c,d){if(this.id=b,this.start=a[c],this.end=a[d],this.data=a,"number"!=typeof this.start||"number"!=typeof this.end)throw new Error("start, end must be number. start: "+this.start+", end: "+this.end);if(this.start>=this.end)throw new Error("start must be smaller than end. start: "+this.start+", end: "+this.end)}return b.prototype.add=function(a,b){if(this.intervalHash[b])throw new Error("id "+b+" is already registered.");if(void 0==b){for(;this.intervalHash[this._autoIncrement];)this._autoIncrement++;b=this._autoIncrement}var d=new g(a,b,this.startKey,this.endKey);this.pointTree.insert([d.start,b]),this.pointTree.insert([d.end,b]),this.intervalHash[b]=d,this._autoIncrement++,c.call(this,this.root,d)},b.prototype.search=function(a,b){var c=[];if("number"!=typeof a)throw new Error(a+": invalid input");if(void 0==b)d.call(this,this.root,a,c);else{if("number"!=typeof b)throw new Error(a+","+b+": invalid input");e.call(this,a,b,c)}return c},b.prototype.remove=function(a){},f.prototype.insert=function(a){this.starts.insert(a),this.ends.insert(a)},g.prototype.result=function(a,b){var c={id:this.id,data:this.data};if("number"==typeof a&&"number"==typeof b){var d=Math.max(this.start,a),e=Math.min(this.end,b),f=e-d;c.rate1=f/(b-a),c.rate2=f/(this.end-this.start)}return c},b}(i);var k;k=function(a,b){var c={algorithm:"overlap",layerWidth:1e3,density:.75,nodeSpacing:3,stubWidth:1},d=function(d){var e={};d=a.extend({},c,d),e.options=function(b){return arguments.length?(d=a.extend(d,b),e):d},e.computeRequiredWidth=function(b){return a.sum(b,function(a){return a.width+d.nodeSpacing})-d.nodeSpacing},e.maxWidthPerLayer=function(){return d.density*d.layerWidth},e.needToSplit=function(a){return e.estimateRequiredLayers(a)>1},e.estimateRequiredLayers=function(a){return d.layerWidth?Math.ceil(e.computeRequiredWidth(a)/e.maxWidthPerLayer()):1};var f={simple:function(a){for(var b=e.estimateRequiredLayers(a),c=[],f=0;b>f;f++)c.push([]);return a.forEach(function(a,e){var f=e%b;c[f].push(a);for(var g=a,h=f-1;h>=0;h--)g=g.createStub(d.stubWidth),c[h].push(g)}),c},roundRobin:function(a){var b=[];return b},overlap:function(a){for(var b=[],c=e.maxWidthPerLayer(),f=a.concat(),g=e.computeRequiredWidth(f);g>c;){e.countIdealOverlaps(f);var h=f.concat(),i=g;for(f=[];h.length>2&&i>c;){h.sort(function(a,b){return b.overlapCount-a.overlapCount});var j=h.shift();i-=j.width,i+=d.stubWidth,j.overlaps.forEach(function(a){a.overlapCount--}),f.push(j)}b.push(h),g=e.computeRequiredWidth(f)}f.length>0&&b.push(f);for(var k=b.length-1;k>=1;k--)for(var l=b[k],m=0;m<l.length;m++){var n=l[m];if(!n.isStub())for(var o=n,p=k-1;p>=0;p--)o=o.createStub(d.stubWidth),b[p].push(o)}return b}};return e.countIdealOverlaps=function(a){var c=new b(d.layerWidth/2);return a.forEach(function(a){c.add([a.idealLeft(),a.idealRight(),a])}),a.forEach(function(a){var b=c.search(a.idealLeft(),a.idealRight());a.overlaps=b,a.overlapCount=b.length}),a},e.distribute=function(a){if(!a||0===a.length)return[];if(a=a.concat().sort(function(a,b){return a.idealPos-b.idealPos}),!e.needToSplit(a))return[a];if("function"==typeof d.algorithm)return d.algorithm(a,d);if("none"==d.algorithm)return a;if(f.hasOwnProperty(d.algorithm))return f[d.algorithm](a);throw"Unknown algorithm: "+d.algorithm},e};return d.DEFAULT_OPTIONS=c,d}(d,j);var l;l=function(a){var b=function(){function b(a){return 0===a.length||Array.isArray(a[0])?a:[a]}var c={};return c.displacement=function(c){if(0===c.length)return 0;var d=b(c);return a.sum(d,function(b){return a.sum(b,function(a){return Math.abs(a.displacement())})})},c.overflow=function(c,d,e){if(0===c.length||!a.isDefined(d)&&!a.isDefined(e))return 0;var f=b(c);return a.sum(f,function(b){return a.sum(b,function(b){var c=b.currentLeft(),f=b.currentRight();if(a.isDefined(d)){if(d>=f)return b.width;if(d>c)return d-c}if(a.isDefined(e)){if(c>=e)return b.width;if(f>e)return f-e}return 0})})},c.overDensity=function(c,d,e,f){if(0===c.length)return 0;var g=d*e,h=b(c);return a.sum(h,function(b){var c=a.sum(b,function(a){return a.width+f})-f;return g>=c?0:c-g})},c.overlapCount=function(c,d){if(0===c.length)return 0;var e=b(c);return a.sum(e,function(a){for(var b=0,c=0;c<a.length;c++)for(var e=c+1;e<a.length;e++)a[c].overlapWithNode(a[e],d)&&b++;return b})},c.overlapSpace=function(c){if(0===c.length)return 0;var d=b(c);return a.sum(d,function(a){for(var b=0,c=0;c<a.length;c++)for(var d=c+1;d<a.length;d++){var e=a[c].distanceFrom(a[d]);b+=0>e?Math.abs(e):0}return b})},c.weightedAllocatedSpace=function(c){if(0===c.length)return 0;var d=b(c);return a.sum(d,function(b,c){return c*a.sum(b,function(a){return a.width})})},c}();return b}(d);var m;m=function(a,b,c,d,e){var f={damping:.1,epsilon:.003,timestep:1,nodeSpacing:3,minPos:0,maxPos:null,pullForce:new e(1),roundsPerTick:100,algorithm:"overlap",density:.85,stubWidth:1},g=function(e){var g={},h=d.dispatch("start","tick","endLayer","end"),i=d.extend({},f),j=new b,k=[],l=[],m=null,n=!1;return g.nodes=function(a){return arguments.length?(l=a,m=null,k=[],g):l},g.getLayers=function(){return m},g.options=function(c){if(!arguments.length)return i;i=d.extend(i,c);var e=d.extractKeys(i,Object.keys(b.DEFAULT_OPTIONS));d.isDefined(i.minPos)&&d.isDefined(i.maxPos)?e.layerWidth=i.maxPos-i.minPos:e.layerWidth=null,j.options(e);var f=d.extractKeys(i,Object.keys(a.DEFAULT_OPTIONS));return k.forEach(function(a){a.options(f)}),g},g.options(e),g.distribute=function(){if(n)throw"This function cannot be called while the simulator is running. Stop it first.";m=j.distribute(l);var b=d.extractKeys(i,Object.keys(a.DEFAULT_OPTIONS));return k=m.map(function(c){return new a(b).nodes(c)}),g},g.initialize=function(){if(n)throw"This function cannot be called while the simulator is running. Stop it first.";return k.forEach(function(a){a.initialize()}),g},g.step=function(){return k.forEach(function(a){a.step()}),g},g.stop=function(){return k.forEach(function(a){a.stop()}),g},g.start=function(a){if(n)throw"This function cannot be called while the simulator is running. Stop it first.";return setTimeout(function(){m||g.distribute(),g.initialize().resume(a)},0),g},g.resume=function(a){if(0===m.length)return g;if(!n){var b=0;h.start({type:"start"});var c=function(){var e=k[b];e&&(e.on("tick",function(a){h.tick(d.extend({},a,{layerIndex:b}))}),e.on("end",function(a){h.endLayer(d.extend({},a,{type:"endLayer",layerIndex:b})),b++,b<m.length?c():(h.end({type:"end"}),n=!1)}),b>0?e.start(a):e.resume(a))};c()}return g},g.energy=function(){return d.sum(k,function(a){return a.energy()})},g.isStable=function(){return k.every(function(a){return a.isStable()})},g.reset=g.initialize,g.metrics=function(){return Object.keys(c).map(function(a){return{name:a,value:g.metric(a)}})},g.metric=function(a){switch(a){case"overflow":return c[a](m,i.minPos,i.maxPos);case"overDensity":return c[a](m,i.density,i.layerWidth,i.nodeSpacing-1);case"overlapCount":return c[a](m,i.nodeSpacing-1);default:return c[a]?c[a](m):null}},d.rebind(g,h,"on"),g};return g.DEFAULT_OPTIONS=f,g}(h,k,l,d,g);var n;n=function(a){function b(b){this.options=a.extend({layerGap:60,nodeHeight:10,direction:"down"},b)}function c(a){return"L "+a.join(" ")}function d(a){return"M "+a.join(" ")}function e(a,b,c){return"C "+a.join(" ")+" "+b.join(" ")+" "+c.join(" ")}function f(a,b){var c=(a[1]+b[1])/2;return e([a[0],c],[b[0],c],b)}function g(a,b){var c=(a[0]+b[0])/2;return e([c,a[1]],[c,b[1]],b)}return b.prototype.getWaypoints=function(a){var b=this.options,c=b.direction,d=a.getPathFromRoot(),e=b.nodeHeight+b.layerGap;return"left"===c?[[[0,d[0].idealPos]]].concat(d.map(function(a,c){var d=e*(c+1)*-1;return[[d+b.nodeHeight,a.currentPos],[d,a.currentPos]]})):"right"===c?[[[0,d[0].idealPos]]].concat(d.map(function(a,c){var d=e*(c+1);return[[d-b.nodeHeight,a.currentPos],[d,a.currentPos]]})):"up"===c?[[[d[0].idealPos,0]]].concat(d.map(function(a,c){var d=e*(c+1)*-1;return[[a.currentPos,d+b.nodeHeight],[a.currentPos,d]]})):[[[d[0].idealPos,0]]].concat(d.map(function(a,c){var d=e*(c+1);return[[a.currentPos,d-b.nodeHeight],[a.currentPos,d]]}))},b.prototype.layout=function(a){var b=this.options,c=b.layerGap+b.nodeHeight;switch(b.direction){case"left":a.forEach(function(a){var d=a.getLevel()*c+b.layerGap;a.x=-d-b.nodeHeight,a.y=a.currentPos,a.dx=b.nodeHeight,a.dy=a.width});break;case"right":a.forEach(function(a){var d=a.getLevel()*c+b.layerGap;a.x=d,a.y=a.currentPos,a.dx=b.nodeHeight,a.dy=a.width});break;case"up":a.forEach(function(a){var d=a.getLevel()*c+b.layerGap;a.x=a.currentPos,a.y=-d-b.nodeHeight,a.dx=a.width,a.dy=b.nodeHeight});break;default:case"down":a.forEach(function(a){var d=a.getLevel()*c+b.layerGap;a.x=a.currentPos,a.y=d,a.dx=a.width,a.dy=b.nodeHeight})}return a},b.prototype.generatePath=function(a){var b=this.options,e=b.direction,h=this.getWaypoints(a,e),i=[d(h[0][0])];return"left"===e||"right"===e?h.reduce(function(a,b,d){return i.push(g(a[a.length-1],b[0])),d<h.length-1&&i.push(c(b[1])),b}):h.reduce(function(a,b,d){return i.push(f(a[a.length-1],b[0])),d<h.length-1&&i.push(c(b[1])),b}),i.join(" ")},b}(d);var o;o=function(a,b){var c=function(){var c={},d={minWidth:20,maxWidth:20,minPos:0,maxPos:800};return c.generateNodes=function(c,e){var f=[];e=a.extend({},d,e);for(var g=e.maxPos-e.minPos,h=e.maxWidth-e.minWidth,i=0;c>i;i++)f.push(new b(Math.floor(Math.random()*g)+e.minPos,Math.floor(Math.random()*h)+e.minWidth));return f},c.convertNodesToGraph=function(a){yGap=60;var b={nodes:[],links:[],constraints:[]},c={type:"alignment",axis:"y",offsets:[]};return b.constraints.push(c),b.nodes.push({index:0,x:1,y:yGap,width:1,height:1,fixed:!0}),b.nodes.push({index:0,x:925,y:yGap,width:1,height:1,fixed:!0}),a.forEach(function(a){var d={index:b.nodes.length,x:a.idealPos,y:0,width:1,height:1,fixed:!0};b.nodes.push(d);var e={index:b.nodes.length,x:a.currentPos,y:yGap,width:a.width,height:12,originalNode:a};c.offsets.push({node:e.index,offset:0}),b.nodes.push(e),b.links.push({source:d.index,target:e.index}),b.constraints.push({axis:"y",left:d.index,right:e.index,gap:yGap,equality:!0}),b.constraints.push({axis:"x",left:0,right:e.index,gap:0}),b.constraints.push({axis:"x",left:e.index,right:1,gap:0})}),b},c.updateNodesInGraph=function(a){return graph.nodes.filter(function(a){return a.originalNode}).map(function(a){return a.originalNode.currentPos=a.x,a.originalNode})},c}();return c}(d,e);var p;return p=function(a,b,c,d,e,f,g,h){return{Node:a,NodeGroup:b,Force:c,Simulator:d,Distributor:e,Renderer:f,metrics:g,util:h}}(e,f,m,h,k,n,l,o)});
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(typeof exports === 'object' && typeof module === 'object')
+		module.exports = factory();
+	else if(typeof define === 'function' && define.amd)
+		define([], factory);
+	else if(typeof exports === 'object')
+		exports["labella"] = factory();
+	else
+		root["labella"] = factory();
+})(this, function() {
+return /******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId])
+/******/ 			return installedModules[moduleId].exports;
+
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			exports: {},
+/******/ 			id: moduleId,
+/******/ 			loaded: false
+/******/ 		};
+
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+
+/******/ 		// Flag the module as loaded
+/******/ 		module.loaded = true;
+
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+
+
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(0);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*
+	Copyright 2015 Twitter, Inc.
+	Licensed under the Apache License, Version 2.0
+	http://www.apache.org/licenses/LICENSE-2.0
+	*/
+
+	module.exports = {
+	  Node: __webpack_require__(1),
+	  Force: __webpack_require__(4),
+	  Distributor: __webpack_require__(5),
+	  Renderer: __webpack_require__(11),
+
+	  // metrics: require('./core/metrics.js'),
+	  util: __webpack_require__(12)
+	};
+
+/***/ },
+/* 1 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var helper = __webpack_require__(2);
+
+	var Node = function (idealPos, width, data) {
+	  this.idealPos = idealPos;
+	  this.currentPos = idealPos;
+	  this.width = width;
+	  this.data = data;
+	  this.layerIndex = 0;
+	};
+
+	var proto = Node.prototype;
+
+	// return negative if overlap
+	proto.distanceFrom = function (node) {
+	  var halfWidth = this.width / 2;
+	  var nodeHalfWidth = node.width / 2;
+
+	  // max(a[0], b[0]) - min(a[1], b[1])
+	  return Math.max(this.currentPos - halfWidth, node.currentPos - nodeHalfWidth) - Math.min(this.currentPos + halfWidth, node.currentPos + nodeHalfWidth);
+	};
+
+	proto.moveToIdealPosition = function () {
+	  this.currentPos = this.idealPos;
+	  return this;
+	};
+
+	proto.displacement = function () {
+	  return this.idealPos - this.currentPos;
+	};
+
+	proto.overlapWithNode = function (node, buffer) {
+	  buffer = buffer === null || buffer === undefined ? 0 : buffer;
+	  return this.distanceFrom(node) - buffer < 0;
+	};
+
+	proto.overlapWithPoint = function (pos) {
+	  var halfWidth = this.width / 2;
+	  return pos >= this.currentPos - halfWidth && pos <= this.currentPos + halfWidth;
+	};
+
+	proto.positionBefore = function (node, buffer) {
+	  buffer = buffer ? buffer : 0;
+	  return node.currentLeft() - this.width / 2 - buffer;
+	};
+
+	proto.positionAfter = function (node, buffer) {
+	  buffer = buffer ? buffer : 0;
+	  return node.currentRight() + this.width / 2 + buffer;
+	};
+
+	proto.currentRight = function () {
+	  return this.currentPos + this.width / 2;
+	};
+
+	proto.currentLeft = function () {
+	  return this.currentPos - this.width / 2;
+	};
+
+	proto.idealRight = function () {
+	  return this.idealPos + this.width / 2;
+	};
+
+	proto.idealLeft = function () {
+	  return this.idealPos - this.width / 2;
+	};
+
+	proto.removeStub = function () {
+	  if (this.parent) {
+	    this.parent.child = null;
+	    this.parent = null;
+	  }
+	  return this;
+	};
+
+	proto.createStub = function (width) {
+	  var stub = new Node(this.idealPos, width, this.data);
+	  stub.currentPos = this.currentPos;
+	  stub.child = this;
+	  this.parent = stub;
+	  return stub;
+	};
+
+	proto.isStub = function () {
+	  return !!this.child;
+	};
+
+	proto.getPathToRoot = function () {
+	  var path = [];
+	  var current = this;
+	  while (current) {
+	    path.push(current);
+	    current = current.parent;
+	  }
+	  return path;
+	};
+
+	proto.getPathFromRoot = function () {
+	  return this.getPathToRoot().reverse();
+	};
+
+	// Trace back to the node without parent
+	proto.getRoot = function () {
+	  var previous = this;
+	  var current = this;
+	  while (current) {
+	    previous = current;
+	    current = current.parent;
+	  }
+	  return previous;
+	};
+
+	proto.getLayerIndex = function () {
+	  return this.layerIndex;
+	};
+
+	proto.clone = function () {
+	  var node = new Node(this.idealPos, this.width, this.data);
+	  node.currentPos = this.currentPos;
+	  node.layerIndex = this.layerIndex;
+	  return node;
+	};
+
+	// return module
+	module.exports = Node;
+
+/***/ },
+/* 2 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var extend = __webpack_require__(3);
+
+	module.exports = function () {
+	  var helper = {};
+
+	  helper.isDefined = function (x) {
+	    return x !== null && x !== undefined;
+	  };
+
+	  helper.extend = extend;
+
+	  helper.pick = function (object, keys) {
+	    return keys.reduce(function (prev, key) {
+	      prev[key] = object[key];
+	      return prev;
+	    }, {});
+	  };
+
+	  helper.sum = function (array, accessor) {
+	    return array.map(accessor).reduce(function (prev, current) {
+	      return prev + current;
+	    }, 0);
+	  };
+
+	  return helper;
+	}();
+
+/***/ },
+/* 3 */
+/***/ function(module, exports) {
+
+	/*
+	This file is modified from https://github.com/justmoon/node-extend
+	The MIT License (MIT)
+
+	Copyright (c) 2014 Stefan Thomas
+
+	Permission is hereby granted, free of charge, to any person obtaining
+	a copy of this software and associated documentation files (the
+	"Software"), to deal in the Software without restriction, including
+	without limitation the rights to use, copy, modify, merge, publish,
+	distribute, sublicense, and/or sell copies of the Software, and to
+	permit persons to whom the Software is furnished to do so, subject to
+	the following conditions:
+
+	The above copyright notice and this permission notice shall be
+	included in all copies or substantial portions of the Software.
+
+	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+	EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+	MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+	NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+	LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+	OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+	WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+	*/
+
+	var hasOwn = Object.prototype.hasOwnProperty;
+	var toStr = Object.prototype.toString;
+
+	var isArray = function isArray(arr) {
+	  if (typeof Array.isArray === 'function') {
+	    return Array.isArray(arr);
+	  }
+
+	  return toStr.call(arr) === '[object Array]';
+	};
+
+	var isPlainObject = function isPlainObject(obj) {
+	  'use strict';
+
+	  if (!obj || toStr.call(obj) !== '[object Object]') {
+	    return false;
+	  }
+
+	  var has_own_constructor = hasOwn.call(obj, 'constructor');
+	  var has_is_property_of_method = obj.constructor && obj.constructor.prototype && hasOwn.call(obj.constructor.prototype, 'isPrototypeOf');
+	  // Not own constructor property must be Object
+	  if (obj.constructor && !has_own_constructor && !has_is_property_of_method) {
+	    return false;
+	  }
+
+	  // Own properties are enumerated firstly, so to speed up,
+	  // if last one is own, then all properties are own.
+	  var key;
+	  for (key in obj) {}
+
+	  return key === undefined || hasOwn.call(obj, key);
+	};
+
+	module.exports = function extend() {
+	  'use strict';
+
+	  var options,
+	      name,
+	      src,
+	      copy,
+	      copyIsArray,
+	      clone,
+	      target = arguments[0],
+	      i = 1,
+	      length = arguments.length,
+	      deep = false;
+
+	  // Handle a deep copy situation
+	  if (typeof target === 'boolean') {
+	    deep = target;
+	    target = arguments[1] || {};
+	    // skip the boolean and the target
+	    i = 2;
+	  } else if (typeof target !== 'object' && typeof target !== 'function' || target == null) {
+	    target = {};
+	  }
+
+	  for (; i < length; ++i) {
+	    options = arguments[i];
+	    // Only deal with non-null/undefined values
+	    if (options != null) {
+	      // Extend the base object
+	      for (name in options) {
+	        src = target[name];
+	        copy = options[name];
+
+	        // Prevent never-ending loop
+	        if (target === copy) {
+	          continue;
+	        }
+
+	        // Recurse if we're merging plain objects or arrays
+	        if (deep && copy && (isPlainObject(copy) || (copyIsArray = isArray(copy)))) {
+	          if (copyIsArray) {
+	            copyIsArray = false;
+	            clone = src && isArray(src) ? src : [];
+	          } else {
+	            clone = src && isPlainObject(src) ? src : {};
+	          }
+
+	          // Never move original objects, clone them
+	          target[name] = extend(deep, clone, copy);
+
+	          // Don't bring in undefined values
+	        } else if (copy !== undefined) {
+	            target[name] = copy;
+	          }
+	      }
+	    }
+	  }
+
+	  // Return the modified object
+	  return target;
+	};
+
+/***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// var Simulator = require('./simulator.js');
+	var Distributor = __webpack_require__(5);
+	var metrics = __webpack_require__(8);
+	var helper = __webpack_require__(2);
+	var removeOverlap = __webpack_require__(9);
+
+	var DEFAULT_OPTIONS = {
+	  nodeSpacing: 3,
+	  minPos: 0,
+	  maxPos: null,
+
+	  algorithm: 'overlap',
+	  density: 0.85,
+	  stubWidth: 1
+	};
+
+	var Force = function (_options) {
+	  var force = {};
+	  var options = helper.extend({}, DEFAULT_OPTIONS);
+	  var distributor = new Distributor();
+	  var nodes = [];
+	  var layers = null;
+
+	  force.nodes = function (x) {
+	    if (!arguments.length) return nodes;
+	    nodes = x;
+	    layers = null;
+	    return force;
+	  };
+
+	  force.getLayers = function () {
+	    return layers;
+	  };
+
+	  force.options = function (x) {
+	    if (!arguments.length) return options;
+	    options = helper.extend(options, x);
+
+	    var disOptions = helper.pick(options, Object.keys(Distributor.DEFAULT_OPTIONS));
+	    if (helper.isDefined(options.minPos) && helper.isDefined(options.maxPos)) {
+	      disOptions.layerWidth = options.maxPos - options.minPos;
+	    } else {
+	      disOptions.layerWidth = null;
+	    }
+	    distributor.options(disOptions);
+
+	    return force;
+	  };
+
+	  force.options(_options);
+
+	  force.compute = function () {
+	    var simOptions = helper.pick(options, Object.keys(removeOverlap.DEFAULT_OPTIONS));
+
+	    nodes.forEach(function (node) {
+	      node.removeStub();
+	    });
+
+	    layers = distributor.distribute(nodes);
+	    layers.map(function (nodes, layerIndex) {
+	      nodes.forEach(function (node) {
+	        node.layerIndex = layerIndex;
+	      });
+	      removeOverlap(nodes, simOptions);
+	    });
+
+	    return force;
+	  };
+
+	  force.start = function () {
+	    console.log('[warning] force.start() is deprecated. Please use force.compute() instead.');
+	  };
+
+	  force.metrics = function () {
+	    return Object.keys(metrics).map(function (name) {
+	      return {
+	        name: name,
+	        value: force.metric(name)
+	      };
+	    });
+	  };
+
+	  force.metric = function (name) {
+	    switch (name) {
+	      case 'overflow':
+	        return metrics[name](layers, options.minPos, options.maxPos);
+	      case 'overDensity':
+	        return metrics[name](layers, options.density, options.layerWidth, options.nodeSpacing - 1);
+	      case 'overlapCount':
+	        return metrics[name](layers, options.nodeSpacing - 1);
+	      default:
+	        return metrics[name] ? metrics[name](layers) : null;
+	    }
+	  };
+
+	  return force;
+	};
+
+	Force.DEFAULT_OPTIONS = DEFAULT_OPTIONS;
+
+	module.exports = Force;
+
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var helper = __webpack_require__(2);
+	var IntervalTree = __webpack_require__(6);
+
+	var DEFAULT_OPTIONS = {
+	  algorithm: 'overlap',
+	  layerWidth: 1000,
+	  density: 0.75,
+	  nodeSpacing: 3,
+	  stubWidth: 1
+	};
+
+	var Distributor = function (options) {
+	  var distributor = {};
+
+	  options = helper.extend({}, DEFAULT_OPTIONS, options);
+
+	  distributor.options = function (x) {
+	    if (!arguments.length) return options;
+	    options = helper.extend(options, x);
+	    return distributor;
+	  };
+
+	  distributor.computeRequiredWidth = function (nodes) {
+	    return helper.sum(nodes, function (d) {
+	      return d.width + options.nodeSpacing;
+	    }) - options.nodeSpacing;
+	  };
+
+	  distributor.maxWidthPerLayer = function () {
+	    return options.density * options.layerWidth;
+	  };
+
+	  distributor.needToSplit = function (nodes) {
+	    return distributor.estimateRequiredLayers(nodes) > 1;
+	  };
+
+	  distributor.estimateRequiredLayers = function (nodes) {
+	    return options.layerWidth ? Math.ceil(distributor.computeRequiredWidth(nodes) / distributor.maxWidthPerLayer()) : 1;
+	  };
+
+	  var algorithms = {
+	    simple: function (nodes) {
+	      var numLayers = distributor.estimateRequiredLayers(nodes);
+
+	      var layers = [];
+	      for (var i = 0; i < numLayers; i++) {
+	        layers.push([]);
+	      }
+
+	      nodes.forEach(function (node, i) {
+	        var mod = i % numLayers;
+	        layers[mod].push(node);
+
+	        var stub = node;
+	        for (var j = mod - 1; j >= 0; j--) {
+	          stub = stub.createStub(options.stubWidth);
+	          layers[j].push(stub);
+	        }
+	      });
+
+	      return layers;
+	    },
+	    roundRobin: function (nodes) {
+	      var layers = [];
+
+	      return layers;
+	    },
+	    overlap: function (nodes) {
+	      var layers = [];
+	      var maxWidth = distributor.maxWidthPerLayer();
+
+	      var puntedNodes = nodes.concat();
+	      var puntedWidth = distributor.computeRequiredWidth(puntedNodes);
+
+	      while (puntedWidth > maxWidth) {
+	        distributor.countIdealOverlaps(puntedNodes);
+
+	        var nodesInCurrentLayer = puntedNodes.concat();
+	        var currentlayerWidth = puntedWidth;
+	        puntedNodes = [];
+
+	        while (nodesInCurrentLayer.length > 2 && currentlayerWidth > maxWidth) {
+	          // Sort by overlaps
+	          nodesInCurrentLayer.sort(function (a, b) {
+	            return b.overlapCount - a.overlapCount;
+	          });
+
+	          // Remove the node with most overlap
+	          var first = nodesInCurrentLayer.shift();
+
+	          // Update width
+	          currentlayerWidth -= first.width;
+	          currentlayerWidth += options.stubWidth;
+
+	          // Update overlap count for the remaining nodes
+	          first.overlaps.forEach(function (node) {
+	            node.overlapCount--;
+	          });
+
+	          // Add removed node to the next layer
+	          puntedNodes.push(first);
+	        }
+
+	        layers.push(nodesInCurrentLayer);
+
+	        puntedWidth = distributor.computeRequiredWidth(puntedNodes);
+	      }
+
+	      if (puntedNodes.length > 0) {
+	        layers.push(puntedNodes);
+	      }
+
+	      // Create stubs
+	      // From last layer
+	      for (var i = layers.length - 1; i >= 1; i--) {
+	        var layer = layers[i];
+	        // For each node in the layer
+	        for (var k = 0; k < layer.length; k++) {
+	          var node = layer[k];
+	          // If it is not a stub
+	          if (node.isStub()) continue;
+	          // Create one stub for each layer above it
+	          var stub = node;
+	          for (var j = i - 1; j >= 0; j--) {
+	            stub = stub.createStub(options.stubWidth);
+	            layers[j].push(stub);
+	          }
+	        }
+	      }
+
+	      return layers;
+	    }
+	  };
+
+	  distributor.countIdealOverlaps = function (nodes) {
+	    var iTree = new IntervalTree(options.layerWidth / 2);
+	    nodes.forEach(function (node) {
+	      iTree.add([node.idealLeft(), node.idealRight(), node]);
+	    });
+
+	    nodes.forEach(function (node) {
+	      var overlaps = iTree.search(node.idealLeft(), node.idealRight());
+	      node.overlaps = overlaps;
+	      node.overlapCount = overlaps.length;
+	    });
+
+	    return nodes;
+	  };
+
+	  distributor.distribute = function (nodes) {
+	    if (!nodes || nodes.length === 0) return [];
+
+	    if (options.algorithm == 'none' || !helper.isDefined(options.algorithm)) {
+	      return [nodes];
+	    }
+
+	    nodes = nodes.concat().sort(function (a, b) {
+	      return a.idealPos - b.idealPos;
+	    });
+
+	    if (!distributor.needToSplit(nodes)) {
+	      return [nodes];
+	    }
+
+	    if (typeof options.algorithm == 'function') {
+	      return options.algorithm(nodes, options);
+	    } else if (algorithms.hasOwnProperty(options.algorithm)) {
+	      return algorithms[options.algorithm](nodes);
+	    } else {
+	      throw 'Unknown algorithm: ' + options.algorithm;
+	    }
+	  };
+
+	  return distributor;
+	};
+
+	Distributor.DEFAULT_OPTIONS = DEFAULT_OPTIONS;
+
+	// return module
+	module.exports = Distributor;
+
+/***/ },
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*
+	This file is modified from https://github.com/shinout/interval-tree
+
+	(The MIT License)
+
+	Copyright (c) 2012 SHIN Suzuki <shinout310@gmail.com>
+
+	Permission is hereby granted, free of charge, to any person obtaining
+	a copy of this software and associated documentation files (the
+	'Software'), to deal in the Software without restriction, including
+	without limitation the rights to use, copy, modify, merge, publish,
+	distribute, sublicense, and/or sell copies of the Software, and to
+	permit persons to whom the Software is furnished to do so, subject to
+	the following conditions:
+
+	The above copyright notice and this permission notice shall be
+	included in all copies or substantial portions of the Software.
+
+	THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+	EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+	MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+	IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+	CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+	TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+	*/
+
+	var SortedList = __webpack_require__(7);
+
+	/**
+	 * IntervalTree
+	 *
+	 * @param (object) data:
+	 * @param (number) center:
+	 * @param (object) options:
+	 *   center:
+	 *
+	 **/
+	function IntervalTree(center, options) {
+	  options || (options = {});
+
+	  this.startKey = options.startKey || 0; // start key
+	  this.endKey = options.endKey || 1; // end key
+	  this.intervalHash = {}; // id => interval object
+	  this.pointTree = new SortedList({ // b-tree of start, end points
+	    compare: function (a, b) {
+	      if (a == null) return -1;
+	      if (b == null) return 1;
+	      var c = a[0] - b[0];
+	      return c > 0 ? 1 : c == 0 ? 0 : -1;
+	    }
+	  });
+
+	  this._autoIncrement = 0;
+
+	  // index of the root node
+	  if (!center || typeof center != 'number') {
+	    throw new Error('you must specify center index as the 2nd argument.');
+	  }
+
+	  this.root = new Node(center, this);
+	}
+
+	/**
+	 * publid methods
+	 **/
+
+	/**
+	 * add new range
+	 **/
+	IntervalTree.prototype.add = function (data, id) {
+	  if (this.intervalHash[id]) {
+	    throw new Error('id ' + id + ' is already registered.');
+	  }
+
+	  if (id == undefined) {
+	    while (this.intervalHash[this._autoIncrement]) {
+	      this._autoIncrement++;
+	    }
+	    id = this._autoIncrement;
+	  }
+
+	  var itvl = new Interval(data, id, this.startKey, this.endKey);
+	  this.pointTree.insert([itvl.start, id]);
+	  this.pointTree.insert([itvl.end, id]);
+	  this.intervalHash[id] = itvl;
+	  this._autoIncrement++;
+	  _insert.call(this, this.root, itvl);
+	};
+
+	/**
+	 * search
+	 *
+	 * @param (integer) val:
+	 * @return (array)
+	 **/
+	IntervalTree.prototype.search = function (val1, val2) {
+	  var ret = [];
+	  if (typeof val1 != 'number') {
+	    throw new Error(val1 + ': invalid input');
+	  }
+
+	  if (val2 == undefined) {
+	    _pointSearch.call(this, this.root, val1, ret);
+	  } else if (typeof val2 == 'number') {
+	    _rangeSearch.call(this, val1, val2, ret);
+	  } else {
+	    throw new Error(val1 + ',' + val2 + ': invalid input');
+	  }
+	  return ret;
+	};
+
+	/**
+	 * remove:
+	 **/
+	IntervalTree.prototype.remove = function (interval_id) {};
+
+	/**
+	 * private methods
+	 **/
+
+	/**
+	 * _insert
+	 **/
+	function _insert(node, itvl) {
+	  if (itvl.end < node.idx) {
+	    if (!node.left) {
+	      node.left = new Node(itvl.start + itvl.end >> 1, this);
+	    }
+	    return _insert.call(this, node.left, itvl);
+	  }
+
+	  if (node.idx < itvl.start) {
+	    if (!node.right) {
+	      node.right = new Node(itvl.start + itvl.end >> 1, this);
+	    }
+	    return _insert.call(this, node.right, itvl);
+	  }
+	  return node.insert(itvl);
+	}
+
+	/**
+	 * _pointSearch
+	 * @param (Node) node
+	 * @param (integer) idx
+	 * @param (Array) arr
+	 **/
+	function _pointSearch(node, idx, arr) {
+	  if (!node) return;
+
+	  if (idx < node.idx) {
+	    node.starts.every(function (itvl) {
+	      var bool = itvl.start <= idx;
+	      if (bool) arr.push(itvl.result());
+	      return bool;
+	    });
+	    return _pointSearch.call(this, node.left, idx, arr);
+	  } else if (idx > node.idx) {
+	    node.ends.every(function (itvl) {
+	      var bool = itvl.end >= idx;
+	      if (bool) arr.push(itvl.result());
+	      return bool;
+	    });
+	    return _pointSearch.call(this, node.right, idx, arr);
+	  }
+	  // exact equal
+	  else {
+	      node.starts.map(function (itvl) {
+	        arr.push(itvl.result());
+	      });
+	    }
+	}
+
+	/**
+	 * _rangeSearch
+	 * @param (integer) start
+	 * @param (integer) end
+	 * @param (Array) arr
+	 **/
+	function _rangeSearch(start, end, arr) {
+	  if (end - start <= 0) {
+	    throw new Error('end must be greater than start. start: ' + start + ', end: ' + end);
+	  }
+	  var resultHash = {};
+
+	  var wholeWraps = [];
+	  _pointSearch.call(this, this.root, start + end >> 1, wholeWraps, true);
+
+	  wholeWraps.forEach(function (result) {
+	    resultHash[result.id] = true;
+	  });
+
+	  var idx1 = this.pointTree.bsearch([start, null]);
+	  var pointTreeArray = this.pointTree;
+	  while (idx1 >= 0 && pointTreeArray[idx1][0] == start) {
+	    idx1--;
+	  }
+
+	  var idx2 = this.pointTree.bsearch([end, null]);
+	  if (idx2 >= 0) {
+	    var len = pointTreeArray.length - 1;
+	    while (idx2 <= len && pointTreeArray[idx2][0] <= end) {
+	      idx2++;
+	    }
+
+	    pointTreeArray.slice(idx1 + 1, idx2).forEach(function (point) {
+	      var id = point[1];
+	      resultHash[id] = true;
+	    }, this);
+
+	    Object.keys(resultHash).forEach(function (id) {
+	      var itvl = this.intervalHash[id];
+	      arr.push(itvl.result(start, end));
+	    }, this);
+	  }
+	}
+
+	/**
+	 * subclasses
+	 *
+	 **/
+
+	/**
+	 * Node : prototype of each node in a interval tree
+	 *
+	 **/
+	function Node(idx) {
+	  this.idx = idx;
+	  this.starts = new SortedList({
+	    compare: function (a, b) {
+	      if (a == null) return -1;
+	      if (b == null) return 1;
+	      var c = a.start - b.start;
+	      return c > 0 ? 1 : c == 0 ? 0 : -1;
+	    }
+	  });
+
+	  this.ends = new SortedList({
+	    compare: function (a, b) {
+	      if (a == null) return -1;
+	      if (b == null) return 1;
+	      var c = a.end - b.end;
+	      return c < 0 ? 1 : c == 0 ? 0 : -1;
+	    }
+	  });
+	}
+
+	/**
+	 * insert an Interval object to this node
+	 **/
+	Node.prototype.insert = function (interval) {
+	  this.starts.insert(interval);
+	  this.ends.insert(interval);
+	};
+
+	/**
+	 * Interval : prototype of interval info
+	 **/
+	function Interval(data, id, s, e) {
+	  this.id = id;
+	  this.start = data[s];
+	  this.end = data[e];
+	  this.data = data;
+
+	  if (typeof this.start != 'number' || typeof this.end != 'number') {
+	    throw new Error('start, end must be number. start: ' + this.start + ', end: ' + this.end);
+	  }
+
+	  if (this.start >= this.end) {
+	    throw new Error('start must be smaller than end. start: ' + this.start + ', end: ' + this.end);
+	  }
+	}
+
+	/**
+	 * get result object
+	 **/
+	Interval.prototype.result = function (start, end) {
+	  var ret = {
+	    id: this.id,
+	    data: this.data
+	  };
+	  if (typeof start == 'number' && typeof end == 'number') {
+	    /**
+	     * calc overlapping rate
+	     **/
+	    var left = Math.max(this.start, start);
+	    var right = Math.min(this.end, end);
+	    var lapLn = right - left;
+	    ret.rate1 = lapLn / (end - start);
+	    ret.rate2 = lapLn / (this.end - this.start);
+	  }
+	  return ret;
+	};
+
+	module.exports = IntervalTree;
+
+/***/ },
+/* 7 */
+/***/ function(module, exports) {
+
+	/*
+	This file is modified from https://github.com/shinout/SortedList
+
+	(The MIT License)
+
+	Copyright (c) 2012 SHIN Suzuki <shinout310@gmail.com>
+
+	Permission is hereby granted, free of charge, to any person obtaining
+	a copy of this software and associated documentation files (the
+	'Software'), to deal in the Software without restriction, including
+	without limitation the rights to use, copy, modify, merge, publish,
+	distribute, sublicense, and/or sell copies of the Software, and to
+	permit persons to whom the Software is furnished to do so, subject to
+	the following conditions:
+
+	The above copyright notice and this permission notice shall be
+	included in all copies or substantial portions of the Software.
+
+	THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+	EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+	MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+	IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+	CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+	TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+	*/
+
+	var SortedList = function SortedList() {
+	  var arr = null,
+	      options = {},
+	      args = arguments;
+
+	  ["0", "1"].forEach(function (n) {
+	    var val = args[n];
+	    if (Array.isArray(val)) {
+	      arr = val;
+	    } else if (val && typeof val == "object") {
+	      options = val;
+	    }
+	  });
+
+	  if (typeof options.filter == 'function') {
+	    this._filter = options.filter;
+	  }
+
+	  if (typeof options.compare == 'function') {
+	    this._compare = options.compare;
+	  } else if (typeof options.compare == 'string' && SortedList.compares[options.compare]) {
+	    this._compare = SortedList.compares[options.compare];
+	  }
+
+	  this._unique = !!options.unique;
+
+	  if (options.resume && arr) {
+	    arr.forEach(function (v, i) {
+	      this.push(v);
+	    }, this);
+	  } else if (arr) this.insert.apply(this, arr);
+	};
+
+	/**
+	 * SortedList.create(val1, val2)
+	 * creates an instance
+	 **/
+	SortedList.create = function (val1, val2) {
+	  return new SortedList(val1, val2);
+	};
+
+	SortedList.prototype = new Array();
+	SortedList.prototype.constructor = Array.prototype.constructor;
+
+	/**
+	 * sorted.insertOne(val)
+	 * insert one value
+	 * returns false if failed, inserted position if succeed
+	 **/
+	SortedList.prototype.insertOne = function (val) {
+	  var pos = this.bsearch(val);
+	  if (this._unique && this.key(val, pos) != null) return false;
+	  if (!this._filter(val, pos)) return false;
+	  this.splice(pos + 1, 0, val);
+	  return pos + 1;
+	};
+
+	/**
+	 * sorted.insert(val1, val2, ...)
+	 * insert multi values
+	 * returns the list of the results of insertOne()
+	 **/
+	SortedList.prototype.insert = function () {
+	  return Array.prototype.map.call(arguments, function (val) {
+	    return this.insertOne(val);
+	  }, this);
+	};
+
+	/**
+	 * sorted.remove(pos)
+	 * remove the value in the given position
+	 **/
+	SortedList.prototype.remove = function (pos) {
+	  this.splice(pos, 1);
+	  return this;
+	};
+
+	/**
+	 * sorted.bsearch(val)
+	 * @returns position of the value
+	 **/
+	SortedList.prototype.bsearch = function (val) {
+	  if (!this.length) return -1;
+	  var mpos,
+	      spos = 0,
+	      epos = this.length;
+	  while (epos - spos > 1) {
+	    mpos = Math.floor((spos + epos) / 2);
+	    mval = this[mpos];
+	    var comp = this._compare(val, mval);
+	    if (comp == 0) return mpos;
+	    if (comp > 0) spos = mpos;else epos = mpos;
+	  }
+	  return spos == 0 && this._compare(this[0], val) > 0 ? -1 : spos;
+	};
+
+	/**
+	 * sorted.key(val)
+	 * @returns first index if exists, null if not
+	 **/
+	SortedList.prototype.key = function (val, bsResult) {
+	  if (bsResult == null) bsResult = this.bsearch(val);
+	  var pos = bsResult;
+	  if (pos == -1 || this._compare(this[pos], val) < 0) return pos + 1 < this.length && this._compare(this[pos + 1], val) == 0 ? pos + 1 : null;
+	  while (pos >= 1 && this._compare(this[pos - 1], val) == 0) pos--;
+	  return pos;
+	};
+
+	/**
+	 * sorted.key(val)
+	 * @returns indexes if exists, null if not
+	 **/
+	SortedList.prototype.keys = function (val, bsResult) {
+	  var ret = [];
+	  if (bsResult == null) bsResult = this.bsearch(val);
+	  var pos = bsResult;
+	  while (pos >= 0 && this._compare(this[pos], val) == 0) {
+	    ret.push(pos);
+	    pos--;
+	  }
+
+	  var len = this.length;
+	  pos = bsResult + 1;
+	  while (pos < len && this._compare(this[pos], val) == 0) {
+	    ret.push(pos);
+	    pos++;
+	  }
+	  return ret.length ? ret : null;
+	};
+
+	/**
+	 * sorted.unique()
+	 * @param createNew : create new instance
+	 * @returns first index if exists, null if not
+	 **/
+	SortedList.prototype.unique = function (createNew) {
+	  if (createNew) return this.filter(function (v, k) {
+	    return k == 0 || this._compare(this[k - 1], v) != 0;
+	  }, this);
+	  var total = 0;
+	  this.map(function (v, k) {
+	    if (k == 0 || this._compare(this[k - 1], v) != 0) return null;
+	    return k - total++;
+	  }, this).forEach(function (k) {
+	    if (k != null) this.remove(k);
+	  }, this);
+	  return this;
+	};
+
+	/**
+	 * sorted.toArray()
+	 * get raw array
+	 **/
+	SortedList.prototype.toArray = function () {
+	  return this.slice();
+	};
+
+	/**
+	 * default filtration function
+	 **/
+	SortedList.prototype._filter = function (val, pos) {
+	  return true;
+	};
+
+	/**
+	 * comparison functions
+	 **/
+	SortedList.compares = {
+	  "number": function (a, b) {
+	    var c = a - b;
+	    return c > 0 ? 1 : c == 0 ? 0 : -1;
+	  },
+
+	  "string": function (a, b) {
+	    return a > b ? 1 : a == b ? 0 : -1;
+	  }
+	};
+
+	/**
+	 * sorted.compare(a, b)
+	 * default comparison function
+	 **/
+	SortedList.prototype._compare = SortedList.compares["string"];
+
+	module.exports = SortedList;
+
+/***/ },
+/* 8 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var helper = __webpack_require__(2);
+
+	var module = function () {
+	  var metrics = {};
+
+	  function toLayers(nodes) {
+	    return nodes.length === 0 || Array.isArray(nodes[0]) ? nodes : [nodes];
+	  }
+
+	  metrics.displacement = function (nodes) {
+	    if (nodes.length === 0) return 0;
+	    var layers = toLayers(nodes);
+	    return helper.sum(layers, function (layer) {
+	      return helper.sum(layer, function (node) {
+	        return Math.abs(node.displacement());
+	      });
+	    });
+	  };
+
+	  metrics.overflow = function (nodes, minPos, maxPos) {
+	    if (nodes.length === 0 || !helper.isDefined(minPos) && !helper.isDefined(maxPos)) return 0;
+	    var layers = toLayers(nodes);
+
+	    return helper.sum(layers, function (layer) {
+	      return helper.sum(layer, function (node) {
+	        var l = node.currentLeft();
+	        var r = node.currentRight();
+
+	        if (helper.isDefined(minPos)) {
+	          if (r <= minPos) {
+	            return node.width;
+	          } else if (l < minPos) {
+	            return minPos - l;
+	          }
+	        }
+
+	        if (helper.isDefined(maxPos)) {
+	          if (l >= maxPos) {
+	            return node.width;
+	          } else if (r > maxPos) {
+	            return r - maxPos;
+	          }
+	        }
+
+	        return 0;
+	      });
+	    });
+	  };
+
+	  metrics.overDensity = function (nodes, density, layerWidth, nodeSpacing) {
+	    if (nodes.length === 0) return 0;
+
+	    var limit = density * layerWidth;
+
+	    var layers = toLayers(nodes);
+	    return helper.sum(layers, function (layer) {
+	      var width = helper.sum(layer, function (node) {
+	        return node.width + nodeSpacing;
+	      }) - nodeSpacing;
+	      return width <= limit ? 0 : width - limit;
+	    });
+	  };
+
+	  metrics.overlapCount = function (nodes, buffer) {
+	    if (nodes.length === 0) return 0;
+	    var layers = toLayers(nodes);
+	    return helper.sum(layers, function (layer) {
+	      var count = 0;
+	      for (var i = 0; i < layer.length; i++) {
+	        for (var j = i + 1; j < layer.length; j++) {
+	          if (layer[i].overlapWithNode(layer[j], buffer)) {
+	            count++;
+	          }
+	        }
+	      }
+	      return count;
+	    });
+	  };
+
+	  metrics.overlapSpace = function (nodes) {
+	    if (nodes.length === 0) return 0;
+	    var layers = toLayers(nodes);
+	    return helper.sum(layers, function (layer) {
+	      var count = 0;
+	      for (var i = 0; i < layer.length; i++) {
+	        for (var j = i + 1; j < layer.length; j++) {
+	          var distance = layer[i].distanceFrom(layer[j]);
+	          count += distance < 0 ? Math.abs(distance) : 0;
+	        }
+	      }
+	      return count;
+	    });
+	  };
+
+	  metrics.weightedAllocatedSpace = function (nodes) {
+	    if (nodes.length === 0) return 0;
+	    var layers = toLayers(nodes);
+
+	    return helper.sum(layers, function (layer, layerIndex) {
+	      return layerIndex * helper.sum(layer, function (d) {
+	        return d.width;
+	      });
+	    });
+	  };
+
+	  return metrics;
+	}();
+
+	// return module
+	module.exports = module;
+
+/***/ },
+/* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var helper = __webpack_require__(2);
+	var vpsc = __webpack_require__(10);
+
+	var DEFAULT_OPTIONS = {
+	  lineSpacing: 2,
+	  nodeSpacing: 3,
+	  minPos: 0,
+	  maxPos: null
+	};
+
+	function last(arr) {
+	  return arr[arr.length - 1];
+	}
+
+	function nodeToVariable(node) {
+	  var v = new vpsc.Variable(node.targetPos);
+	  v.node = node;
+	  return v;
+	}
+
+	function removeOverlap(nodes, options) {
+	  if (nodes.length > 0) {
+	    options = helper.extend(DEFAULT_OPTIONS, options);
+
+	    // For nodes with stub, set target position to stub's current position
+	    nodes.forEach(function (node) {
+	      node.targetPos = node.parent ? node.parent.currentPos : node.idealPos;
+	    });
+
+	    nodes.sort(function (a, b) {
+	      return a.targetPos - b.targetPos;
+	    });
+
+	    var variables = nodes.map(nodeToVariable);
+
+	    var constraints = [];
+	    for (var i = 1; i < variables.length; i++) {
+	      var v1 = variables[i - 1];
+	      var v2 = variables[i];
+
+	      var gap;
+	      if (v1.node.isStub() && v2.node.isStub()) {
+	        gap = (v1.node.width + v2.node.width) / 2 + options.lineSpacing;
+	      } else {
+	        gap = (v1.node.width + v2.node.width) / 2 + options.nodeSpacing;
+	      }
+	      constraints.push(new vpsc.Constraint(v1, v2, gap));
+	    }
+
+	    if (helper.isDefined(options.minPos)) {
+	      var leftWall = new vpsc.Variable(options.minPos, 1e10);
+	      var v = variables[0];
+	      constraints.push(new vpsc.Constraint(leftWall, v, v.node.width / 2));
+	      variables.unshift(leftWall);
+	    }
+
+	    if (helper.isDefined(options.maxPos)) {
+	      var rightWall = new vpsc.Variable(options.maxPos, 1e10);
+	      var lastv = last(variables);
+	      constraints.push(new vpsc.Constraint(lastv, rightWall, lastv.node.width / 2));
+	      variables.push(rightWall);
+	    }
+
+	    var solver = new vpsc.Solver(variables, constraints);
+	    solver.solve();
+
+	    variables.filter(function (v) {
+	      return v.node;
+	    }).map(function (v) {
+	      v.node.currentPos = Math.round(v.position());
+	      return v;
+	    });
+	  }
+
+	  return nodes;
+	}
+
+	removeOverlap.DEFAULT_OPTIONS = DEFAULT_OPTIONS;
+
+	module.exports = removeOverlap;
+
+/***/ },
+/* 10 */
+/***/ function(module, exports) {
+
+	/*
+	This file is compiled from https://github.com/tgdwyer/WebCola/blob/master/WebCola/src/vpsc.ts
+	and modified slightly.
+
+	The MIT License (MIT)
+
+	Copyright (c) 2013 Tim Dwyer
+
+	Permission is hereby granted, free of charge, to any person obtaining a copy
+	of this software and associated documentation files (the "Software"), to deal
+	in the Software without restriction, including without limitation the rights
+	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+	copies of the Software, and to permit persons to whom the Software is
+	furnished to do so, subject to the following conditions:
+
+	The above copyright notice and this permission notice shall be included in all
+	copies or substantial portions of the Software.
+
+	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+	SOFTWARE.
+	*/
+
+	var vpsc = {};
+
+	var PositionStats = function () {
+	    function PositionStats(scale) {
+	        this.scale = scale;
+	        this.AB = 0;
+	        this.AD = 0;
+	        this.A2 = 0;
+	    }
+	    PositionStats.prototype.addVariable = function (v) {
+	        var ai = this.scale / v.scale;
+	        var bi = v.offset / v.scale;
+	        var wi = v.weight;
+	        this.AB += wi * ai * bi;
+	        this.AD += wi * ai * v.desiredPosition;
+	        this.A2 += wi * ai * ai;
+	    };
+	    PositionStats.prototype.getPosn = function () {
+	        return (this.AD - this.AB) / this.A2;
+	    };
+	    return PositionStats;
+	}();
+	vpsc.PositionStats = PositionStats;
+	var Constraint = function () {
+	    function Constraint(left, right, gap, equality) {
+	        if (equality === void 0) {
+	            equality = false;
+	        }
+	        this.left = left;
+	        this.right = right;
+	        this.gap = gap;
+	        this.equality = equality;
+	        this.active = false;
+	        this.unsatisfiable = false;
+	        this.left = left;
+	        this.right = right;
+	        this.gap = gap;
+	        this.equality = equality;
+	    }
+	    Constraint.prototype.slack = function () {
+	        return this.unsatisfiable ? Number.MAX_VALUE : this.right.scale * this.right.position() - this.gap - this.left.scale * this.left.position();
+	    };
+	    return Constraint;
+	}();
+	vpsc.Constraint = Constraint;
+	var Variable = function () {
+	    function Variable(desiredPosition, weight, scale) {
+	        if (weight === void 0) {
+	            weight = 1;
+	        }
+	        if (scale === void 0) {
+	            scale = 1;
+	        }
+	        this.desiredPosition = desiredPosition;
+	        this.weight = weight;
+	        this.scale = scale;
+	        this.offset = 0;
+	    }
+	    Variable.prototype.dfdv = function () {
+	        return 2.0 * this.weight * (this.position() - this.desiredPosition);
+	    };
+	    Variable.prototype.position = function () {
+	        return (this.block.ps.scale * this.block.posn + this.offset) / this.scale;
+	    };
+	    // visit neighbours by active constraints within the same block
+	    Variable.prototype.visitNeighbours = function (prev, f) {
+	        var ff = function (c, next) {
+	            return c.active && prev !== next && f(c, next);
+	        };
+	        this.cOut.forEach(function (c) {
+	            return ff(c, c.right);
+	        });
+	        this.cIn.forEach(function (c) {
+	            return ff(c, c.left);
+	        });
+	    };
+	    return Variable;
+	}();
+	vpsc.Variable = Variable;
+	var Block = function () {
+	    function Block(v) {
+	        this.vars = [];
+	        v.offset = 0;
+	        this.ps = new PositionStats(v.scale);
+	        this.addVariable(v);
+	    }
+	    Block.prototype.addVariable = function (v) {
+	        v.block = this;
+	        this.vars.push(v);
+	        this.ps.addVariable(v);
+	        this.posn = this.ps.getPosn();
+	    };
+	    // move the block where it needs to be to minimize cost
+	    Block.prototype.updateWeightedPosition = function () {
+	        this.ps.AB = this.ps.AD = this.ps.A2 = 0;
+	        for (var i = 0, n = this.vars.length; i < n; ++i) this.ps.addVariable(this.vars[i]);
+	        this.posn = this.ps.getPosn();
+	    };
+	    Block.prototype.compute_lm = function (v, u, postAction) {
+	        var _this = this;
+	        var dfdv = v.dfdv();
+	        v.visitNeighbours(u, function (c, next) {
+	            var _dfdv = _this.compute_lm(next, v, postAction);
+	            if (next === c.right) {
+	                dfdv += _dfdv * c.left.scale;
+	                c.lm = _dfdv;
+	            } else {
+	                dfdv += _dfdv * c.right.scale;
+	                c.lm = -_dfdv;
+	            }
+	            postAction(c);
+	        });
+	        return dfdv / v.scale;
+	    };
+	    Block.prototype.populateSplitBlock = function (v, prev) {
+	        var _this = this;
+	        v.visitNeighbours(prev, function (c, next) {
+	            next.offset = v.offset + (next === c.right ? c.gap : -c.gap);
+	            _this.addVariable(next);
+	            _this.populateSplitBlock(next, v);
+	        });
+	    };
+	    // traverse the active constraint tree applying visit to each active constraint
+	    Block.prototype.traverse = function (visit, acc, v, prev) {
+	        var _this = this;
+	        if (v === void 0) {
+	            v = this.vars[0];
+	        }
+	        if (prev === void 0) {
+	            prev = null;
+	        }
+	        v.visitNeighbours(prev, function (c, next) {
+	            acc.push(visit(c));
+	            _this.traverse(visit, acc, next, v);
+	        });
+	    };
+	    // calculate lagrangian multipliers on constraints and
+	    // find the active constraint in this block with the smallest lagrangian.
+	    // if the lagrangian is negative, then the constraint is a split candidate.
+	    Block.prototype.findMinLM = function () {
+	        var m = null;
+	        this.compute_lm(this.vars[0], null, function (c) {
+	            if (!c.equality && (m === null || c.lm < m.lm)) m = c;
+	        });
+	        return m;
+	    };
+	    Block.prototype.findMinLMBetween = function (lv, rv) {
+	        this.compute_lm(lv, null, function () {});
+	        var m = null;
+	        this.findPath(lv, null, rv, function (c, next) {
+	            if (!c.equality && c.right === next && (m === null || c.lm < m.lm)) m = c;
+	        });
+	        return m;
+	    };
+	    Block.prototype.findPath = function (v, prev, to, visit) {
+	        var _this = this;
+	        var endFound = false;
+	        v.visitNeighbours(prev, function (c, next) {
+	            if (!endFound && (next === to || _this.findPath(next, v, to, visit))) {
+	                endFound = true;
+	                visit(c, next);
+	            }
+	        });
+	        return endFound;
+	    };
+	    // Search active constraint tree from u to see if there is a directed path to v.
+	    // Returns true if path is found.
+	    Block.prototype.isActiveDirectedPathBetween = function (u, v) {
+	        if (u === v) return true;
+	        var i = u.cOut.length;
+	        while (i--) {
+	            var c = u.cOut[i];
+	            if (c.active && this.isActiveDirectedPathBetween(c.right, v)) return true;
+	        }
+	        return false;
+	    };
+	    // split the block into two by deactivating the specified constraint
+	    Block.split = function (c) {
+	        /* DEBUG
+	                    console.log("split on " + c);
+	                    console.assert(c.active, "attempt to split on inactive constraint");
+	        DEBUG */
+	        c.active = false;
+	        return [Block.createSplitBlock(c.left), Block.createSplitBlock(c.right)];
+	    };
+	    Block.createSplitBlock = function (startVar) {
+	        var b = new Block(startVar);
+	        b.populateSplitBlock(startVar, null);
+	        return b;
+	    };
+	    // find a split point somewhere between the specified variables
+	    Block.prototype.splitBetween = function (vl, vr) {
+	        /* DEBUG
+	                    console.assert(vl.block === this);
+	                    console.assert(vr.block === this);
+	        DEBUG */
+	        var c = this.findMinLMBetween(vl, vr);
+	        if (c !== null) {
+	            var bs = Block.split(c);
+	            return { constraint: c, lb: bs[0], rb: bs[1] };
+	        }
+	        // couldn't find a split point - for example the active path is all equality constraints
+	        return null;
+	    };
+	    Block.prototype.mergeAcross = function (b, c, dist) {
+	        c.active = true;
+	        for (var i = 0, n = b.vars.length; i < n; ++i) {
+	            var v = b.vars[i];
+	            v.offset += dist;
+	            this.addVariable(v);
+	        }
+	        this.posn = this.ps.getPosn();
+	    };
+	    Block.prototype.cost = function () {
+	        var sum = 0,
+	            i = this.vars.length;
+	        while (i--) {
+	            var v = this.vars[i],
+	                d = v.position() - v.desiredPosition;
+	            sum += d * d * v.weight;
+	        }
+	        return sum;
+	    };
+	    return Block;
+	}();
+	vpsc.Block = Block;
+	var Blocks = function () {
+	    function Blocks(vs) {
+	        this.vs = vs;
+	        var n = vs.length;
+	        this.list = new Array(n);
+	        while (n--) {
+	            var b = new Block(vs[n]);
+	            this.list[n] = b;
+	            b.blockInd = n;
+	        }
+	    }
+	    Blocks.prototype.cost = function () {
+	        var sum = 0,
+	            i = this.list.length;
+	        while (i--) sum += this.list[i].cost();
+	        return sum;
+	    };
+	    Blocks.prototype.insert = function (b) {
+	        /* DEBUG
+	                    console.assert(!this.contains(b), "blocks error: tried to reinsert block " + b.blockInd)
+	        DEBUG */
+	        b.blockInd = this.list.length;
+	        this.list.push(b);
+	        /* DEBUG
+	                    console.log("insert block: " + b.blockInd);
+	                    this.contains(b);
+	        DEBUG */
+	    };
+	    Blocks.prototype.remove = function (b) {
+	        /* DEBUG
+	                    console.log("remove block: " + b.blockInd);
+	                    console.assert(this.contains(b));
+	        DEBUG */
+	        var last = this.list.length - 1;
+	        var swapBlock = this.list[last];
+	        this.list.length = last;
+	        if (b !== swapBlock) {
+	            this.list[b.blockInd] = swapBlock;
+	            swapBlock.blockInd = b.blockInd;
+	        }
+	    };
+	    // merge the blocks on either side of the specified constraint, by copying the smaller block into the larger
+	    // and deleting the smaller.
+	    Blocks.prototype.merge = function (c) {
+	        var l = c.left.block,
+	            r = c.right.block;
+	        /* DEBUG
+	                    console.assert(l!==r, "attempt to merge within the same block");
+	        DEBUG */
+	        var dist = c.right.offset - c.left.offset - c.gap;
+	        if (l.vars.length < r.vars.length) {
+	            r.mergeAcross(l, c, dist);
+	            this.remove(l);
+	        } else {
+	            l.mergeAcross(r, c, -dist);
+	            this.remove(r);
+	        }
+	        /* DEBUG
+	                    console.assert(Math.abs(c.slack()) < 1e-6, "Error: Constraint should be at equality after merge!");
+	                    console.log("merged on " + c);
+	        DEBUG */
+	    };
+	    Blocks.prototype.forEach = function (f) {
+	        this.list.forEach(f);
+	    };
+	    // useful, for example, after variable desired positions change.
+	    Blocks.prototype.updateBlockPositions = function () {
+	        this.list.forEach(function (b) {
+	            return b.updateWeightedPosition();
+	        });
+	    };
+	    // split each block across its constraint with the minimum lagrangian
+	    Blocks.prototype.split = function (inactive) {
+	        var _this = this;
+	        this.updateBlockPositions();
+	        this.list.forEach(function (b) {
+	            var v = b.findMinLM();
+	            if (v !== null && v.lm < Solver.LAGRANGIAN_TOLERANCE) {
+	                b = v.left.block;
+	                Block.split(v).forEach(function (nb) {
+	                    return _this.insert(nb);
+	                });
+	                _this.remove(b);
+	                inactive.push(v);
+	            }
+	        });
+	    };
+	    return Blocks;
+	}();
+	vpsc.Blocks = Blocks;
+	var Solver = function () {
+	    function Solver(vs, cs) {
+	        this.vs = vs;
+	        this.cs = cs;
+	        this.vs = vs;
+	        vs.forEach(function (v) {
+	            v.cIn = [], v.cOut = [];
+	            /* DEBUG
+	                            v.toString = () => "v" + vs.indexOf(v);
+	            DEBUG */
+	        });
+	        this.cs = cs;
+	        cs.forEach(function (c) {
+	            c.left.cOut.push(c);
+	            c.right.cIn.push(c);
+	            /* DEBUG
+	                            c.toString = () => c.left + "+" + c.gap + "<=" + c.right + " slack=" + c.slack() + " active=" + c.active;
+	            DEBUG */
+	        });
+	        this.inactive = cs.map(function (c) {
+	            c.active = false;return c;
+	        });
+	        this.bs = null;
+	    }
+	    Solver.prototype.cost = function () {
+	        return this.bs.cost();
+	    };
+	    // set starting positions without changing desired positions.
+	    // Note: it throws away any previous block structure.
+	    Solver.prototype.setStartingPositions = function (ps) {
+	        this.inactive = this.cs.map(function (c) {
+	            c.active = false;return c;
+	        });
+	        this.bs = new Blocks(this.vs);
+	        this.bs.forEach(function (b, i) {
+	            return b.posn = ps[i];
+	        });
+	    };
+	    Solver.prototype.setDesiredPositions = function (ps) {
+	        this.vs.forEach(function (v, i) {
+	            return v.desiredPosition = ps[i];
+	        });
+	    };
+	    /* DEBUG
+	            private getId(v: Variable): number {
+	                return this.vs.indexOf(v);
+	            }
+	             // sanity check of the index integrity of the inactive list
+	            checkInactive(): void {
+	                var inactiveCount = 0;
+	                this.cs.forEach(c=> {
+	                    var i = this.inactive.indexOf(c);
+	                    console.assert(!c.active && i >= 0 || c.active && i < 0, "constraint should be in the inactive list if it is not active: " + c);
+	                    if (i >= 0) {
+	                        inactiveCount++;
+	                    } else {
+	                        console.assert(c.active, "inactive constraint not found in inactive list: " + c);
+	                    }
+	                });
+	                console.assert(inactiveCount === this.inactive.length, inactiveCount + " inactive constraints found, " + this.inactive.length + "in inactive list");
+	            }
+	            // after every call to satisfy the following should check should pass
+	            checkSatisfied(): void {
+	                this.cs.forEach(c=>console.assert(c.slack() >= vpsc.Solver.ZERO_UPPERBOUND, "Error: Unsatisfied constraint! "+c));
+	            }
+	    DEBUG */
+	    Solver.prototype.mostViolated = function () {
+	        var minSlack = Number.MAX_VALUE,
+	            v = null,
+	            l = this.inactive,
+	            n = l.length,
+	            deletePoint = n;
+	        for (var i = 0; i < n; ++i) {
+	            var c = l[i];
+	            if (c.unsatisfiable) continue;
+	            var slack = c.slack();
+	            if (c.equality || slack < minSlack) {
+	                minSlack = slack;
+	                v = c;
+	                deletePoint = i;
+	                if (c.equality) break;
+	            }
+	        }
+	        if (deletePoint !== n && (minSlack < Solver.ZERO_UPPERBOUND && !v.active || v.equality)) {
+	            l[deletePoint] = l[n - 1];
+	            l.length = n - 1;
+	        }
+	        return v;
+	    };
+	    // satisfy constraints by building block structure over violated constraints
+	    // and moving the blocks to their desired positions
+	    Solver.prototype.satisfy = function () {
+	        if (this.bs == null) {
+	            this.bs = new Blocks(this.vs);
+	        }
+	        /* DEBUG
+	                    console.log("satisfy: " + this.bs);
+	        DEBUG */
+	        this.bs.split(this.inactive);
+	        var v = null;
+	        while ((v = this.mostViolated()) && (v.equality || v.slack() < Solver.ZERO_UPPERBOUND && !v.active)) {
+	            var lb = v.left.block,
+	                rb = v.right.block;
+	            /* DEBUG
+	                            console.log("most violated is: " + v);
+	                            this.bs.contains(lb);
+	                            this.bs.contains(rb);
+	            DEBUG */
+	            if (lb !== rb) {
+	                this.bs.merge(v);
+	            } else {
+	                if (lb.isActiveDirectedPathBetween(v.right, v.left)) {
+	                    // cycle found!
+	                    v.unsatisfiable = true;
+	                    continue;
+	                }
+	                // constraint is within block, need to split first
+	                var split = lb.splitBetween(v.left, v.right);
+	                if (split !== null) {
+	                    this.bs.insert(split.lb);
+	                    this.bs.insert(split.rb);
+	                    this.bs.remove(lb);
+	                    this.inactive.push(split.constraint);
+	                } else {
+	                    /* DEBUG
+	                                            console.log("unsatisfiable constraint found");
+	                    DEBUG */
+	                    v.unsatisfiable = true;
+	                    continue;
+	                }
+	                if (v.slack() >= 0) {
+	                    /* DEBUG
+	                                            console.log("violated constraint indirectly satisfied: " + v);
+	                    DEBUG */
+	                    // v was satisfied by the above split!
+	                    this.inactive.push(v);
+	                } else {
+	                    /* DEBUG
+	                                            console.log("merge after split:");
+	                    DEBUG */
+	                    this.bs.merge(v);
+	                }
+	            }
+	        }
+	        /* DEBUG
+	                    this.checkSatisfied();
+	        DEBUG */
+	    };
+	    // repeatedly build and split block structure until we converge to an optimal solution
+	    Solver.prototype.solve = function () {
+	        this.satisfy();
+	        var lastcost = Number.MAX_VALUE,
+	            cost = this.bs.cost();
+	        while (Math.abs(lastcost - cost) > 0.0001) {
+	            this.satisfy();
+	            lastcost = cost;
+	            cost = this.bs.cost();
+	        }
+	        return cost;
+	    };
+	    Solver.LAGRANGIAN_TOLERANCE = -1e-4;
+	    Solver.ZERO_UPPERBOUND = -1e-10;
+	    return Solver;
+	}();
+	vpsc.Solver = Solver;
+
+	module.exports = vpsc;
+
+/***/ },
+/* 11 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var helper = __webpack_require__(2);
+
+	function Renderer(options) {
+	  this.options = helper.extend({
+	    layerGap: 60,
+	    nodeHeight: 10,
+	    direction: 'down'
+	  }, options);
+	}
+
+	function lineTo(point) {
+	  return 'L ' + point.join(' ');
+	}
+
+	function moveTo(point) {
+	  return 'M ' + point.join(' ');
+	}
+
+	function curveTo(c1, c2, point2) {
+	  return 'C ' + c1.join(' ') + ' ' + c2.join(' ') + ' ' + point2.join(' ');
+	}
+
+	function vCurveBetween(point1, point2) {
+	  var midY = (point1[1] + point2[1]) / 2;
+	  return curveTo([point1[0], midY], [point2[0], midY], point2);
+	}
+
+	function hCurveBetween(point1, point2) {
+	  var midX = (point1[0] + point2[0]) / 2;
+	  return curveTo([midX, point1[1]], [midX, point2[1]], point2);
+	}
+
+	Renderer.prototype.getWaypoints = function (node) {
+	  var options = this.options;
+	  var direction = options.direction;
+
+	  var hops = node.getPathFromRoot();
+	  var gap = options.nodeHeight + options.layerGap;
+
+	  if (direction === 'left') {
+	    return [[[0, hops[0].idealPos]]].concat(hops.map(function (hop, level) {
+	      var xPos = gap * (level + 1) * -1;
+	      return [[xPos + options.nodeHeight, hop.currentPos], [xPos, hop.currentPos]];
+	    }));
+	  }
+	  if (direction === 'right') {
+	    return [[[0, hops[0].idealPos]]].concat(hops.map(function (hop, level) {
+	      var xPos = gap * (level + 1);
+	      return [[xPos - options.nodeHeight, hop.currentPos], [xPos, hop.currentPos]];
+	    }));
+	  } else if (direction === 'up') {
+	    return [[[hops[0].idealPos, 0]]].concat(hops.map(function (hop, level) {
+	      var yPos = gap * (level + 1) * -1;
+	      return [[hop.currentPos, yPos + options.nodeHeight], [hop.currentPos, yPos]];
+	    }));
+	  } else {
+	    return [[[hops[0].idealPos, 0]]].concat(hops.map(function (hop, level) {
+	      var yPos = gap * (level + 1);
+	      return [[hop.currentPos, yPos - options.nodeHeight], [hop.currentPos, yPos]];
+	    }));
+	  }
+	};
+
+	Renderer.prototype.layout = function (nodes) {
+	  var options = this.options;
+
+	  var gap = options.layerGap + options.nodeHeight;
+
+	  switch (options.direction) {
+	    case 'left':
+	      nodes.forEach(function (node) {
+	        var pos = node.getLayerIndex() * gap + options.layerGap;
+	        node.x = -pos - options.nodeHeight;
+	        node.y = node.currentPos;
+	        node.dx = options.nodeHeight;
+	        node.dy = node.width;
+	      });
+	      break;
+	    case 'right':
+	      nodes.forEach(function (node) {
+	        var pos = node.getLayerIndex() * gap + options.layerGap;
+	        node.x = pos;
+	        node.y = node.currentPos;
+	        node.dx = options.nodeHeight;
+	        node.dy = node.width;
+	      });
+	      break;
+	    case 'up':
+	      nodes.forEach(function (node) {
+	        var pos = node.getLayerIndex() * gap + options.layerGap;
+	        node.x = node.currentPos;
+	        node.y = -pos - options.nodeHeight;
+	        node.dx = node.width;
+	        node.dy = options.nodeHeight;
+	      });
+	      break;
+	    default:
+	    case 'down':
+	      nodes.forEach(function (node) {
+	        var pos = node.getLayerIndex() * gap + options.layerGap;
+	        node.x = node.currentPos;
+	        node.y = pos;
+	        node.dx = node.width;
+	        node.dy = options.nodeHeight;
+	      });
+	      break;
+	  }
+
+	  return nodes;
+	};
+
+	Renderer.prototype.generatePath = function (node) {
+	  var options = this.options;
+	  var direction = options.direction;
+
+	  var waypoints = this.getWaypoints(node, direction);
+
+	  var steps = [moveTo(waypoints[0][0])];
+
+	  if (direction === 'left' || direction === 'right') {
+	    waypoints.reduce(function (prev, current, level) {
+	      steps.push(hCurveBetween(prev[prev.length - 1], current[0]));
+	      if (level < waypoints.length - 1) {
+	        steps.push(lineTo(current[1]));
+	      }
+	      return current;
+	    });
+	  } else {
+	    waypoints.reduce(function (prev, current, level) {
+	      steps.push(vCurveBetween(prev[prev.length - 1], current[0]));
+	      if (level < waypoints.length - 1) {
+	        steps.push(lineTo(current[1]));
+	      }
+	      return current;
+	    });
+	  }
+
+	  return steps.join(' ');
+	};
+
+	// return module
+	module.exports = Renderer;
+
+/***/ },
+/* 12 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Node = __webpack_require__(1);
+	var helper = __webpack_require__(2);
+
+	module.exports = function () {
+	  var util = {};
+
+	  var OPTIONS = {
+	    minWidth: 20,
+	    maxWidth: 20,
+	    minPos: 0,
+	    maxPos: 800
+	  };
+
+	  util.generateNodes = function (amount, options) {
+	    var nodes = [];
+	    options = helper.extend({}, OPTIONS, options);
+	    var diffPos = options.maxPos - options.minPos;
+	    var diffWidth = options.maxWidth - options.minWidth;
+	    for (var i = 0; i < amount; i++) {
+	      nodes.push(new Node(Math.floor(Math.random() * diffPos) + options.minPos, Math.floor(Math.random() * diffWidth) + options.minWidth));
+	    }
+	    return nodes;
+	  };
+
+	  return util;
+	}();
+
+/***/ }
+/******/ ])
+});
+;

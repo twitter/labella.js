@@ -1,6 +1,6 @@
 {
   "name": "d3kit",
-  "version": "1.0.6",
+  "version": "1.0.9",
   "authors": [
     "Krist Wongsuphasawat <kristw@twitter.com>",
     "Robert Harris <rharris@twitter.com>"
@@ -19,9 +19,12 @@
     "**/.*",
     "node_modules",
     "bower_components",
+    "resources",
     "src",
+    "grunt",
     "karma.conf.js",
     "Gruntfile.js",
+    "package.json",
     "test",
     "tests"
   ],

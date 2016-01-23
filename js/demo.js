@@ -3,7 +3,8 @@ angular.module('app', [])
     $scope.distributorAlgorithms = [
       // 'fifo',
       'simple',
-      'overlap'
+      'overlap',
+      'none'
     ];
 
     $scope.autoLayout = true;
@@ -13,11 +14,10 @@ angular.module('app', [])
       minWidth: 40,
       maxWidth: 60,
 
+      lineSpacing: 2,
       nodeSpacing: 3,
-      roundsPerTick: 5,
       minPos: 0,
       maxPos: 960,
-      maxRound: 100,
 
       density: 0.75,
       algorithm: 'overlap'
@@ -43,33 +43,21 @@ angular.module('app', [])
       var force = new labella.Force({
         minPos: +options.minPos,
         maxPos: +options.maxPos,
+        lineSpacing: +options.lineSpacing,
         nodeSpacing: +options.nodeSpacing,
-        roundsPerTick: +options.roundsPerTick,
 
+        density: +options.density,
         algorithm: options.algorithm
       });
 
-      force.on('start', function(event){
-        t1 = new Date().getTime();
-      });
-      force.on('tick', function(event){
-        chart.data(force.nodes());
-      });
-      // force.on('endLayer', function(event){
-      //   chart.data(force.getLayers());
-      // });
-      force.on('end', function(event){
-        $timeout(function(){
-          var t2 = new Date().getTime();
-          console.log('completed in ' + (t2 - t1) + 'ms');
-          chart.data(force.nodes());
-          $scope.metrics = force.metrics();
-        }, 0);
-      });
+      force.nodes(inputNodes);
 
-      force
-        .nodes(inputNodes)
-        .start(+options.maxRound);
+      var t1 = new Date().getTime();
+      force.compute();
+      var t2 = new Date().getTime();
+      console.log('completed in ' + (t2 - t1) + 'ms');
+      chart.data(force.nodes());
+      // $scope.metrics = force.metrics();
     }
 
     $scope.regenerate = function(){
