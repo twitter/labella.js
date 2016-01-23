@@ -3,13 +3,10 @@
   "version": "0.1.1",
   "description": "May the force label you.",
   "main": "dist/labella.min.js",
-  "directories": {
-    "example": "examples"
-  },
+  "files": [
+    "dist/*.*"
+  ],
   "dependencies": {},
-  "engines": {
-    "node": "~5.2"
-  },
   "devDependencies": {
     "babel-core": "~6.3.21",
     "babel-loader": "~6.2.0",
@@ -47,7 +44,8 @@
   "scripts": {
     "prepublish": "pkgfiles",
     "start": "gulp --debug",
-    "test": "gulp test"
+    "test": "karma start --single-run",
+    "tdd": "karma start"
   },
   "repository": {
     "type": "git",

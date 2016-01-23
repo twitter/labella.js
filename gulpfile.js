@@ -5,7 +5,6 @@ var del           = require('del');
 var browserSync   = require('browser-sync');
 var gulp          = require('gulp');
 var $             = require('gulp-load-plugins')();
-var Server        = require('karma').Server;
 var webpack       = require('webpack-stream');
 var argv          = require('yargs').argv;
 var runSequence   = require('run-sequence');
@@ -23,7 +22,7 @@ var paths = {
 };
 
 var patterns = {
-  js          : paths.src + '/**/*.js'
+  js : paths.src + '/**/*.js'
 };
 
 gulp.task('clean', function () {
@@ -58,21 +57,6 @@ gulp.task('webpack', function() {
     }))
     .pipe(gulp.dest(paths.dist))
     .pipe(gulp.dest(paths.examples+'/dist'));
-});
-
-/* Run test once and exit */
-gulp.task('test', function (done) {
-  new Server({
-    configFile: __dirname + '/karma.conf.js',
-    singleRun: true
-  }, done).start();
-});
-
-/* Watch for file changes and re-run tests on each change */
-gulp.task('tdd', function (done) {
-  new Server({
-    configFile: __dirname + '/karma.conf.js'
-  }, done).start();
 });
 
 /* Start browser-sync */

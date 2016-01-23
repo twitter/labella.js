@@ -6,6 +6,7 @@
   ],
   "description": "May the force label you",
   "main": "dist/labella.min.js",
+  "license": "Apache-2.0",
   "moduleType": [
     "amd",
     "globals",

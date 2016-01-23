@@ -33,8 +33,8 @@ gulp
 - Unit test
 
 ```bash
-gulp test # Run once
-gulp tdd  # Run, watch for file changes and re-run the tests automatically.
+npm test     # Run once
+npm run tdd  # Run, watch for file changes and re-run the tests automatically.
 ```
 
 - Build library once (will create files in the dist folder)
@@ -47,8 +47,10 @@ gulp build
 
 Use one of these commands to build, bump version and publish to both npm and bower.
 
-```
-gulp publish:patch // will add version by 0.0.1
-gulp publish:minor // will add version by 0.1
-gulp publish:major // will add version by 1
+```bash
+gulp tag --npm --patch # will add version by 0.0.1
+gulp tag --npm --minor # will add version by 0.1
+gulp tag --npm --major # will add version by 1
+# then
+npm publish
 ```
