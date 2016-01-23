@@ -19,7 +19,7 @@ In the *distribute* step, the nodes are split into multiple layers if all nodes 
 
 ```javascript
 var force = new labella.Force()
-  .nodes(nodes);
+  .nodes(nodes)
   .compute();
 
 // The rendering is independent from this library.

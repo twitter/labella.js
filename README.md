@@ -10,10 +10,10 @@ API Reference ▸
 
 # Labella.js [![NPM version][npm-image]][npm-url]
 
-*"Labels should be beautiful."*
+> "Labels should be beautiful."
 
 If you try to place labels for points on a timeline (or any 1D space), one common problem is the labels often overlap.
-How about making the labels push each other. Use the force, jedi-style.
+How about making the labels push each other and find where they can stay with overlapping.
 
 * Play with [interactive demo](http://twitter.github.io/labella.js/) to learn more
 * See examples: [up](http://twitter.github.io/labella.js/basic_up.html) |
@@ -25,6 +25,8 @@ How about making the labels push each other. Use the force, jedi-style.
 * Read the instructions on this page or API reference.
 
 Moreover, if you are looking for a ready-to-use timeline component with Labella's smart labeling instead of building your own timeline from scratch, check out [d3Kit-timeline](https://github.com/kristw/d3kit-timeline).
+
+**Note:** For users who are upgrading from v0.x.x to v1.x.x. The API has changed. `force.start()` and `force.on()` are deprecated. Both are replaced by `force.compute()` which has to be called slightly differently. Please read the [change logs](CHANGELOG.md).  
 
 ### Install
 
@@ -52,7 +54,7 @@ var nodes = [
 ];
 
 var force = new labella.Force()
-  .nodes(nodes);
+  .nodes(nodes)
   .compute();
 
 // The rendering is independent from this library.
