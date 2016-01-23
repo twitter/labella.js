@@ -617,6 +617,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  distributor.distribute = function (nodes) {
 	    if (!nodes || nodes.length === 0) return [];
 
+	    if (options.algorithm == 'none' || !helper.isDefined(options.algorithm)) {
+	      return [nodes];
+	    }
+
 	    nodes = nodes.concat().sort(function (a, b) {
 	      return a.idealPos - b.idealPos;
 	    });
@@ -627,8 +631,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    if (typeof options.algorithm == 'function') {
 	      return options.algorithm(nodes, options);
-	    } else if (options.algorithm == 'none' || !helper.isDefined(options.algorithm)) {
-	      return nodes;
 	    } else if (algorithms.hasOwnProperty(options.algorithm)) {
 	      return algorithms[options.algorithm](nodes);
 	    } else {
