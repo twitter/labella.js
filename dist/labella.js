@@ -1294,26 +1294,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return arr[arr.length - 1];
 	}
 
+	function nodeToVariable(node) {
+	  var v = new vpsc.Variable(node.targetPos);
+	  v.node = node;
+	  return v;
+	}
+
 	function removeOverlap(nodes, options) {
 	  if (nodes.length > 0) {
 	    options = helper.extend(DEFAULT_OPTIONS, options);
 
-	    // For nodes with stub, set ideal position to stub's current position
-	    nodes.filter(function (node) {
-	      return !!node.parent;
-	    }).forEach(function (node) {
-	      node.idealPos = node.parent.currentPos;
+	    // For nodes with stub, set target position to stub's current position
+	    nodes.forEach(function (node) {
+	      node.targetPos = node.parent ? node.parent.currentPos : node.idealPos;
 	    });
 
 	    nodes.sort(function (a, b) {
-	      return a.idealPos - b.idealPos;
+	      return a.targetPos - b.targetPos;
 	    });
 
-	    var variables = nodes.map(function (node) {
-	      var v = new vpsc.Variable(node.idealPos);
-	      v.node = node;
-	      return v;
-	    });
+	    var variables = nodes.map(nodeToVariable);
 
 	    var constraints = [];
 	    for (var i = 1; i < variables.length; i++) {
