@@ -380,11 +380,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var options = helper.extend({}, DEFAULT_OPTIONS);
 	  var distributor = new Distributor();
 	  var nodes = [];
+	  var layers = null;
 
 	  force.nodes = function (x) {
 	    if (!arguments.length) return nodes;
 	    nodes = x;
+	    layers = null;
 	    return force;
+	  };
+
+	  force.getLayers = function () {
+	    return layers;
 	  };
 
 	  force.options = function (x) {
@@ -411,7 +417,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      node.removeStub();
 	    });
 
-	    var layers = distributor.distribute(nodes);
+	    layers = distributor.distribute(nodes);
 	    layers.map(function (nodes, layerIndex) {
 	      nodes.forEach(function (node) {
 	        node.layerIndex = layerIndex;
