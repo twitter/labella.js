@@ -19,17 +19,11 @@ var Force = function(_options){
   var options = helper.extend({}, DEFAULT_OPTIONS);
   var distributor = new Distributor();
   var nodes = [];
-  var layers = null;
 
   force.nodes = function(x) {
     if (!arguments.length) return nodes;
     nodes = x;
-    layers = null;
     return force;
-  };
-
-  force.getLayers = function(){
-    return layers;
   };
 
   force.options = function(x){
@@ -51,18 +45,18 @@ var Force = function(_options){
   force.options(_options);
 
   force.compute = function(){
-    var simOptions = helper.pick(options, Object.keys(removeOverlap.DEFAULT_OPTIONS));
+    var overlapOptions = helper.pick(options, Object.keys(removeOverlap.DEFAULT_OPTIONS));
 
     nodes.forEach(function(node){
       node.removeStub();
     });
 
-    layers = distributor.distribute(nodes);
+    var layers = distributor.distribute(nodes);
     layers.map(function(nodes, layerIndex){
       nodes.forEach(function(node){
         node.layerIndex = layerIndex;
       });
-      removeOverlap(nodes, simOptions);
+      removeOverlap(nodes, overlapOptions);
     });
 
     return force;
@@ -72,27 +66,27 @@ var Force = function(_options){
     console.log('[warning] force.start() is deprecated. Please use force.compute() instead.');
   };
 
-  force.metrics = function(){
-    return Object.keys(metrics).map(function(name){
-      return {
-        name: name,
-        value: force.metric(name)
-      };
-    });
-  };
+  // force.metrics = function(){
+  //   return Object.keys(metrics).map(function(name){
+  //     return {
+  //       name: name,
+  //       value: force.metric(name)
+  //     };
+  //   });
+  // };
 
-  force.metric = function(name){
-    switch(name){
-      case 'overflow':
-        return metrics[name](layers, options.minPos, options.maxPos);
-      case 'overDensity':
-        return metrics[name](layers, options.density, options.layerWidth, options.nodeSpacing - 1);
-      case 'overlapCount':
-        return metrics[name](layers, options.nodeSpacing - 1);
-      default:
-        return metrics[name] ? metrics[name](layers) : null;
-    }
-  };
+  // force.metric = function(name){
+  //   switch(name){
+  //     case 'overflow':
+  //       return metrics[name](layers, options.minPos, options.maxPos);
+  //     case 'overDensity':
+  //       return metrics[name](layers, options.density, options.layerWidth, options.nodeSpacing - 1);
+  //     case 'overlapCount':
+  //       return metrics[name](layers, options.nodeSpacing - 1);
+  //     default:
+  //       return metrics[name] ? metrics[name](layers) : null;
+  //   }
+  // };
 
   return force;
 };
