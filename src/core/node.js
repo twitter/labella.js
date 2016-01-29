@@ -64,20 +64,20 @@ proto.idealLeft = function(){
   return this.idealPos - this.width/2;
 };
 
-proto.removeStub = function(){
-  if(this.parent){
-    this.parent.child = null;
-    this.parent = null;
-  }
-  return this;
-};
-
 proto.createStub = function(width){
   var stub = new Node(this.idealPos, width, this.data);
   stub.currentPos = this.currentPos;
   stub.child = this;
   this.parent = stub;
   return stub;
+};
+
+proto.removeStub = function(){
+  if(this.parent){
+    this.parent.child = null;
+    this.parent = null;
+  }
+  return this;
 };
 
 proto.isStub = function(){
