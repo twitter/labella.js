@@ -16,6 +16,16 @@ metrics.displacement = function(nodes){
   });
 };
 
+metrics.pathLength = function(nodes){
+  if(nodes.length===0) return 0;
+  var layers = toLayers(nodes);
+  return helper.sum(layers, function(layer){
+    return helper.sum(layer, function(node){
+      return node.isStub() ? 0 : Math.abs(node.getPathToRootLength());
+    });
+  });
+};
+
 metrics.overflowSpace = function(nodes, minPos, maxPos){
   if(nodes.length===0 || (!helper.isDefined(minPos) && !helper.isDefined(maxPos))) return 0;
   var layers = toLayers(nodes);

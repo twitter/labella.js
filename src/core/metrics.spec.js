@@ -3,8 +3,10 @@ var Node = require('./node.js');
 
 describe('metrics', function(){
   describe('#displacement(nodes)', function(){
-    it('should return sum of the displacements', function(){
+    it('should return 0 if the input is empty', function(){
       expect(metrics.displacement([])).toEqual(0);
+    });
+    it('should return sum of the displacements', function(){
       var nodes = [
         new Node(1,50),
         new Node(2,50),
@@ -15,6 +17,36 @@ describe('metrics', function(){
       nodes[0].currentPos = 10;
       nodes[1].currentPos = 10;
       expect(metrics.displacement([nodes])).toEqual(17);
+    });
+  });
+
+  describe('#pathLength(nodes)', function(){
+    it('should return 0 if the input is empty', function(){
+      expect(metrics.pathLength([])).toEqual(0);
+    });
+    it('should return sum of the displacements from leaves to stubs up to root', function(){
+      var n1 = new Node(1,50);
+      n1.currentPos = 20;
+      var n2 = new Node(2,50);
+      var n3 = new Node(804, 50);
+      var stub = n3.createStub();
+      n3.currentPos = 810;
+      var n4 = new Node(854, 50);
+      n4.currentPos = 800;
+      var stub4 = n4.createStub();
+      stub4.currentPos = 700;
+      var stub4_2 = stub4.createStub();
+      var nodes = [
+        n1,
+        n2,
+        n3,
+        new Node(854,50)
+      ];
+      expect(metrics.pathLength([n1])).toEqual(19);
+      expect(metrics.pathLength([n2])).toEqual(0);
+      expect(metrics.pathLength([n3])).toEqual(6);
+      expect(metrics.pathLength([n4, stub4, stub4_2])).toEqual(254);
+      expect(metrics.pathLength([[n1, n2, n3, stub4_2], [stub4], [n4]])).toEqual(279);
     });
   });
 

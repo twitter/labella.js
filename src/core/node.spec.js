@@ -171,6 +171,17 @@ describe('Node', function(){
     });
   });
 
+  describe('#getPathToRootLength', function(){
+    it('should return sum of displacements from all levels', function(){
+      var n4 = new Node(854, 50);
+      n4.currentPos = 800;
+      var stub4 = n4.createStub();
+      stub4.currentPos = 700;
+      var stub4_2 = stub4.createStub();
+      expect(n4.getPathToRootLength()).toEqual(254);
+    });
+  });
+
   describe('#getRoot()', function(){
     it('should return the topmost stub of this node', function(){
       var n1 = new Node(10, 10);

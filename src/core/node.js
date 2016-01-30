@@ -98,6 +98,18 @@ proto.getPathFromRoot = function(){
   return this.getPathToRoot().reverse();
 };
 
+proto.getPathToRootLength = function(){
+  var length = 0;
+  var current = this;
+  while(current){
+    var targetPos = current.parent ? current.parent.currentPos : current.idealPos;
+    length += Math.abs(current.currentPos - targetPos);
+    current = current.parent;
+  }
+
+  return length;
+};
+
 // Trace back to the node without parent
 proto.getRoot = function(){
   var previous = this;
