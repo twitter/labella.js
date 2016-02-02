@@ -124,4 +124,4 @@ var options = {
   roundsPerTick: 100
 };
 
-run(_.range(1,10,1).concat(_.range(10,201,10)), 10, options);
+run(_.range(1,10,1).concat(_.range(10,501,10)), 10, options);
