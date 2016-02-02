@@ -1,1 +1,0 @@
-var labella1 = require('./')
