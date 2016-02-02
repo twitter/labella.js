@@ -28,7 +28,13 @@ function removeOverlap(nodes, options){
     });
 
     nodes.sort(function(a,b){
-      return a.targetPos - b.targetPos;
+      var diff = a.targetPos - b.targetPos;
+      if(diff!==0){
+        return diff;
+      }
+      else{
+        return a.isStub() - b.isStub();
+      }
     });
 
     var variables = nodes.map(nodeToVariable);

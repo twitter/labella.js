@@ -174,6 +174,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return this.getPathToRoot().reverse();
 	};
 
+	proto.getPathToRootLength = function () {
+	  var length = 0;
+	  var current = this;
+	  while (current) {
+	    var targetPos = current.parent ? current.parent.currentPos : current.idealPos;
+	    length += Math.abs(current.currentPos - targetPos);
+	    current = current.parent;
+	  }
+
+	  return length;
+	};
+
 	// Trace back to the node without parent
 	proto.getRoot = function () {
 	  var previous = this;
@@ -1169,114 +1181,121 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var helper = __webpack_require__(2);
 
-	var module = function () {
-	  var metrics = {};
+	var metrics = {};
 
-	  function toLayers(nodes) {
-	    return nodes.length === 0 || Array.isArray(nodes[0]) ? nodes : [nodes];
-	  }
+	function toLayers(nodes) {
+	  return nodes.length === 0 || Array.isArray(nodes[0]) ? nodes : [nodes];
+	}
 
-	  metrics.displacement = function (nodes) {
-	    if (nodes.length === 0) return 0;
-	    var layers = toLayers(nodes);
-	    return helper.sum(layers, function (layer) {
-	      return helper.sum(layer, function (node) {
-	        return Math.abs(node.displacement());
-	      });
+	metrics.displacement = function (nodes) {
+	  if (nodes.length === 0) return 0;
+	  var layers = toLayers(nodes);
+	  return helper.sum(layers, function (layer) {
+	    return helper.sum(layer, function (node) {
+	      return Math.abs(node.displacement());
 	    });
-	  };
+	  });
+	};
 
-	  metrics.overflow = function (nodes, minPos, maxPos) {
-	    if (nodes.length === 0 || !helper.isDefined(minPos) && !helper.isDefined(maxPos)) return 0;
-	    var layers = toLayers(nodes);
-
-	    return helper.sum(layers, function (layer) {
-	      return helper.sum(layer, function (node) {
-	        var l = node.currentLeft();
-	        var r = node.currentRight();
-
-	        if (helper.isDefined(minPos)) {
-	          if (r <= minPos) {
-	            return node.width;
-	          } else if (l < minPos) {
-	            return minPos - l;
-	          }
-	        }
-
-	        if (helper.isDefined(maxPos)) {
-	          if (l >= maxPos) {
-	            return node.width;
-	          } else if (r > maxPos) {
-	            return r - maxPos;
-	          }
-	        }
-
-	        return 0;
-	      });
+	metrics.pathLength = function (nodes) {
+	  if (nodes.length === 0) return 0;
+	  var layers = toLayers(nodes);
+	  return helper.sum(layers, function (layer) {
+	    return helper.sum(layer, function (node) {
+	      return node.isStub() ? 0 : Math.abs(node.getPathToRootLength());
 	    });
-	  };
+	  });
+	};
 
-	  metrics.overDensity = function (nodes, density, layerWidth, nodeSpacing) {
-	    if (nodes.length === 0) return 0;
+	metrics.overflowSpace = function (nodes, minPos, maxPos) {
+	  if (nodes.length === 0 || !helper.isDefined(minPos) && !helper.isDefined(maxPos)) return 0;
+	  var layers = toLayers(nodes);
 
-	    var limit = density * layerWidth;
+	  return helper.sum(layers, function (layer) {
+	    return helper.sum(layer, function (node) {
+	      var l = node.currentLeft();
+	      var r = node.currentRight();
 
-	    var layers = toLayers(nodes);
-	    return helper.sum(layers, function (layer) {
-	      var width = helper.sum(layer, function (node) {
-	        return node.width + nodeSpacing;
-	      }) - nodeSpacing;
-	      return width <= limit ? 0 : width - limit;
-	    });
-	  };
-
-	  metrics.overlapCount = function (nodes, buffer) {
-	    if (nodes.length === 0) return 0;
-	    var layers = toLayers(nodes);
-	    return helper.sum(layers, function (layer) {
-	      var count = 0;
-	      for (var i = 0; i < layer.length; i++) {
-	        for (var j = i + 1; j < layer.length; j++) {
-	          if (layer[i].overlapWithNode(layer[j], buffer)) {
-	            count++;
-	          }
+	      if (helper.isDefined(minPos)) {
+	        if (r <= minPos) {
+	          return node.width;
+	        } else if (l < minPos) {
+	          return minPos - l;
 	        }
 	      }
-	      return count;
-	    });
-	  };
 
-	  metrics.overlapSpace = function (nodes) {
-	    if (nodes.length === 0) return 0;
-	    var layers = toLayers(nodes);
-	    return helper.sum(layers, function (layer) {
-	      var count = 0;
-	      for (var i = 0; i < layer.length; i++) {
-	        for (var j = i + 1; j < layer.length; j++) {
-	          var distance = layer[i].distanceFrom(layer[j]);
-	          count += distance < 0 ? Math.abs(distance) : 0;
+	      if (helper.isDefined(maxPos)) {
+	        if (l >= maxPos) {
+	          return node.width;
+	        } else if (r > maxPos) {
+	          return r - maxPos;
 	        }
 	      }
-	      return count;
+
+	      return 0;
 	    });
-	  };
+	  });
+	};
 
-	  metrics.weightedAllocatedSpace = function (nodes) {
-	    if (nodes.length === 0) return 0;
-	    var layers = toLayers(nodes);
+	metrics.overDensitySpace = function (nodes, density, layerWidth, nodeSpacing) {
+	  if (nodes.length === 0 || !helper.isDefined(density) || !helper.isDefined(layerWidth)) return 0;
 
-	    return helper.sum(layers, function (layer, layerIndex) {
-	      return layerIndex * helper.sum(layer, function (d) {
-	        return d.width;
-	      });
+	  nodeSpacing = nodeSpacing || 0;
+	  var limit = density * layerWidth;
+
+	  var layers = toLayers(nodes);
+	  return helper.sum(layers, function (layer) {
+	    var width = helper.sum(layer, function (node) {
+	      return node.width + nodeSpacing;
+	    }) - nodeSpacing;
+	    return width <= limit ? 0 : width - limit;
+	  });
+	};
+
+	metrics.overlapCount = function (nodes, buffer) {
+	  if (nodes.length === 0) return 0;
+	  var layers = toLayers(nodes);
+	  return helper.sum(layers, function (layer) {
+	    var count = 0;
+	    for (var i = 0; i < layer.length; i++) {
+	      for (var j = i + 1; j < layer.length; j++) {
+	        if (layer[i].overlapWithNode(layer[j], buffer)) {
+	          count++;
+	        }
+	      }
+	    }
+	    return count;
+	  });
+	};
+
+	metrics.overlapSpace = function (nodes) {
+	  if (nodes.length === 0) return 0;
+	  var layers = toLayers(nodes);
+	  return helper.sum(layers, function (layer) {
+	    var count = 0;
+	    for (var i = 0; i < layer.length; i++) {
+	      for (var j = i + 1; j < layer.length; j++) {
+	        var distance = layer[i].distanceFrom(layer[j]);
+	        count += distance < 0 ? Math.abs(distance) : 0;
+	      }
+	    }
+	    return count;
+	  });
+	};
+
+	metrics.weightedAllocatedSpace = function (nodes) {
+	  if (nodes.length === 0) return 0;
+	  var layers = toLayers(nodes);
+
+	  return helper.sum(layers, function (layer, layerIndex) {
+	    return layerIndex * helper.sum(layer, function (d) {
+	      return d.width;
 	    });
-	  };
-
-	  return metrics;
-	}();
+	  });
+	};
 
 	// return module
-	module.exports = module;
+	module.exports = metrics;
 
 /***/ },
 /* 9 */
@@ -1312,7 +1331,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    });
 
 	    nodes.sort(function (a, b) {
-	      return a.targetPos - b.targetPos;
+	      var diff = a.targetPos - b.targetPos;
+	      if (diff !== 0) {
+	        return diff;
+	      } else {
+	        return a.isStub() - b.isStub();
+	      }
 	    });
 
 	    var variables = nodes.map(nodeToVariable);
