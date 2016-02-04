@@ -154,13 +154,13 @@ var Distributor = function(options){
       return [nodes];
     }
 
-    nodes = nodes.concat().sort(function(a,b){
-      return a.idealPos - b.idealPos;
-    });
-
     if(!distributor.needToSplit(nodes)){
       return [nodes];
     }
+
+    nodes = nodes.concat().sort(function(a,b){
+      return a.idealPos - b.idealPos;
+    });
 
     if(typeof options.algorithm == 'function'){
       return options.algorithm(nodes, options);
