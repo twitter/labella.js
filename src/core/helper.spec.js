@@ -1,4 +1,4 @@
-import helper from './helper';
+var helper = require('./helper.js');
 
 describe('helper', function(){
   describe('#isDefined(x)', function(){

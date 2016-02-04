@@ -1,9 +1,7 @@
-/* jshint esnext:true */
-
 var Node = require('./node.js');
-import helper from './helper';
+var helper = require('./helper.js');
 
-export default {
+module.exports = {
   generateNodes(amount, options){
     var nodes = [];
     options = helper.extend({}, {

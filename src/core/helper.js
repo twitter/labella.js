@@ -1,8 +1,6 @@
-/* jshint esnext:true */
-
 var extend = require('../lib/extend.js');
 
-export default {
+module.exports = {
   extend(){
     return extend.apply(this, arguments);
   },
