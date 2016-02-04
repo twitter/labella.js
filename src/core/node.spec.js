@@ -1,3 +1,5 @@
+'use strict';
+
 var Node = require('./node.js');
 
 describe('Node', function(){
@@ -177,7 +179,6 @@ describe('Node', function(){
       n4.currentPos = 800;
       var stub4 = n4.createStub();
       stub4.currentPos = 700;
-      var stub4_2 = stub4.createStub();
       expect(n4.getPathToRootLength()).toEqual(254);
     });
   });

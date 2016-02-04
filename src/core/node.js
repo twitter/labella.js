@@ -92,8 +92,8 @@ class Node{
   }
 
   getPathToRootLength(){
-    var length = 0;
-    var current = this;
+    let length = 0;
+    let current = this;
     while(current){
       const targetPos = current.parent ? current.parent.currentPos : current.idealPos;
       length += Math.abs(current.currentPos - targetPos);

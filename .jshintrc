@@ -86,10 +86,10 @@
     "yui"           : false,    // Yahoo User Interface
 
     // Custom Globals
-    // Custom Globals
     "globals"       : {
         "describe": false,
         "before": false,
+        "expect": false,
         "it": false
     }        // additional predefined global variables
 }
