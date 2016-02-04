@@ -1,4 +1,4 @@
-var helper = require('./helper.js');
+import helper from './helper';
 
 function Renderer(options){
   this.options = helper.extend({

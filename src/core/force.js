@@ -1,7 +1,7 @@
 // var Simulator = require('./simulator.js');
 var Distributor = require('./distributor.js');
 var metrics = require('./metrics.js');
-var helper = require('./helper.js');
+import helper from './helper';
 var removeOverlap = require('./removeOverlap.js');
 
 var DEFAULT_OPTIONS = {

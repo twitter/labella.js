@@ -1,19 +1,17 @@
+/* jshint esnext:true */
+
 var Node = require('./node.js');
-var helper = require('./helper.js');
+import helper from './helper';
 
-module.exports = (function(){
-  var util = {};
-
-  var OPTIONS = {
-    minWidth: 20,
-    maxWidth: 20,
-    minPos: 0,
-    maxPos: 800
-  };
-
-  util.generateNodes = function(amount, options){
+export default {
+  generateNodes(amount, options){
     var nodes = [];
-    options = helper.extend({}, OPTIONS, options);
+    options = helper.extend({}, {
+      minWidth: 20,
+      maxWidth: 20,
+      minPos: 0,
+      maxPos: 800
+    }, options);
     var diffPos = options.maxPos - options.minPos;
     var diffWidth = options.maxWidth - options.minWidth;
     for(var i=0;i<amount;i++){
@@ -23,7 +21,5 @@ module.exports = (function(){
       ));
     }
     return nodes;
-  };
-
-  return util;
-}());
+  }
+};

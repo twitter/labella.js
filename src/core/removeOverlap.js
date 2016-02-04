@@ -1,4 +1,4 @@
-var helper = require('./helper.js');
+import helper from './helper';
 var vpsc = require('../lib/vpsc.js');
 
 var DEFAULT_OPTIONS = {

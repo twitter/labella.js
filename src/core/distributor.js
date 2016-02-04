@@ -1,4 +1,4 @@
-var helper = require('./helper.js');
+import helper from './helper';
 var IntervalTree = require('../lib/intervalTree.js');
 
 var DEFAULT_OPTIONS = {

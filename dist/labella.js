@@ -54,6 +54,8 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+
 	/*
 	Copyright 2015 Twitter, Inc.
 	Licensed under the Apache License, Version 2.0
@@ -74,9 +76,11 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+
 	var helper = __webpack_require__(2);
 
-	var Node = function (idealPos, width, data) {
+	var Node = function Node(idealPos, width, data) {
 	  this.idealPos = idealPos;
 	  this.currentPos = idealPos;
 	  this.width = width;
@@ -215,36 +219,42 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var extend = __webpack_require__(3);
+	'use strict';
 
-	module.exports = function () {
-	  var helper = {};
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	/* jshint esnext:true */
 
-	  helper.isDefined = function (x) {
+	var _extend = __webpack_require__(3);
+
+	exports.default = {
+	  extend: function extend() {
+	    return _extend.apply(this, arguments);
+	  },
+	  isDefined: function isDefined(x) {
 	    return x !== null && x !== undefined;
-	  };
-
-	  helper.extend = extend;
-
-	  helper.pick = function (object, keys) {
+	  },
+	  pick: function pick(object, keys) {
 	    return keys.reduce(function (prev, key) {
 	      prev[key] = object[key];
 	      return prev;
 	    }, {});
-	  };
-
-	  helper.sum = function (array, accessor) {
+	  },
+	  sum: function sum(array, accessor) {
 	    return array.map(accessor).reduce(function (prev, current) {
 	      return prev + current;
 	    }, 0);
-	  };
-
-	  return helper;
-	}();
+	  }
+	};
 
 /***/ },
 /* 3 */
 /***/ function(module, exports) {
+
+	'use strict';
+
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
 	/*
 	This file is modified from https://github.com/justmoon/node-extend
@@ -325,7 +335,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    target = arguments[1] || {};
 	    // skip the boolean and the target
 	    i = 2;
-	  } else if (typeof target !== 'object' && typeof target !== 'function' || target == null) {
+	  } else if ((typeof target === 'undefined' ? 'undefined' : _typeof(target)) !== 'object' && typeof target !== 'function' || target == null) {
 	    target = {};
 	  }
 
@@ -371,10 +381,18 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+
+	var _helper = __webpack_require__(2);
+
+	var _helper2 = _interopRequireDefault(_helper);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 	// var Simulator = require('./simulator.js');
 	var Distributor = __webpack_require__(5);
 	var metrics = __webpack_require__(8);
-	var helper = __webpack_require__(2);
+
 	var removeOverlap = __webpack_require__(9);
 
 	var DEFAULT_OPTIONS = {
@@ -387,9 +405,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  stubWidth: 1
 	};
 
-	var Force = function (_options) {
+	var Force = function Force(_options) {
 	  var force = {};
-	  var options = helper.extend({}, DEFAULT_OPTIONS);
+	  var options = _helper2.default.extend({}, DEFAULT_OPTIONS);
 	  var distributor = new Distributor();
 	  var nodes = [];
 	  var layers = null;
@@ -407,10 +425,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  force.options = function (x) {
 	    if (!arguments.length) return options;
-	    options = helper.extend(options, x);
+	    options = _helper2.default.extend(options, x);
 
-	    var disOptions = helper.pick(options, Object.keys(Distributor.DEFAULT_OPTIONS));
-	    if (helper.isDefined(options.minPos) && helper.isDefined(options.maxPos)) {
+	    var disOptions = _helper2.default.pick(options, Object.keys(Distributor.DEFAULT_OPTIONS));
+	    if (_helper2.default.isDefined(options.minPos) && _helper2.default.isDefined(options.maxPos)) {
 	      disOptions.layerWidth = options.maxPos - options.minPos;
 	    } else {
 	      disOptions.layerWidth = null;
@@ -423,7 +441,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  force.options(_options);
 
 	  force.compute = function () {
-	    var overlapOptions = helper.pick(options, Object.keys(removeOverlap.DEFAULT_OPTIONS));
+	    var overlapOptions = _helper2.default.pick(options, Object.keys(removeOverlap.DEFAULT_OPTIONS));
 
 	    nodes.forEach(function (node) {
 	      node.removeStub();
@@ -477,7 +495,14 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var helper = __webpack_require__(2);
+	'use strict';
+
+	var _helper = __webpack_require__(2);
+
+	var _helper2 = _interopRequireDefault(_helper);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 	var IntervalTree = __webpack_require__(6);
 
 	var DEFAULT_OPTIONS = {
@@ -488,19 +513,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	  stubWidth: 1
 	};
 
-	var Distributor = function (options) {
+	var Distributor = function Distributor(options) {
 	  var distributor = {};
 
-	  options = helper.extend({}, DEFAULT_OPTIONS, options);
+	  options = _helper2.default.extend({}, DEFAULT_OPTIONS, options);
 
 	  distributor.options = function (x) {
 	    if (!arguments.length) return options;
-	    options = helper.extend(options, x);
+	    options = _helper2.default.extend(options, x);
 	    return distributor;
 	  };
 
 	  distributor.computeRequiredWidth = function (nodes) {
-	    return helper.sum(nodes, function (d) {
+	    return _helper2.default.sum(nodes, function (d) {
 	      return d.width + options.nodeSpacing;
 	    }) - options.nodeSpacing;
 	  };
@@ -518,7 +543,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 
 	  var algorithms = {
-	    simple: function (nodes) {
+	    simple: function simple(nodes) {
 	      var numLayers = distributor.estimateRequiredLayers(nodes);
 
 	      var layers = [];
@@ -539,12 +564,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      return layers;
 	    },
-	    roundRobin: function (nodes) {
+	    roundRobin: function roundRobin(nodes) {
 	      var layers = [];
 
 	      return layers;
 	    },
-	    overlap: function (nodes) {
+	    overlap: function overlap(nodes) {
 	      var layers = [];
 	      var maxWidth = distributor.maxWidthPerLayer();
 
@@ -629,7 +654,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  distributor.distribute = function (nodes) {
 	    if (!nodes || nodes.length === 0) return [];
 
-	    if (options.algorithm == 'none' || !helper.isDefined(options.algorithm)) {
+	    if (options.algorithm == 'none' || !_helper2.default.isDefined(options.algorithm)) {
 	      return [nodes];
 	    }
 
@@ -661,6 +686,8 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ },
 /* 6 */
 /***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
 
 	/*
 	This file is modified from https://github.com/shinout/interval-tree
@@ -707,7 +734,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  this.endKey = options.endKey || 1; // end key
 	  this.intervalHash = {}; // id => interval object
 	  this.pointTree = new SortedList({ // b-tree of start, end points
-	    compare: function (a, b) {
+	    compare: function compare(a, b) {
 	      if (a == null) return -1;
 	      if (b == null) return 1;
 	      var c = a[0] - b[0];
@@ -891,7 +918,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	function Node(idx) {
 	  this.idx = idx;
 	  this.starts = new SortedList({
-	    compare: function (a, b) {
+	    compare: function compare(a, b) {
 	      if (a == null) return -1;
 	      if (b == null) return 1;
 	      var c = a.start - b.start;
@@ -900,7 +927,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  });
 
 	  this.ends = new SortedList({
-	    compare: function (a, b) {
+	    compare: function compare(a, b) {
 	      if (a == null) return -1;
 	      if (b == null) return 1;
 	      var c = a.end - b.end;
@@ -962,6 +989,10 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 7 */
 /***/ function(module, exports) {
 
+	"use strict";
+
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
 	/*
 	This file is modified from https://github.com/shinout/SortedList
 
@@ -998,7 +1029,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var val = args[n];
 	    if (Array.isArray(val)) {
 	      arr = val;
-	    } else if (val && typeof val == "object") {
+	    } else if (val && (typeof val === "undefined" ? "undefined" : _typeof(val)) == "object") {
 	      options = val;
 	    }
 	  });
@@ -1077,7 +1108,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      epos = this.length;
 	  while (epos - spos > 1) {
 	    mpos = Math.floor((spos + epos) / 2);
-	    mval = this[mpos];
+	    var mval = this[mpos];
 	    var comp = this._compare(val, mval);
 	    if (comp == 0) return mpos;
 	    if (comp > 0) spos = mpos;else epos = mpos;
@@ -1093,8 +1124,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (bsResult == null) bsResult = this.bsearch(val);
 	  var pos = bsResult;
 	  if (pos == -1 || this._compare(this[pos], val) < 0) return pos + 1 < this.length && this._compare(this[pos + 1], val) == 0 ? pos + 1 : null;
-	  while (pos >= 1 && this._compare(this[pos - 1], val) == 0) pos--;
-	  return pos;
+	  while (pos >= 1 && this._compare(this[pos - 1], val) == 0) {
+	    pos--;
+	  }return pos;
 	};
 
 	/**
@@ -1157,12 +1189,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * comparison functions
 	 **/
 	SortedList.compares = {
-	  "number": function (a, b) {
+	  "number": function number(a, b) {
 	    var c = a - b;
 	    return c > 0 ? 1 : c == 0 ? 0 : -1;
 	  },
 
-	  "string": function (a, b) {
+	  "string": function string(a, b) {
 	    return a > b ? 1 : a == b ? 0 : -1;
 	  }
 	};
@@ -1179,7 +1211,13 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var helper = __webpack_require__(2);
+	'use strict';
+
+	var _helper = __webpack_require__(2);
+
+	var _helper2 = _interopRequireDefault(_helper);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var metrics = {};
 
@@ -1190,8 +1228,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	metrics.displacement = function (nodes) {
 	  if (nodes.length === 0) return 0;
 	  var layers = toLayers(nodes);
-	  return helper.sum(layers, function (layer) {
-	    return helper.sum(layer, function (node) {
+	  return _helper2.default.sum(layers, function (layer) {
+	    return _helper2.default.sum(layer, function (node) {
 	      return Math.abs(node.displacement());
 	    });
 	  });
@@ -1200,23 +1238,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	metrics.pathLength = function (nodes) {
 	  if (nodes.length === 0) return 0;
 	  var layers = toLayers(nodes);
-	  return helper.sum(layers, function (layer) {
-	    return helper.sum(layer, function (node) {
+	  return _helper2.default.sum(layers, function (layer) {
+	    return _helper2.default.sum(layer, function (node) {
 	      return node.isStub() ? 0 : Math.abs(node.getPathToRootLength());
 	    });
 	  });
 	};
 
 	metrics.overflowSpace = function (nodes, minPos, maxPos) {
-	  if (nodes.length === 0 || !helper.isDefined(minPos) && !helper.isDefined(maxPos)) return 0;
+	  if (nodes.length === 0 || !_helper2.default.isDefined(minPos) && !_helper2.default.isDefined(maxPos)) return 0;
 	  var layers = toLayers(nodes);
 
-	  return helper.sum(layers, function (layer) {
-	    return helper.sum(layer, function (node) {
+	  return _helper2.default.sum(layers, function (layer) {
+	    return _helper2.default.sum(layer, function (node) {
 	      var l = node.currentLeft();
 	      var r = node.currentRight();
 
-	      if (helper.isDefined(minPos)) {
+	      if (_helper2.default.isDefined(minPos)) {
 	        if (r <= minPos) {
 	          return node.width;
 	        } else if (l < minPos) {
@@ -1224,7 +1262,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	      }
 
-	      if (helper.isDefined(maxPos)) {
+	      if (_helper2.default.isDefined(maxPos)) {
 	        if (l >= maxPos) {
 	          return node.width;
 	        } else if (r > maxPos) {
@@ -1238,14 +1276,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	metrics.overDensitySpace = function (nodes, density, layerWidth, nodeSpacing) {
-	  if (nodes.length === 0 || !helper.isDefined(density) || !helper.isDefined(layerWidth)) return 0;
+	  if (nodes.length === 0 || !_helper2.default.isDefined(density) || !_helper2.default.isDefined(layerWidth)) return 0;
 
 	  nodeSpacing = nodeSpacing || 0;
 	  var limit = density * layerWidth;
 
 	  var layers = toLayers(nodes);
-	  return helper.sum(layers, function (layer) {
-	    var width = helper.sum(layer, function (node) {
+	  return _helper2.default.sum(layers, function (layer) {
+	    var width = _helper2.default.sum(layer, function (node) {
 	      return node.width + nodeSpacing;
 	    }) - nodeSpacing;
 	    return width <= limit ? 0 : width - limit;
@@ -1255,7 +1293,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	metrics.overlapCount = function (nodes, buffer) {
 	  if (nodes.length === 0) return 0;
 	  var layers = toLayers(nodes);
-	  return helper.sum(layers, function (layer) {
+	  return _helper2.default.sum(layers, function (layer) {
 	    var count = 0;
 	    for (var i = 0; i < layer.length; i++) {
 	      for (var j = i + 1; j < layer.length; j++) {
@@ -1271,7 +1309,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	metrics.overlapSpace = function (nodes) {
 	  if (nodes.length === 0) return 0;
 	  var layers = toLayers(nodes);
-	  return helper.sum(layers, function (layer) {
+	  return _helper2.default.sum(layers, function (layer) {
 	    var count = 0;
 	    for (var i = 0; i < layer.length; i++) {
 	      for (var j = i + 1; j < layer.length; j++) {
@@ -1287,8 +1325,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (nodes.length === 0) return 0;
 	  var layers = toLayers(nodes);
 
-	  return helper.sum(layers, function (layer, layerIndex) {
-	    return layerIndex * helper.sum(layer, function (d) {
+	  return _helper2.default.sum(layers, function (layer, layerIndex) {
+	    return layerIndex * _helper2.default.sum(layer, function (d) {
 	      return d.width;
 	    });
 	  });
@@ -1301,7 +1339,14 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var helper = __webpack_require__(2);
+	'use strict';
+
+	var _helper = __webpack_require__(2);
+
+	var _helper2 = _interopRequireDefault(_helper);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 	var vpsc = __webpack_require__(10);
 
 	var DEFAULT_OPTIONS = {
@@ -1323,7 +1368,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function removeOverlap(nodes, options) {
 	  if (nodes.length > 0) {
-	    options = helper.extend(DEFAULT_OPTIONS, options);
+	    options = _helper2.default.extend(DEFAULT_OPTIONS, options);
 
 	    // For nodes with stub, set target position to stub's current position
 	    nodes.forEach(function (node) {
@@ -1355,14 +1400,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	      constraints.push(new vpsc.Constraint(v1, v2, gap));
 	    }
 
-	    if (helper.isDefined(options.minPos)) {
+	    if (_helper2.default.isDefined(options.minPos)) {
 	      var leftWall = new vpsc.Variable(options.minPos, 1e10);
 	      var v = variables[0];
 	      constraints.push(new vpsc.Constraint(leftWall, v, v.node.width / 2));
 	      variables.unshift(leftWall);
 	    }
 
-	    if (helper.isDefined(options.maxPos)) {
+	    if (_helper2.default.isDefined(options.maxPos)) {
 	      var rightWall = new vpsc.Variable(options.maxPos, 1e10);
 	      var lastv = last(variables);
 	      constraints.push(new vpsc.Constraint(lastv, rightWall, lastv.node.width / 2));
@@ -1390,6 +1435,8 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ },
 /* 10 */
 /***/ function(module, exports) {
+
+	"use strict";
 
 	/*
 	This file is compiled from https://github.com/tgdwyer/WebCola/blob/master/WebCola/src/vpsc.ts
@@ -1484,7 +1531,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	    // visit neighbours by active constraints within the same block
 	    Variable.prototype.visitNeighbours = function (prev, f) {
-	        var ff = function (c, next) {
+	        var ff = function ff(c, next) {
 	            return c.active && prev !== next && f(c, next);
 	        };
 	        this.cOut.forEach(function (c) {
@@ -1513,8 +1560,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    // move the block where it needs to be to minimize cost
 	    Block.prototype.updateWeightedPosition = function () {
 	        this.ps.AB = this.ps.AD = this.ps.A2 = 0;
-	        for (var i = 0, n = this.vars.length; i < n; ++i) this.ps.addVariable(this.vars[i]);
-	        this.posn = this.ps.getPosn();
+	        for (var i = 0, n = this.vars.length; i < n; ++i) {
+	            this.ps.addVariable(this.vars[i]);
+	        }this.posn = this.ps.getPosn();
 	    };
 	    Block.prototype.compute_lm = function (v, u, postAction) {
 	        var _this = this;
@@ -1658,8 +1706,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    Blocks.prototype.cost = function () {
 	        var sum = 0,
 	            i = this.list.length;
-	        while (i--) sum += this.list[i].cost();
-	        return sum;
+	        while (i--) {
+	            sum += this.list[i].cost();
+	        }return sum;
 	    };
 	    Blocks.prototype.insert = function (b) {
 	        /* DEBUG
@@ -1906,10 +1955,16 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var helper = __webpack_require__(2);
+	'use strict';
+
+	var _helper = __webpack_require__(2);
+
+	var _helper2 = _interopRequireDefault(_helper);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function Renderer(options) {
-	  this.options = helper.extend({
+	  this.options = _helper2.default.extend({
 	    layerGap: 60,
 	    nodeHeight: 10,
 	    direction: 'down'
@@ -2053,8 +2108,15 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+
+	var _helper = __webpack_require__(2);
+
+	var _helper2 = _interopRequireDefault(_helper);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 	var Node = __webpack_require__(1);
-	var helper = __webpack_require__(2);
 
 	module.exports = function () {
 	  var util = {};
@@ -2068,7 +2130,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  util.generateNodes = function (amount, options) {
 	    var nodes = [];
-	    options = helper.extend({}, OPTIONS, options);
+	    options = _helper2.default.extend({}, OPTIONS, options);
 	    var diffPos = options.maxPos - options.minPos;
 	    var diffWidth = options.maxWidth - options.minWidth;
 	    for (var i = 0; i < amount; i++) {

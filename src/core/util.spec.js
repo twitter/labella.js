@@ -1,4 +1,4 @@
-var util = require('./util.js');
+import util from './util';
 
 describe('util', function(){
   describe('#generateNodes(amount[, options])', function(){
