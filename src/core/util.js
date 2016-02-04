@@ -1,3 +1,5 @@
+'use strict';
+
 var Node = require('./node.js');
 var helper = require('./helper.js');
 

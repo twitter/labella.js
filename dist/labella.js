@@ -64,21 +64,19 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	module.exports = {
 	  Node: __webpack_require__(1),
-	  Force: __webpack_require__(4),
-	  Distributor: __webpack_require__(5),
-	  Renderer: __webpack_require__(11),
+	  Force: __webpack_require__(2),
+	  Distributor: __webpack_require__(3),
+	  Renderer: __webpack_require__(10),
 
 	  // metrics: require('./core/metrics.js'),
-	  util: __webpack_require__(12)
+	  util: __webpack_require__(11)
 	};
 
 /***/ },
 /* 1 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	'use strict';
-
-	var helper = __webpack_require__(2);
+	"use strict";
 
 	var Node = function Node(idealPos, width, data) {
 	  this.idealPos = idealPos;
@@ -221,179 +219,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	/* jshint esnext:true */
-
-	var _extend = __webpack_require__(3);
-
-	exports.default = {
-	  extend: function extend() {
-	    return _extend.apply(this, arguments);
-	  },
-	  isDefined: function isDefined(x) {
-	    return x !== null && x !== undefined;
-	  },
-	  pick: function pick(object, keys) {
-	    return keys.reduce(function (prev, key) {
-	      prev[key] = object[key];
-	      return prev;
-	    }, {});
-	  },
-	  sum: function sum(array, accessor) {
-	    return array.map(accessor).reduce(function (prev, current) {
-	      return prev + current;
-	    }, 0);
-	  }
-	};
-
-/***/ },
-/* 3 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
-
-	/*
-	This file is modified from https://github.com/justmoon/node-extend
-	The MIT License (MIT)
-
-	Copyright (c) 2014 Stefan Thomas
-
-	Permission is hereby granted, free of charge, to any person obtaining
-	a copy of this software and associated documentation files (the
-	"Software"), to deal in the Software without restriction, including
-	without limitation the rights to use, copy, modify, merge, publish,
-	distribute, sublicense, and/or sell copies of the Software, and to
-	permit persons to whom the Software is furnished to do so, subject to
-	the following conditions:
-
-	The above copyright notice and this permission notice shall be
-	included in all copies or substantial portions of the Software.
-
-	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-	EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-	MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-	NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-	LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-	OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-	WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-	*/
-
-	var hasOwn = Object.prototype.hasOwnProperty;
-	var toStr = Object.prototype.toString;
-
-	var isArray = function isArray(arr) {
-	  if (typeof Array.isArray === 'function') {
-	    return Array.isArray(arr);
-	  }
-
-	  return toStr.call(arr) === '[object Array]';
-	};
-
-	var isPlainObject = function isPlainObject(obj) {
-	  'use strict';
-
-	  if (!obj || toStr.call(obj) !== '[object Object]') {
-	    return false;
-	  }
-
-	  var has_own_constructor = hasOwn.call(obj, 'constructor');
-	  var has_is_property_of_method = obj.constructor && obj.constructor.prototype && hasOwn.call(obj.constructor.prototype, 'isPrototypeOf');
-	  // Not own constructor property must be Object
-	  if (obj.constructor && !has_own_constructor && !has_is_property_of_method) {
-	    return false;
-	  }
-
-	  // Own properties are enumerated firstly, so to speed up,
-	  // if last one is own, then all properties are own.
-	  var key;
-	  for (key in obj) {}
-
-	  return key === undefined || hasOwn.call(obj, key);
-	};
-
-	module.exports = function extend() {
-	  'use strict';
-
-	  var options,
-	      name,
-	      src,
-	      copy,
-	      copyIsArray,
-	      clone,
-	      target = arguments[0],
-	      i = 1,
-	      length = arguments.length,
-	      deep = false;
-
-	  // Handle a deep copy situation
-	  if (typeof target === 'boolean') {
-	    deep = target;
-	    target = arguments[1] || {};
-	    // skip the boolean and the target
-	    i = 2;
-	  } else if ((typeof target === 'undefined' ? 'undefined' : _typeof(target)) !== 'object' && typeof target !== 'function' || target == null) {
-	    target = {};
-	  }
-
-	  for (; i < length; ++i) {
-	    options = arguments[i];
-	    // Only deal with non-null/undefined values
-	    if (options != null) {
-	      // Extend the base object
-	      for (name in options) {
-	        src = target[name];
-	        copy = options[name];
-
-	        // Prevent never-ending loop
-	        if (target === copy) {
-	          continue;
-	        }
-
-	        // Recurse if we're merging plain objects or arrays
-	        if (deep && copy && (isPlainObject(copy) || (copyIsArray = isArray(copy)))) {
-	          if (copyIsArray) {
-	            copyIsArray = false;
-	            clone = src && isArray(src) ? src : [];
-	          } else {
-	            clone = src && isPlainObject(src) ? src : {};
-	          }
-
-	          // Never move original objects, clone them
-	          target[name] = extend(deep, clone, copy);
-
-	          // Don't bring in undefined values
-	        } else if (copy !== undefined) {
-	            target[name] = copy;
-	          }
-	      }
-	    }
-	  }
-
-	  // Return the modified object
-	  return target;
-	};
-
-/***/ },
-/* 4 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _helper = __webpack_require__(2);
-
-	var _helper2 = _interopRequireDefault(_helper);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	// var Simulator = require('./simulator.js');
-	var Distributor = __webpack_require__(5);
-	var metrics = __webpack_require__(8);
-
-	var removeOverlap = __webpack_require__(9);
+	var Distributor = __webpack_require__(3);
+	var helper = __webpack_require__(4);
+	var removeOverlap = __webpack_require__(8);
 
 	var DEFAULT_OPTIONS = {
 	  nodeSpacing: 3,
@@ -407,7 +235,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var Force = function Force(_options) {
 	  var force = {};
-	  var options = _helper2.default.extend({}, DEFAULT_OPTIONS);
+	  var options = helper.extend({}, DEFAULT_OPTIONS);
 	  var distributor = new Distributor();
 	  var nodes = [];
 	  var layers = null;
@@ -425,10 +253,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  force.options = function (x) {
 	    if (!arguments.length) return options;
-	    options = _helper2.default.extend(options, x);
+	    options = helper.extend(options, x);
 
-	    var disOptions = _helper2.default.pick(options, Object.keys(Distributor.DEFAULT_OPTIONS));
-	    if (_helper2.default.isDefined(options.minPos) && _helper2.default.isDefined(options.maxPos)) {
+	    var disOptions = helper.pick(options, Object.keys(Distributor.DEFAULT_OPTIONS));
+	    if (helper.isDefined(options.minPos) && helper.isDefined(options.maxPos)) {
 	      disOptions.layerWidth = options.maxPos - options.minPos;
 	    } else {
 	      disOptions.layerWidth = null;
@@ -441,7 +269,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  force.options(_options);
 
 	  force.compute = function () {
-	    var overlapOptions = _helper2.default.pick(options, Object.keys(removeOverlap.DEFAULT_OPTIONS));
+	    var overlapOptions = helper.pick(options, Object.keys(removeOverlap.DEFAULT_OPTIONS));
 
 	    nodes.forEach(function (node) {
 	      node.removeStub();
@@ -492,17 +320,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Force;
 
 /***/ },
-/* 5 */
+/* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _helper = __webpack_require__(2);
-
-	var _helper2 = _interopRequireDefault(_helper);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
+	var helper = __webpack_require__(4);
 	var IntervalTree = __webpack_require__(6);
 
 	var DEFAULT_OPTIONS = {
@@ -516,16 +339,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	var Distributor = function Distributor(options) {
 	  var distributor = {};
 
-	  options = _helper2.default.extend({}, DEFAULT_OPTIONS, options);
+	  options = helper.extend({}, DEFAULT_OPTIONS, options);
 
 	  distributor.options = function (x) {
 	    if (!arguments.length) return options;
-	    options = _helper2.default.extend(options, x);
+	    options = helper.extend(options, x);
 	    return distributor;
 	  };
 
 	  distributor.computeRequiredWidth = function (nodes) {
-	    return _helper2.default.sum(nodes, function (d) {
+	    return helper.sum(nodes, function (d) {
 	      return d.width + options.nodeSpacing;
 	    }) - options.nodeSpacing;
 	  };
@@ -654,7 +477,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  distributor.distribute = function (nodes) {
 	    if (!nodes || nodes.length === 0) return [];
 
-	    if (options.algorithm == 'none' || !_helper2.default.isDefined(options.algorithm)) {
+	    if (options.algorithm == 'none' || !helper.isDefined(options.algorithm)) {
 	      return [nodes];
 	    }
 
@@ -682,6 +505,163 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	// return module
 	module.exports = Distributor;
+
+/***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _extend = __webpack_require__(5);
+
+	module.exports = {
+	  extend: function extend() {
+	    return _extend.apply(this, arguments);
+	  },
+	  isDefined: function isDefined(x) {
+	    return x !== null && x !== undefined;
+	  },
+	  pick: function pick(object, keys) {
+	    return keys.reduce(function (prev, key) {
+	      prev[key] = object[key];
+	      return prev;
+	    }, {});
+	  },
+	  sum: function sum(array, accessor) {
+	    return array.map(accessor).reduce(function (prev, current) {
+	      return prev + current;
+	    }, 0);
+	  }
+	};
+
+/***/ },
+/* 5 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+	/*
+	This file is modified from https://github.com/justmoon/node-extend
+	The MIT License (MIT)
+
+	Copyright (c) 2014 Stefan Thomas
+
+	Permission is hereby granted, free of charge, to any person obtaining
+	a copy of this software and associated documentation files (the
+	"Software"), to deal in the Software without restriction, including
+	without limitation the rights to use, copy, modify, merge, publish,
+	distribute, sublicense, and/or sell copies of the Software, and to
+	permit persons to whom the Software is furnished to do so, subject to
+	the following conditions:
+
+	The above copyright notice and this permission notice shall be
+	included in all copies or substantial portions of the Software.
+
+	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+	EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+	MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+	NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+	LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+	OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+	WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+	*/
+
+	var hasOwn = Object.prototype.hasOwnProperty;
+	var toStr = Object.prototype.toString;
+
+	var isArray = function isArray(arr) {
+	  if (typeof Array.isArray === 'function') {
+	    return Array.isArray(arr);
+	  }
+
+	  return toStr.call(arr) === '[object Array]';
+	};
+
+	var isPlainObject = function isPlainObject(obj) {
+	  'use strict';
+
+	  if (!obj || toStr.call(obj) !== '[object Object]') {
+	    return false;
+	  }
+
+	  var has_own_constructor = hasOwn.call(obj, 'constructor');
+	  var has_is_property_of_method = obj.constructor && obj.constructor.prototype && hasOwn.call(obj.constructor.prototype, 'isPrototypeOf');
+	  // Not own constructor property must be Object
+	  if (obj.constructor && !has_own_constructor && !has_is_property_of_method) {
+	    return false;
+	  }
+
+	  // Own properties are enumerated firstly, so to speed up,
+	  // if last one is own, then all properties are own.
+	  var key;
+	  for (key in obj) {}
+
+	  return key === undefined || hasOwn.call(obj, key);
+	};
+
+	module.exports = function extend() {
+	  'use strict';
+
+	  var options,
+	      name,
+	      src,
+	      copy,
+	      copyIsArray,
+	      clone,
+	      target = arguments[0],
+	      i = 1,
+	      length = arguments.length,
+	      deep = false;
+
+	  // Handle a deep copy situation
+	  if (typeof target === 'boolean') {
+	    deep = target;
+	    target = arguments[1] || {};
+	    // skip the boolean and the target
+	    i = 2;
+	  } else if ((typeof target === 'undefined' ? 'undefined' : _typeof(target)) !== 'object' && typeof target !== 'function' || target == null) {
+	    target = {};
+	  }
+
+	  for (; i < length; ++i) {
+	    options = arguments[i];
+	    // Only deal with non-null/undefined values
+	    if (options != null) {
+	      // Extend the base object
+	      for (name in options) {
+	        src = target[name];
+	        copy = options[name];
+
+	        // Prevent never-ending loop
+	        if (target === copy) {
+	          continue;
+	        }
+
+	        // Recurse if we're merging plain objects or arrays
+	        if (deep && copy && (isPlainObject(copy) || (copyIsArray = isArray(copy)))) {
+	          if (copyIsArray) {
+	            copyIsArray = false;
+	            clone = src && isArray(src) ? src : [];
+	          } else {
+	            clone = src && isPlainObject(src) ? src : {};
+	          }
+
+	          // Never move original objects, clone them
+	          target[name] = extend(deep, clone, copy);
+
+	          // Don't bring in undefined values
+	        } else if (copy !== undefined) {
+	            target[name] = copy;
+	          }
+	      }
+	    }
+	  }
+
+	  // Return the modified object
+	  return target;
+	};
 
 /***/ },
 /* 6 */
@@ -1213,141 +1193,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _helper = __webpack_require__(2);
-
-	var _helper2 = _interopRequireDefault(_helper);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var metrics = {};
-
-	function toLayers(nodes) {
-	  return nodes.length === 0 || Array.isArray(nodes[0]) ? nodes : [nodes];
-	}
-
-	metrics.displacement = function (nodes) {
-	  if (nodes.length === 0) return 0;
-	  var layers = toLayers(nodes);
-	  return _helper2.default.sum(layers, function (layer) {
-	    return _helper2.default.sum(layer, function (node) {
-	      return Math.abs(node.displacement());
-	    });
-	  });
-	};
-
-	metrics.pathLength = function (nodes) {
-	  if (nodes.length === 0) return 0;
-	  var layers = toLayers(nodes);
-	  return _helper2.default.sum(layers, function (layer) {
-	    return _helper2.default.sum(layer, function (node) {
-	      return node.isStub() ? 0 : Math.abs(node.getPathToRootLength());
-	    });
-	  });
-	};
-
-	metrics.overflowSpace = function (nodes, minPos, maxPos) {
-	  if (nodes.length === 0 || !_helper2.default.isDefined(minPos) && !_helper2.default.isDefined(maxPos)) return 0;
-	  var layers = toLayers(nodes);
-
-	  return _helper2.default.sum(layers, function (layer) {
-	    return _helper2.default.sum(layer, function (node) {
-	      var l = node.currentLeft();
-	      var r = node.currentRight();
-
-	      if (_helper2.default.isDefined(minPos)) {
-	        if (r <= minPos) {
-	          return node.width;
-	        } else if (l < minPos) {
-	          return minPos - l;
-	        }
-	      }
-
-	      if (_helper2.default.isDefined(maxPos)) {
-	        if (l >= maxPos) {
-	          return node.width;
-	        } else if (r > maxPos) {
-	          return r - maxPos;
-	        }
-	      }
-
-	      return 0;
-	    });
-	  });
-	};
-
-	metrics.overDensitySpace = function (nodes, density, layerWidth, nodeSpacing) {
-	  if (nodes.length === 0 || !_helper2.default.isDefined(density) || !_helper2.default.isDefined(layerWidth)) return 0;
-
-	  nodeSpacing = nodeSpacing || 0;
-	  var limit = density * layerWidth;
-
-	  var layers = toLayers(nodes);
-	  return _helper2.default.sum(layers, function (layer) {
-	    var width = _helper2.default.sum(layer, function (node) {
-	      return node.width + nodeSpacing;
-	    }) - nodeSpacing;
-	    return width <= limit ? 0 : width - limit;
-	  });
-	};
-
-	metrics.overlapCount = function (nodes, buffer) {
-	  if (nodes.length === 0) return 0;
-	  var layers = toLayers(nodes);
-	  return _helper2.default.sum(layers, function (layer) {
-	    var count = 0;
-	    for (var i = 0; i < layer.length; i++) {
-	      for (var j = i + 1; j < layer.length; j++) {
-	        if (layer[i].overlapWithNode(layer[j], buffer)) {
-	          count++;
-	        }
-	      }
-	    }
-	    return count;
-	  });
-	};
-
-	metrics.overlapSpace = function (nodes) {
-	  if (nodes.length === 0) return 0;
-	  var layers = toLayers(nodes);
-	  return _helper2.default.sum(layers, function (layer) {
-	    var count = 0;
-	    for (var i = 0; i < layer.length; i++) {
-	      for (var j = i + 1; j < layer.length; j++) {
-	        var distance = layer[i].distanceFrom(layer[j]);
-	        count += distance < 0 ? Math.abs(distance) : 0;
-	      }
-	    }
-	    return count;
-	  });
-	};
-
-	metrics.weightedAllocatedSpace = function (nodes) {
-	  if (nodes.length === 0) return 0;
-	  var layers = toLayers(nodes);
-
-	  return _helper2.default.sum(layers, function (layer, layerIndex) {
-	    return layerIndex * _helper2.default.sum(layer, function (d) {
-	      return d.width;
-	    });
-	  });
-	};
-
-	// return module
-	module.exports = metrics;
-
-/***/ },
-/* 9 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _helper = __webpack_require__(2);
-
-	var _helper2 = _interopRequireDefault(_helper);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var vpsc = __webpack_require__(10);
+	var helper = __webpack_require__(4);
+	var vpsc = __webpack_require__(9);
 
 	var DEFAULT_OPTIONS = {
 	  lineSpacing: 2,
@@ -1368,7 +1215,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function removeOverlap(nodes, options) {
 	  if (nodes.length > 0) {
-	    options = _helper2.default.extend(DEFAULT_OPTIONS, options);
+	    options = helper.extend(DEFAULT_OPTIONS, options);
 
 	    // For nodes with stub, set target position to stub's current position
 	    nodes.forEach(function (node) {
@@ -1400,14 +1247,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	      constraints.push(new vpsc.Constraint(v1, v2, gap));
 	    }
 
-	    if (_helper2.default.isDefined(options.minPos)) {
+	    if (helper.isDefined(options.minPos)) {
 	      var leftWall = new vpsc.Variable(options.minPos, 1e10);
 	      var v = variables[0];
 	      constraints.push(new vpsc.Constraint(leftWall, v, v.node.width / 2));
 	      variables.unshift(leftWall);
 	    }
 
-	    if (_helper2.default.isDefined(options.maxPos)) {
+	    if (helper.isDefined(options.maxPos)) {
 	      var rightWall = new vpsc.Variable(options.maxPos, 1e10);
 	      var lastv = last(variables);
 	      constraints.push(new vpsc.Constraint(lastv, rightWall, lastv.node.width / 2));
@@ -1433,7 +1280,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = removeOverlap;
 
 /***/ },
-/* 10 */
+/* 9 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -1952,19 +1799,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = vpsc;
 
 /***/ },
-/* 11 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _helper = __webpack_require__(2);
-
-	var _helper2 = _interopRequireDefault(_helper);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	var helper = __webpack_require__(4);
 
 	function Renderer(options) {
-	  this.options = _helper2.default.extend({
+	  this.options = helper.extend({
 	    layerGap: 60,
 	    nodeHeight: 10,
 	    direction: 'down'
@@ -2105,42 +1948,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Renderer;
 
 /***/ },
-/* 12 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _helper = __webpack_require__(2);
-
-	var _helper2 = _interopRequireDefault(_helper);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 	var Node = __webpack_require__(1);
+	var helper = __webpack_require__(4);
 
-	module.exports = function () {
-	  var util = {};
-
-	  var OPTIONS = {
-	    minWidth: 20,
-	    maxWidth: 20,
-	    minPos: 0,
-	    maxPos: 800
-	  };
-
-	  util.generateNodes = function (amount, options) {
+	module.exports = {
+	  generateNodes: function generateNodes(amount, options) {
 	    var nodes = [];
-	    options = _helper2.default.extend({}, OPTIONS, options);
+	    options = helper.extend({}, {
+	      minWidth: 20,
+	      maxWidth: 20,
+	      minPos: 0,
+	      maxPos: 800
+	    }, options);
 	    var diffPos = options.maxPos - options.minPos;
 	    var diffWidth = options.maxWidth - options.minWidth;
 	    for (var i = 0; i < amount; i++) {
 	      nodes.push(new Node(Math.floor(Math.random() * diffPos) + options.minPos, Math.floor(Math.random() * diffWidth) + options.minWidth));
 	    }
 	    return nodes;
-	  };
-
-	  return util;
-	}();
+	  }
+	};
 
 /***/ }
 /******/ ])

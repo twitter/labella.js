@@ -1,6 +1,6 @@
-// var Simulator = require('./simulator.js');
+'use strict';
+
 var Distributor = require('./distributor.js');
-var metrics = require('./metrics.js');
 var helper = require('./helper.js');
 var removeOverlap = require('./removeOverlap.js');
 

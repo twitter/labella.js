@@ -1,3 +1,5 @@
+'use strict';
+
 var extend = require('../lib/extend.js');
 
 module.exports = {

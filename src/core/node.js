@@ -1,5 +1,3 @@
-var helper = require('./helper.js');
-
 var Node = function(idealPos, width, data){
   this.idealPos = idealPos;
   this.currentPos = idealPos;
