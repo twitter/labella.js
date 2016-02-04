@@ -48,10 +48,6 @@ proto.positionAfter = function(node, buffer){
   return node.currentRight() + this.width/2 + buffer;
 };
 
-proto.halfWidth = function(){
-  return this.width / 2;
-};
-
 proto.currentRight = function(){
   return this.currentPos + this.width/2;
 };

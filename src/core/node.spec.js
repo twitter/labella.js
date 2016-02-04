@@ -87,13 +87,6 @@ describe('Node', function(){
     });
   });
 
-  describe('#halfWidth()', function(){
-    it('should return half width', function(){
-      var n1 = new Node(10, 10);
-      expect(n1.halfWidth()).toEqual(5);
-    });
-  });
-
   describe('#currentRight()', function(){
     var n1 = new Node(10, 10);
     n1.currentPos = 20;
