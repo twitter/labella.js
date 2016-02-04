@@ -12,7 +12,8 @@
         "bower_components",
         "coverage",
         "tmp",
-        "dist"
+        "dist",
+        ".publish"
       ],
 		}
 	],

@@ -78,139 +78,173 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	"use strict";
 
-	var Node = function Node(idealPos, width, data) {
-	  this.idealPos = idealPos;
-	  this.currentPos = idealPos;
-	  this.width = width;
-	  this.data = data;
-	  this.layerIndex = 0;
-	};
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var proto = Node.prototype;
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	// return negative if overlap
-	proto.distanceFrom = function (node) {
-	  var halfWidth = this.width / 2;
-	  var nodeHalfWidth = node.width / 2;
+	var Node = function () {
+	  function Node(idealPos, width, data) {
+	    _classCallCheck(this, Node);
 
-	  // max(a[0], b[0]) - min(a[1], b[1])
-	  return Math.max(this.currentPos - halfWidth, node.currentPos - nodeHalfWidth) - Math.min(this.currentPos + halfWidth, node.currentPos + nodeHalfWidth);
-	};
-
-	proto.moveToIdealPosition = function () {
-	  this.currentPos = this.idealPos;
-	  return this;
-	};
-
-	proto.displacement = function () {
-	  return this.idealPos - this.currentPos;
-	};
-
-	proto.overlapWithNode = function (node, buffer) {
-	  buffer = buffer === null || buffer === undefined ? 0 : buffer;
-	  return this.distanceFrom(node) - buffer < 0;
-	};
-
-	proto.overlapWithPoint = function (pos) {
-	  var halfWidth = this.width / 2;
-	  return pos >= this.currentPos - halfWidth && pos <= this.currentPos + halfWidth;
-	};
-
-	proto.positionBefore = function (node, buffer) {
-	  buffer = buffer ? buffer : 0;
-	  return node.currentLeft() - this.width / 2 - buffer;
-	};
-
-	proto.positionAfter = function (node, buffer) {
-	  buffer = buffer ? buffer : 0;
-	  return node.currentRight() + this.width / 2 + buffer;
-	};
-
-	proto.currentRight = function () {
-	  return this.currentPos + this.width / 2;
-	};
-
-	proto.currentLeft = function () {
-	  return this.currentPos - this.width / 2;
-	};
-
-	proto.idealRight = function () {
-	  return this.idealPos + this.width / 2;
-	};
-
-	proto.idealLeft = function () {
-	  return this.idealPos - this.width / 2;
-	};
-
-	proto.createStub = function (width) {
-	  var stub = new Node(this.idealPos, width, this.data);
-	  stub.currentPos = this.currentPos;
-	  stub.child = this;
-	  this.parent = stub;
-	  return stub;
-	};
-
-	proto.removeStub = function () {
-	  if (this.parent) {
-	    this.parent.child = null;
-	    this.parent = null;
-	  }
-	  return this;
-	};
-
-	proto.isStub = function () {
-	  return !!this.child;
-	};
-
-	proto.getPathToRoot = function () {
-	  var path = [];
-	  var current = this;
-	  while (current) {
-	    path.push(current);
-	    current = current.parent;
-	  }
-	  return path;
-	};
-
-	proto.getPathFromRoot = function () {
-	  return this.getPathToRoot().reverse();
-	};
-
-	proto.getPathToRootLength = function () {
-	  var length = 0;
-	  var current = this;
-	  while (current) {
-	    var targetPos = current.parent ? current.parent.currentPos : current.idealPos;
-	    length += Math.abs(current.currentPos - targetPos);
-	    current = current.parent;
+	    this.idealPos = idealPos;
+	    this.currentPos = idealPos;
+	    this.width = width;
+	    this.data = data;
+	    this.layerIndex = 0;
 	  }
 
-	  return length;
-	};
+	  // return negative if overlap
 
-	// Trace back to the node without parent
-	proto.getRoot = function () {
-	  var previous = this;
-	  var current = this;
-	  while (current) {
-	    previous = current;
-	    current = current.parent;
-	  }
-	  return previous;
-	};
+	  _createClass(Node, [{
+	    key: "distanceFrom",
+	    value: function distanceFrom(node) {
+	      var halfWidth = this.width / 2;
+	      var nodeHalfWidth = node.width / 2;
+	      // max(a[0], b[0]) - min(a[1], b[1])
+	      return Math.max(this.currentPos - halfWidth, node.currentPos - nodeHalfWidth) - Math.min(this.currentPos + halfWidth, node.currentPos + nodeHalfWidth);
+	    }
+	  }, {
+	    key: "moveToIdealPosition",
+	    value: function moveToIdealPosition() {
+	      this.currentPos = this.idealPos;
+	      return this;
+	    }
+	  }, {
+	    key: "displacement",
+	    value: function displacement() {
+	      return this.idealPos - this.currentPos;
+	    }
+	  }, {
+	    key: "overlapWithNode",
+	    value: function overlapWithNode(node) {
+	      var buffer = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
-	proto.getLayerIndex = function () {
-	  return this.layerIndex;
-	};
+	      return this.distanceFrom(node) - buffer < 0;
+	    }
+	  }, {
+	    key: "overlapWithPoint",
+	    value: function overlapWithPoint(pos) {
+	      var halfWidth = this.width / 2;
+	      return pos >= this.currentPos - halfWidth && pos <= this.currentPos + halfWidth;
+	    }
+	  }, {
+	    key: "positionBefore",
+	    value: function positionBefore(node) {
+	      var buffer = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
-	proto.clone = function () {
-	  var node = new Node(this.idealPos, this.width, this.data);
-	  node.currentPos = this.currentPos;
-	  node.layerIndex = this.layerIndex;
-	  return node;
-	};
+	      return node.currentLeft() - this.width / 2 - buffer;
+	    }
+	  }, {
+	    key: "positionAfter",
+	    value: function positionAfter(node) {
+	      var buffer = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
-	// return module
+	      return node.currentRight() + this.width / 2 + buffer;
+	    }
+	  }, {
+	    key: "currentRight",
+	    value: function currentRight() {
+	      return this.currentPos + this.width / 2;
+	    }
+	  }, {
+	    key: "currentLeft",
+	    value: function currentLeft() {
+	      return this.currentPos - this.width / 2;
+	    }
+	  }, {
+	    key: "idealRight",
+	    value: function idealRight() {
+	      return this.idealPos + this.width / 2;
+	    }
+	  }, {
+	    key: "idealLeft",
+	    value: function idealLeft() {
+	      return this.idealPos - this.width / 2;
+	    }
+	  }, {
+	    key: "createStub",
+	    value: function createStub(width) {
+	      var stub = new Node(this.idealPos, width, this.data);
+	      stub.currentPos = this.currentPos;
+	      stub.child = this;
+	      this.parent = stub;
+	      return stub;
+	    }
+	  }, {
+	    key: "removeStub",
+	    value: function removeStub() {
+	      if (this.parent) {
+	        this.parent.child = null;
+	        this.parent = null;
+	      }
+	      return this;
+	    }
+	  }, {
+	    key: "isStub",
+	    value: function isStub() {
+	      return !!this.child;
+	    }
+	  }, {
+	    key: "getPathToRoot",
+	    value: function getPathToRoot() {
+	      var path = [];
+	      var current = this;
+	      while (current) {
+	        path.push(current);
+	        current = current.parent;
+	      }
+	      return path;
+	    }
+	  }, {
+	    key: "getPathFromRoot",
+	    value: function getPathFromRoot() {
+	      return this.getPathToRoot().reverse();
+	    }
+	  }, {
+	    key: "getPathToRootLength",
+	    value: function getPathToRootLength() {
+	      var length = 0;
+	      var current = this;
+	      while (current) {
+	        var targetPos = current.parent ? current.parent.currentPos : current.idealPos;
+	        length += Math.abs(current.currentPos - targetPos);
+	        current = current.parent;
+	      }
+
+	      return length;
+	    }
+
+	    // Trace back to the node without parent
+
+	  }, {
+	    key: "getRoot",
+	    value: function getRoot() {
+	      var previous = this;
+	      var current = this;
+	      while (current) {
+	        previous = current;
+	        current = current.parent;
+	      }
+	      return previous;
+	    }
+	  }, {
+	    key: "getLayerIndex",
+	    value: function getLayerIndex() {
+	      return this.layerIndex;
+	    }
+	  }, {
+	    key: "clone",
+	    value: function clone() {
+	      var node = new Node(this.idealPos, this.width, this.data);
+	      node.currentPos = this.currentPos;
+	      node.layerIndex = this.layerIndex;
+	      return node;
+	    }
+	  }]);
+
+	  return Node;
+	}();
+
 	module.exports = Node;
 
 /***/ },
@@ -289,28 +323,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  force.start = function () {
 	    console.log('[warning] force.start() is deprecated. Please use force.compute() instead.');
 	  };
-
-	  // force.metrics = function(){
-	  //   return Object.keys(metrics).map(function(name){
-	  //     return {
-	  //       name: name,
-	  //       value: force.metric(name)
-	  //     };
-	  //   });
-	  // };
-
-	  // force.metric = function(name){
-	  //   switch(name){
-	  //     case 'overflow':
-	  //       return metrics[name](layers, options.minPos, options.maxPos);
-	  //     case 'overDensity':
-	  //       return metrics[name](layers, options.density, options.layerWidth, options.nodeSpacing - 1);
-	  //     case 'overlapCount':
-	  //       return metrics[name](layers, options.nodeSpacing - 1);
-	  //     default:
-	  //       return metrics[name] ? metrics[name](layers) : null;
-	  //   }
-	  // };
 
 	  return force;
 	};
