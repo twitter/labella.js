@@ -1,6 +1,6 @@
-// var Simulator = require('./simulator.js');
+'use strict';
+
 var Distributor = require('./distributor.js');
-var metrics = require('./metrics.js');
 var helper = require('./helper.js');
 var removeOverlap = require('./removeOverlap.js');
 
@@ -71,28 +71,6 @@ var Force = function(_options){
   force.start = function(){
     console.log('[warning] force.start() is deprecated. Please use force.compute() instead.');
   };
-
-  // force.metrics = function(){
-  //   return Object.keys(metrics).map(function(name){
-  //     return {
-  //       name: name,
-  //       value: force.metric(name)
-  //     };
-  //   });
-  // };
-
-  // force.metric = function(name){
-  //   switch(name){
-  //     case 'overflow':
-  //       return metrics[name](layers, options.minPos, options.maxPos);
-  //     case 'overDensity':
-  //       return metrics[name](layers, options.density, options.layerWidth, options.nodeSpacing - 1);
-  //     case 'overlapCount':
-  //       return metrics[name](layers, options.nodeSpacing - 1);
-  //     default:
-  //       return metrics[name] ? metrics[name](layers) : null;
-  //   }
-  // };
 
   return force;
 };

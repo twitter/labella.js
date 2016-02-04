@@ -1,27 +1,24 @@
-var extend = require('../lib/extend.js');
+'use strict';
 
-module.exports = (function(){
-  var helper = {};
+const extend = require('../lib/extend.js');
 
-  helper.isDefined = function(x){
+module.exports = {
+  extend(){
+    return extend.apply(this, arguments);
+  },
+  isDefined(x){
     return x!==null && x!==undefined;
-  };
-
-  helper.extend = extend;
-
-  helper.pick = function(object, keys){
-    return keys.reduce(function(prev, key){
+  },
+  pick(object, keys){
+    return keys.reduce((prev, key) => {
       prev[key] = object[key];
       return prev;
     }, {});
-  };
-
-  helper.sum = function(array, accessor){
+  },
+  sum(array, accessor){
     return array.map(accessor)
-      .reduce(function(prev, current){
+      .reduce((prev, current) => {
         return prev + current;
       }, 0);
-  };
-
-  return helper;
-}());
+  }
+};

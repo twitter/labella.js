@@ -115,7 +115,7 @@ SortedList.prototype.bsearch = function(val) {
       epos = this.length;
   while (epos - spos > 1) {
     mpos = Math.floor((spos + epos)/2);
-    mval = this[mpos];
+    var mval = this[mpos];
     var comp = this._compare(val, mval);
     if (comp == 0) return mpos;
     if (comp > 0)  spos = mpos;

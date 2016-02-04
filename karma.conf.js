@@ -3,7 +3,7 @@
 
 var webpackConfig = require('./webpack.config.js')();
 
-webpackConfig.module.preLoaders = [
+webpackConfig.module.postLoaders = [
   // instrument only source files with Istanbul
   {
     test: /\/[A-Za-z0-9_\-\/]+(?!\.spec)\.js$/,
