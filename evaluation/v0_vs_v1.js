@@ -1,10 +1,12 @@
+'use strict';
+
 var Promise = require('promise');
 var _ = require('lodash');
 var fs = require('fs');
 var labella0 = require('./labella-0.1.1.min.js');
 var labella1 = require('./labella-1.0.0.min.js');
-var metrics = require('../src/core/metrics.js');
-var util = require('../src/core/util.js');
+var metrics = labella1.metrics;
+var util = labella1.util;
 
 function layout(lib, version, nodes, options){
   nodes = nodes.map(function(n){
@@ -124,4 +126,4 @@ var options = {
   roundsPerTick: 100
 };
 
-run(_.range(1,10,1).concat(_.range(10,501,10)), 10, options);
+run(_.range(1,10,1).concat(_.range(10,101,10)), 10, options);

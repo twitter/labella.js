@@ -68,15 +68,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	  Distributor: __webpack_require__(3),
 	  Renderer: __webpack_require__(10),
 
-	  // metrics: require('./core/metrics.js'),
-	  util: __webpack_require__(11)
+	  metrics: __webpack_require__(11),
+	  util: __webpack_require__(12)
 	};
 
 /***/ },
 /* 1 */
 /***/ function(module, exports) {
 
-	"use strict";
+	'use strict';
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -96,7 +96,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  // return negative if overlap
 
 	  _createClass(Node, [{
-	    key: "distanceFrom",
+	    key: 'distanceFrom',
 	    value: function distanceFrom(node) {
 	      var halfWidth = this.width / 2;
 	      var nodeHalfWidth = node.width / 2;
@@ -104,65 +104,65 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return Math.max(this.currentPos - halfWidth, node.currentPos - nodeHalfWidth) - Math.min(this.currentPos + halfWidth, node.currentPos + nodeHalfWidth);
 	    }
 	  }, {
-	    key: "moveToIdealPosition",
+	    key: 'moveToIdealPosition',
 	    value: function moveToIdealPosition() {
 	      this.currentPos = this.idealPos;
 	      return this;
 	    }
 	  }, {
-	    key: "displacement",
+	    key: 'displacement',
 	    value: function displacement() {
 	      return this.idealPos - this.currentPos;
 	    }
 	  }, {
-	    key: "overlapWithNode",
+	    key: 'overlapWithNode',
 	    value: function overlapWithNode(node) {
 	      var buffer = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
 	      return this.distanceFrom(node) - buffer < 0;
 	    }
 	  }, {
-	    key: "overlapWithPoint",
+	    key: 'overlapWithPoint',
 	    value: function overlapWithPoint(pos) {
 	      var halfWidth = this.width / 2;
 	      return pos >= this.currentPos - halfWidth && pos <= this.currentPos + halfWidth;
 	    }
 	  }, {
-	    key: "positionBefore",
+	    key: 'positionBefore',
 	    value: function positionBefore(node) {
 	      var buffer = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
 	      return node.currentLeft() - this.width / 2 - buffer;
 	    }
 	  }, {
-	    key: "positionAfter",
+	    key: 'positionAfter',
 	    value: function positionAfter(node) {
 	      var buffer = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
 	      return node.currentRight() + this.width / 2 + buffer;
 	    }
 	  }, {
-	    key: "currentRight",
+	    key: 'currentRight',
 	    value: function currentRight() {
 	      return this.currentPos + this.width / 2;
 	    }
 	  }, {
-	    key: "currentLeft",
+	    key: 'currentLeft',
 	    value: function currentLeft() {
 	      return this.currentPos - this.width / 2;
 	    }
 	  }, {
-	    key: "idealRight",
+	    key: 'idealRight',
 	    value: function idealRight() {
 	      return this.idealPos + this.width / 2;
 	    }
 	  }, {
-	    key: "idealLeft",
+	    key: 'idealLeft',
 	    value: function idealLeft() {
 	      return this.idealPos - this.width / 2;
 	    }
 	  }, {
-	    key: "createStub",
+	    key: 'createStub',
 	    value: function createStub(width) {
 	      var stub = new Node(this.idealPos, width, this.data);
 	      stub.currentPos = this.currentPos;
@@ -171,7 +171,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return stub;
 	    }
 	  }, {
-	    key: "removeStub",
+	    key: 'removeStub',
 	    value: function removeStub() {
 	      if (this.parent) {
 	        this.parent.child = null;
@@ -180,12 +180,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return this;
 	    }
 	  }, {
-	    key: "isStub",
+	    key: 'isStub',
 	    value: function isStub() {
 	      return !!this.child;
 	    }
 	  }, {
-	    key: "getPathToRoot",
+	    key: 'getPathToRoot',
 	    value: function getPathToRoot() {
 	      var path = [];
 	      var current = this;
@@ -196,12 +196,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return path;
 	    }
 	  }, {
-	    key: "getPathFromRoot",
+	    key: 'getPathFromRoot',
 	    value: function getPathFromRoot() {
 	      return this.getPathToRoot().reverse();
 	    }
 	  }, {
-	    key: "getPathToRootLength",
+	    key: 'getPathToRootLength',
 	    value: function getPathToRootLength() {
 	      var length = 0;
 	      var current = this;
@@ -217,7 +217,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    // Trace back to the node without parent
 
 	  }, {
-	    key: "getRoot",
+	    key: 'getRoot',
 	    value: function getRoot() {
 	      var previous = this;
 	      var current = this;
@@ -228,12 +228,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return previous;
 	    }
 	  }, {
-	    key: "getLayerIndex",
+	    key: 'getLayerIndex',
 	    value: function getLayerIndex() {
 	      return this.layerIndex;
 	    }
 	  }, {
-	    key: "clone",
+	    key: 'clone',
 	    value: function clone() {
 	      var node = new Node(this.idealPos, this.width, this.data);
 	      node.currentPos = this.currentPos;
@@ -524,12 +524,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _extend = __webpack_require__(5);
-
-	module.exports = {
-	  extend: function extend() {
-	    return _extend.apply(this, arguments);
-	  },
+	var helper = {
 	  isDefined: function isDefined(x) {
 	    return x !== null && x !== undefined;
 	  },
@@ -545,6 +540,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, 0);
 	  }
 	};
+
+	helper.extend = __webpack_require__(5);
+
+	module.exports = helper;
 
 /***/ },
 /* 5 */
@@ -1961,6 +1960,130 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 11 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var helper = __webpack_require__(4);
+
+	var metrics = {};
+
+	function toLayers(nodes) {
+	  return nodes.length === 0 || Array.isArray(nodes[0]) ? nodes : [nodes];
+	}
+
+	metrics.displacement = function (nodes) {
+	  if (nodes.length === 0) return 0;
+	  var layers = toLayers(nodes);
+	  return helper.sum(layers, function (layer) {
+	    return helper.sum(layer, function (node) {
+	      return Math.abs(node.displacement());
+	    });
+	  });
+	};
+
+	metrics.pathLength = function (nodes) {
+	  if (nodes.length === 0) return 0;
+	  var layers = toLayers(nodes);
+	  return helper.sum(layers, function (layer) {
+	    return helper.sum(layer, function (node) {
+	      return node.isStub() ? 0 : Math.abs(node.getPathToRootLength());
+	    });
+	  });
+	};
+
+	metrics.overflowSpace = function (nodes, minPos, maxPos) {
+	  if (nodes.length === 0 || !helper.isDefined(minPos) && !helper.isDefined(maxPos)) return 0;
+	  var layers = toLayers(nodes);
+
+	  return helper.sum(layers, function (layer) {
+	    return helper.sum(layer, function (node) {
+	      var l = node.currentLeft();
+	      var r = node.currentRight();
+
+	      if (helper.isDefined(minPos)) {
+	        if (r <= minPos) {
+	          return node.width;
+	        } else if (l < minPos) {
+	          return minPos - l;
+	        }
+	      }
+
+	      if (helper.isDefined(maxPos)) {
+	        if (l >= maxPos) {
+	          return node.width;
+	        } else if (r > maxPos) {
+	          return r - maxPos;
+	        }
+	      }
+
+	      return 0;
+	    });
+	  });
+	};
+
+	metrics.overDensitySpace = function (nodes, density, layerWidth, nodeSpacing) {
+	  if (nodes.length === 0 || !helper.isDefined(density) || !helper.isDefined(layerWidth)) return 0;
+
+	  nodeSpacing = nodeSpacing || 0;
+	  var limit = density * layerWidth;
+
+	  var layers = toLayers(nodes);
+	  return helper.sum(layers, function (layer) {
+	    var width = helper.sum(layer, function (node) {
+	      return node.width + nodeSpacing;
+	    }) - nodeSpacing;
+	    return width <= limit ? 0 : width - limit;
+	  });
+	};
+
+	metrics.overlapCount = function (nodes, buffer) {
+	  if (nodes.length === 0) return 0;
+	  var layers = toLayers(nodes);
+	  return helper.sum(layers, function (layer) {
+	    var count = 0;
+	    for (var i = 0; i < layer.length; i++) {
+	      for (var j = i + 1; j < layer.length; j++) {
+	        if (layer[i].overlapWithNode(layer[j], buffer)) {
+	          count++;
+	        }
+	      }
+	    }
+	    return count;
+	  });
+	};
+
+	metrics.overlapSpace = function (nodes) {
+	  if (nodes.length === 0) return 0;
+	  var layers = toLayers(nodes);
+	  return helper.sum(layers, function (layer) {
+	    var count = 0;
+	    for (var i = 0; i < layer.length; i++) {
+	      for (var j = i + 1; j < layer.length; j++) {
+	        var distance = layer[i].distanceFrom(layer[j]);
+	        count += distance < 0 ? Math.abs(distance) : 0;
+	      }
+	    }
+	    return count;
+	  });
+	};
+
+	metrics.weightedAllocatedSpace = function (nodes) {
+	  if (nodes.length === 0) return 0;
+	  var layers = toLayers(nodes);
+
+	  return helper.sum(layers, function (layer, layerIndex) {
+	    return layerIndex * helper.sum(layer, function (d) {
+	      return d.width;
+	    });
+	  });
+	};
+
+	// return module
+	module.exports = metrics;
+
+/***/ },
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';

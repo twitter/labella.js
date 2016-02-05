@@ -1,11 +1,6 @@
 'use strict';
 
-const extend = require('../lib/extend.js');
-
-module.exports = {
-  extend(){
-    return extend.apply(this, arguments);
-  },
+const helper = {
   isDefined(x){
     return x!==null && x!==undefined;
   },
@@ -22,3 +17,7 @@ module.exports = {
       }, 0);
   }
 };
+
+helper.extend = require('../lib/extend.js');
+
+module.exports = helper;

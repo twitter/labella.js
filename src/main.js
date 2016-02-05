@@ -10,6 +10,6 @@ module.exports = {
   Distributor: require('./core/distributor.js'),
   Renderer: require('./core/renderer.js'),
 
-  // metrics: require('./core/metrics.js'),
+  metrics: require('./core/metrics.js'),
   util: require('./core/util.js')
 };

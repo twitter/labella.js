@@ -1,3 +1,5 @@
+'use strict';
+
 class Node{
   constructor(idealPos, width, data){
     this.idealPos = idealPos;
