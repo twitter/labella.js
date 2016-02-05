@@ -32,49 +32,39 @@ function computeMetrics(treatment, nodes){
     displacement: metrics.displacement(outputNodes),
     pathLength: metrics.pathLength(outputNodes),
     overflowSpace: metrics.overflowSpace(outputNodes, options.minPos, options.maxPos),
-    overlapCount: metrics.overlapCount(outputNodes)
+    overlapCount: metrics.overlapCount(outputNodes),
   };
 }
 
 function run(steps, round, treatments, nodeOptions){
   return _.flatMap(steps, function(step){
-    var treatmentResults = treatments.map(function(){return [];});
-
-    for(var i=0;i<round;i++){
-      var nodes = util.generateNodes(step, _.extend({
+    var nodeSets = _.range(0,round,1).map(function(step){
+      return util.generateNodes(step, _.extend({
         minWidth: 10,
         maxWidth: 50,
         minPos: null,
         maxPos: null
       }, nodeOptions));
-
-      treatments.map(function(treatment, j){
-        treatmentResults[j].push(computeMetrics(treatment, nodes));
-      });
-    }
-
-    return treatmentResults.map(function(treatmentResult, j){
-      var metricNames = Object.keys(treatmentResult[0]);
-      var means = {
-        numNodes: step,
-        treatmentID: j
-      };
-      metricNames.forEach(function(name){
-        means[name] = _.mean(treatmentResult.map(function(d){return d[name];}));
-      });
-      return means;
     });
 
-    // return _.extend({
-    //   numNodes: step
-    // },_.mapValues(results, function(metric){
-    //   return _.mean(metric);
-    // }));
+    return treatments.map(function(treatment, index){
+      var results = nodeSets.map(function(nodes){
+        return computeMetrics(treatment, nodes);
+      });
+
+      return Object.keys(results[0]).reduce(function(agg, name){
+        agg[name] = _.mean(results.map(function(d){return d[name];}));
+        return agg;
+      }, {
+        numNodes: step,
+        treatmentID: index
+      });
+    });
   });
 }
 
 var treatments = [function(inputNodes){
-  return new labella.Force().nodes(inputNodes);
+  return (new labella.Force()).nodes(inputNodes);
 },{
   algorithm: 'none',
   roundsPerTick: 100
