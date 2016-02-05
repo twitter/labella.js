@@ -59,6 +59,33 @@ gulp.task('webpack', function() {
     .pipe(gulp.dest(paths.examples+'/dist'));
 });
 
+gulp.task('webpack-extra', function() {
+  return gulp.src(paths.src + '/extra.js')
+    .pipe(webpack(_.extend(webpackConfig, {
+      output: {
+        filename: 'labella-extra.js',
+        sourceMapFilename: '[file].map',
+        library: 'labella',
+        libraryTarget: 'umd',
+        umdNamedDefine: false
+      },
+      devtool: argv.debug ? 'eval' : undefined
+    })))
+    .pipe(gulp.dest(paths.dist))
+    .pipe(gulp.dest(paths.examples+'/dist'))
+    .pipe($.uglify({
+      report: 'min',
+      mangle: true,
+      compress: true, //true,
+      preserveComments: false
+    }))
+    .pipe($.rename({
+      suffix: '.min'
+    }))
+    .pipe(gulp.dest(paths.dist))
+    .pipe(gulp.dest(paths.examples+'/dist'));
+});
+
 /* Start browser-sync */
 gulp.task('browser-sync', ['build'], function() {
   browserSync.init({
@@ -73,7 +100,7 @@ var buildTasks = [];
 
 /* Build everything */
 gulp.task('build', function(done){
-  runSequence('clean', buildTasks.concat(['webpack']), done);
+  runSequence('clean', buildTasks.concat(['webpack', 'webpack-extra']), done);
 });
 
 /* Watch for individual file changes and build as needed */
