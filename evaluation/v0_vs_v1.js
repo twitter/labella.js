@@ -4,7 +4,7 @@ var Promise = require('promise');
 var _ = require('lodash');
 var fs = require('fs');
 var labella0 = require('./labella-0.1.1.min.js');
-var labella1 = require('./labella-1.0.0.min.js');
+var labella1 = require('./labella-extra.min.js');
 var metrics = labella1.metrics;
 var util = labella1.util;
 
