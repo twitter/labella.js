@@ -24,26 +24,30 @@ function computeMetrics(treatment, nodes){
   var time = process.hrtime(t1);
   time = time[0]*1000000000 + time[1];
 
-  var outputNodes = force.nodes();
+  var layers = force.getLayers();
+  console.log('layers.length', nodes.length, layers.length);
   var options = force.options();
 
   return {
     time: time,
-    displacement: metrics.displacement(outputNodes),
-    pathLength: metrics.pathLength(outputNodes),
-    overflowSpace: metrics.overflowSpace(outputNodes, options.minPos, options.maxPos),
-    overlapCount: metrics.overlapCount(outputNodes),
+    layerCount: layers.length,
+    displacement: metrics.displacement(layers),
+    pathLength: metrics.pathLength(layers),
+    overflowSpace: metrics.overflowSpace(layers, options.minPos, options.maxPos),
+    overlapCount: metrics.overlapCount(layers),
+    overlapSpace: metrics.overlapSpace(layers),
+    weightedAllocatedSpace: metrics.weightedAllocatedSpace(layers)
   };
 }
 
 function run(steps, round, treatments, nodeOptions){
   return _.flatMap(steps, function(step){
-    var nodeSets = _.range(0,round,1).map(function(step){
+    var nodeSets = _.range(0,round,1).map(function(){
       return util.generateNodes(step, _.extend({
-        minWidth: 10,
+        minWidth: 20,
         maxWidth: 50,
-        minPos: null,
-        maxPos: null
+        minPos: 0,
+        maxPos: 500
       }, nodeOptions));
     });
 
@@ -63,13 +67,24 @@ function run(steps, round, treatments, nodeOptions){
   });
 }
 
-var treatments = [function(inputNodes){
+var treatments = [
+function(inputNodes){
   return (new labella.Force()).nodes(inputNodes);
+},
+{
+  algorithm: 'none'
 },{
-  algorithm: 'none',
-  roundsPerTick: 100
+  algorithm: 'simple',
+  density: 0.85,
+  minPos: 0,
+  maxPos: 500
+},{
+  algorithm: 'overlap',
+  density: 0.85,
+  minPos: 0,
+  maxPos: 500
 }];
 
-var scores = run(_.range(1,10,1).concat(_.range(10,101,10)), 10, treatments);
+var scores = run(_.range(1,10,1).concat(_.range(10,201,10)), 10, treatments);
 
-console.log('scores', scores);
+// console.log('scores', scores);

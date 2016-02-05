@@ -274,7 +274,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  force.nodes = function (x) {
 	    if (!arguments.length) return nodes;
 	    nodes = x;
-	    layers = null;
+	    layers = [x];
 	    return force;
 	  };
 
