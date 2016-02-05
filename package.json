@@ -32,7 +32,7 @@
     "karma-sourcemap-loader": "~0.3.6",
     "karma-spec-reporter": "~0.0.23",
     "karma-webpack": "~1.7.0",
-    "lodash": "^4.1.0",
+    "lodash": "^4.2.1",
     "phantomjs": "~1.9.18",
     "pkgfiles": "^2.3.0",
     "promise": "^7.1.1",
