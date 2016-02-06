@@ -1,6 +1,9 @@
 'use strict';
 
 var _ = require('lodash');
+var json2csv = require('json2csv');
+var fs = require('fs');
+
 var labella = require('../dist/labella-extra.min.js');
 var util = labella.util;
 var metrics = labella.metrics;
@@ -25,17 +28,17 @@ function computeMetrics(treatment, nodes){
   time = time[0]*1000000000 + time[1];
 
   var layers = force.getLayers();
-  console.log('layers.length', nodes.length, layers.length);
   var options = force.options();
 
   return {
-    time: time,
+    time: time/1000000,
     layerCount: layers.length,
     displacement: metrics.displacement(layers),
     pathLength: metrics.pathLength(layers),
     overflowSpace: metrics.overflowSpace(layers, options.minPos, options.maxPos),
     overlapCount: metrics.overlapCount(layers),
     overlapSpace: metrics.overlapSpace(layers),
+    overDensitySpace: metrics.overDensitySpace(layers, options.density, options.maxPos-options.minPos, options.nodeSpacing),
     weightedAllocatedSpace: metrics.weightedAllocatedSpace(layers)
   };
 }
@@ -51,6 +54,8 @@ function run(steps, round, treatments, nodeOptions){
       }, nodeOptions));
     });
 
+    console.log('step', step);
+
     return treatments.map(function(treatment, index){
       var results = nodeSets.map(function(nodes){
         return computeMetrics(treatment, nodes);
@@ -61,30 +66,64 @@ function run(steps, round, treatments, nodeOptions){
         return agg;
       }, {
         numNodes: step,
-        treatmentID: index
+        treatmentID: index,
+        algorithm: treatment.algorithm,
+        removeOverlap: treatment.removeOverlap
       });
     });
   });
 }
 
 var treatments = [
-function(inputNodes){
-  return (new labella.Force()).nodes(inputNodes);
-},
-{
-  algorithm: 'none'
-},{
-  algorithm: 'simple',
-  density: 0.85,
-  minPos: 0,
-  maxPos: 500
-},{
-  algorithm: 'overlap',
-  density: 0.85,
-  minPos: 0,
-  maxPos: 500
-}];
+  {
+    algorithm: 'none',
+    removeOverlap: false,
+    density: 0.85,
+    minPos: 0,
+    maxPos: 500
+  },
+  {
+    algorithm: 'none',
+    density: 0.85,
+    minPos: 0,
+    maxPos: 500
+  },
+  {
+    algorithm: 'simple',
+    density: 0.85,
+    minPos: 0,
+    maxPos: 500
+  },
+  {
+    algorithm: 'simple',
+    removeOverlap: false,
+    density: 0.85,
+    minPos: 0,
+    maxPos: 500
+  },
+  {
+    algorithm: 'overlap',
+    density: 0.85,
+    minPos: 0,
+    maxPos: 500
+  },
+  {
+    algorithm: 'overlap',
+    removeOverlap: false,
+    density: 0.85,
+    minPos: 0,
+    maxPos: 500
+  }
+];
 
-var scores = run(_.range(1,10,1).concat(_.range(10,201,10)), 10, treatments);
+var scores = run(_.range(1,10,1).concat(_.range(10,251,10)), 10, treatments);
+
+json2csv({ data: scores }, function(err, csv) {
+  if (err) console.log(err);
+  // console.log(csv);
+
+  fs.writeFileSync('output/metrics.csv', csv);
+  console.log('done');
+});
 
 // console.log('scores', scores);

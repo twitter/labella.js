@@ -11,7 +11,7 @@ metrics.displacement = function(nodes){
   var layers = toLayers(nodes);
   return helper.sum(layers, function(layer){
     return helper.sum(layer, function(node){
-      return Math.abs(node.displacement());
+      return node.isStub() ? 0 : Math.abs(node.displacement());
     });
   });
 };

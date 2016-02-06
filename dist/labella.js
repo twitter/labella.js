@@ -260,6 +260,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  maxPos: null,
 
 	  algorithm: 'overlap',
+	  removeOverlap: true,
 	  density: 0.85,
 	  stubWidth: 1
 	};
@@ -311,7 +312,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      nodes.forEach(function (node) {
 	        node.layerIndex = layerIndex;
 	      });
-	      removeOverlap(nodes, overlapOptions);
+	      if (options.removeOverlap) {
+	        removeOverlap(nodes, overlapOptions);
+	      }
 	    });
 
 	    return force;

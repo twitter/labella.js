@@ -10,6 +10,7 @@ var DEFAULT_OPTIONS = {
   maxPos: null,
 
   algorithm: 'overlap',
+  removeOverlap: true,
   density: 0.85,
   stubWidth: 1
 };
@@ -62,7 +63,9 @@ var Force = function(_options){
       nodes.forEach(function(node){
         node.layerIndex = layerIndex;
       });
-      removeOverlap(nodes, overlapOptions);
+      if(options.removeOverlap){
+        removeOverlap(nodes, overlapOptions);
+      }
     });
 
     return force;
