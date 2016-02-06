@@ -1975,6 +1975,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return nodes.length === 0 || Array.isArray(nodes[0]) ? nodes : [nodes];
 	}
 
+	function denominator(layers) {
+	  return helper.sum(layers, function (layer) {
+	    return layer.length;
+	  });
+	}
+
+	function denominatorWithoutStubs(layers) {
+	  return helper.sum(layers, function (layer) {
+	    return layer.filter(function (l) {
+	      return !l.isStub();
+	    }).length;
+	  });
+	}
+
 	metrics.displacement = function (nodes) {
 	  if (nodes.length === 0) return 0;
 	  var layers = toLayers(nodes);
@@ -1982,7 +1996,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return helper.sum(layer, function (node) {
 	      return node.isStub() ? 0 : Math.abs(node.displacement());
 	    });
-	  });
+	  }) / denominatorWithoutStubs(layers);
 	};
 
 	metrics.pathLength = function (nodes) {
@@ -1992,7 +2006,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return helper.sum(layer, function (node) {
 	      return node.isStub() ? 0 : Math.abs(node.getPathToRootLength());
 	    });
-	  });
+	  }) / denominatorWithoutStubs(layers);
 	};
 
 	metrics.overflowSpace = function (nodes, minPos, maxPos) {
@@ -2025,10 +2039,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  });
 	};
 
-	metrics.overDensitySpace = function (nodes, density, layerWidth, nodeSpacing) {
+	metrics.overDensitySpace = function (nodes, density, layerWidth) {
+	  var nodeSpacing = arguments.length <= 3 || arguments[3] === undefined ? 0 : arguments[3];
+
 	  if (nodes.length === 0 || !helper.isDefined(density) || !helper.isDefined(layerWidth)) return 0;
 
-	  nodeSpacing = nodeSpacing || 0;
 	  var limit = density * layerWidth;
 
 	  var layers = toLayers(nodes);
@@ -2068,6 +2083,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	    }
 	    return count;
+	  }) / denominator(layers);
+	};
+
+	metrics.weightedAllocation = function (nodes) {
+	  if (nodes.length === 0) return 0;
+	  var layers = toLayers(nodes);
+
+	  return helper.sum(layers, function (layer, layerIndex) {
+	    return layerIndex * layer.filter(function (l) {
+	      return !l.isStub();
+	    }).length;
 	  });
 	};
 

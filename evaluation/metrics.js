@@ -31,7 +31,7 @@ function computeMetrics(treatment, nodes){
   var options = force.options();
 
   return {
-    time: time/1000000,
+    time: time/1000000, // convert to ms
     layerCount: layers.length,
     displacement: metrics.displacement(layers),
     pathLength: metrics.pathLength(layers),
@@ -39,6 +39,7 @@ function computeMetrics(treatment, nodes){
     overlapCount: metrics.overlapCount(layers),
     overlapSpace: metrics.overlapSpace(layers),
     overDensitySpace: metrics.overDensitySpace(layers, options.density, options.maxPos-options.minPos, options.nodeSpacing),
+    weightedAllocation: metrics.weightedAllocation(layers),
     weightedAllocatedSpace: metrics.weightedAllocatedSpace(layers)
   };
 }
@@ -116,7 +117,7 @@ var treatments = [
   }
 ];
 
-var scores = run(_.range(1,10,1).concat(_.range(10,251,10)), 10, treatments);
+var scores = run(_.range(1,10,1).concat(_.range(10,301,10)), 10, treatments);
 
 json2csv({ data: scores }, function(err, csv) {
   if (err) console.log(err);

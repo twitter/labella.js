@@ -16,7 +16,7 @@ describe('metrics', function(){
       expect(metrics.displacement(nodes)).toEqual(0);
       nodes[0].currentPos = 10;
       nodes[1].currentPos = 10;
-      expect(metrics.displacement([nodes])).toEqual(17);
+      expect(metrics.displacement([nodes])).toEqual(17 / 4);
     });
   });
 
@@ -46,7 +46,7 @@ describe('metrics', function(){
       expect(metrics.pathLength([n2])).toEqual(0);
       expect(metrics.pathLength([n3])).toEqual(6);
       expect(metrics.pathLength([n4, stub4, stub4_2])).toEqual(254);
-      expect(metrics.pathLength([[n1, n2, n3, stub4_2], [stub4], [n4]])).toEqual(279);
+      expect(metrics.pathLength([[n1, n2, n3, stub4_2], [stub4], [n4]])).toEqual(279/4);
     });
   });
 
@@ -117,9 +117,28 @@ describe('metrics', function(){
     it('should return 0 if the input is empty', function(){
       expect(metrics.overlapSpace([])).toEqual(0);
     });
-    it('should return number of times nodes on the same layer overlaps', function(){
-      expect(metrics.overlapSpace(nodes)).toEqual(49);
-      expect(metrics.overlapSpace([nodes,nodes])).toEqual(49*2);
+    it('should return space that nodes on the same layer overlaps on average', function(){
+      expect(metrics.overlapSpace(nodes)).toEqual(49 / 4);
+      expect(metrics.overlapSpace([nodes,nodes])).toEqual(49*2 / 8);
+    });
+  });
+
+  describe('#weightedAllocation(nodes)', function(){
+    var nodes = [
+      new Node(0,50),
+      new Node(50,50),
+      new Node(800,50),
+      new Node(801,50)
+    ];
+    it('should return 0 if the input is empty', function(){
+      expect(metrics.weightedAllocation([])).toEqual(0);
+    });
+    it('should return 0 if the output is in one row', function(){
+      expect(metrics.weightedAllocation(nodes)).toEqual(0);
+    });
+    it('should return number of nodes weight by layer index', function(){
+      expect(metrics.weightedAllocation([nodes, nodes])).toEqual(4);
+      expect(metrics.weightedAllocation([nodes, nodes, nodes])).toEqual(4 + 8);
     });
   });
 

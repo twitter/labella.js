@@ -6,6 +6,16 @@ function toLayers(nodes){
   return nodes.length===0 || Array.isArray(nodes[0]) ? nodes : [nodes];
 }
 
+function denominator(layers){
+  return helper.sum(layers, layer => layer.length);
+}
+
+function denominatorWithoutStubs(layers){
+  return helper.sum(layers, layer => {
+    return layer.filter(l => { return !l.isStub(); }).length
+  });
+}
+
 metrics.displacement = function(nodes){
   if(nodes.length===0) return 0;
   var layers = toLayers(nodes);
@@ -13,7 +23,7 @@ metrics.displacement = function(nodes){
     return helper.sum(layer, function(node){
       return node.isStub() ? 0 : Math.abs(node.displacement());
     });
-  });
+  }) / denominatorWithoutStubs(layers);
 };
 
 metrics.pathLength = function(nodes){
@@ -23,7 +33,7 @@ metrics.pathLength = function(nodes){
     return helper.sum(layer, function(node){
       return node.isStub() ? 0 : Math.abs(node.getPathToRootLength());
     });
-  });
+  }) / denominatorWithoutStubs(layers);
 };
 
 metrics.overflowSpace = function(nodes, minPos, maxPos){
@@ -59,10 +69,9 @@ metrics.overflowSpace = function(nodes, minPos, maxPos){
 
 };
 
-metrics.overDensitySpace = function(nodes, density, layerWidth, nodeSpacing){
+metrics.overDensitySpace = function(nodes, density, layerWidth, nodeSpacing=0){
   if(nodes.length===0 || !helper.isDefined(density) || !helper.isDefined(layerWidth)) return 0;
 
-  nodeSpacing = nodeSpacing || 0;
   var limit = density * layerWidth;
 
   var layers = toLayers(nodes);
@@ -102,6 +111,15 @@ metrics.overlapSpace = function(nodes){
       }
     }
     return count;
+  }) / denominator(layers);
+};
+
+metrics.weightedAllocation = function(nodes){
+  if(nodes.length===0) return 0;
+  var layers = toLayers(nodes);
+
+  return helper.sum(layers, function(layer, layerIndex){
+    return (layerIndex) * layer.filter(l => {return !l.isStub();}).length;
   });
 };
 
@@ -110,7 +128,7 @@ metrics.weightedAllocatedSpace = function(nodes){
   var layers = toLayers(nodes);
 
   return helper.sum(layers, function(layer, layerIndex){
-    return (layerIndex) * helper.sum(layer, function(d){return d.width;});
+    return (layerIndex) * helper.sum(layer, d => d.width);
   });
 };
 
