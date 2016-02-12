@@ -6,7 +6,7 @@ Recommendations and requirements for how to best contribute to **Labella.js**. A
 
 ### Versioning
 
-**Labella.js** comforms to the [Semantic Versioning](http://semver.org/) standard.
+**Labella.js** conforms to the [Semantic Versioning](http://semver.org/) standard.
 
 ### Pull requests
 - Submit pull requests against the `dev` branch
