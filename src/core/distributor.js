@@ -140,7 +140,7 @@ var Distributor = function(options){
 
     nodes.forEach(function(node){
       var overlaps = iTree.search(node.idealLeft(), node.idealRight());
-      node.overlaps = overlaps;
+      node.overlaps = overlaps.map(function(x) { return x.data[2]; });
       node.overlapCount = overlaps.length;
     });
 
