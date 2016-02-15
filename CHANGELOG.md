@@ -2,6 +2,15 @@
 
 ## v1.x.x
 
+<a name="1.0.1"></a>
+### 1.0.1 (2016-01-23)
+
+No API change, just bug fixes and refactoring.
+
+- Fix the *overlap* distribution algorithm. Thanks @GjjvdBurg
+- Use webpack to make the library support UMD instead of using a custom template.
+- Refactor a few classes to ES6
+
 <a name="1.0.0"></a>
 ### 1.0.0 (2016-01-23)
 
