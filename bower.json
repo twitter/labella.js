@@ -21,16 +21,17 @@
   "ignore": [
     "**/.*",
     "package.json",
-    "src",
     "node_modules",
     "bower_components",
+    "gulpfile.js",
     "karma.conf.js",
-    "Gruntfile.js",
-    "grunt",
-    "test",
+    "webpack.config.js",
     "*.sublime-project",
+    "docs",
+    "evaluation",
     "examples",
-    "docs"
+    "src",
+    "test"
   ],
   "devDependencies": {
     "angular": "~1.4.0",
