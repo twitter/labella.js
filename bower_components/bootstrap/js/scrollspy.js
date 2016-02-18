@@ -1,8 +1,8 @@
 /* ========================================================================
- * Bootstrap: scrollspy.js v3.3.6
+ * Bootstrap: scrollspy.js v3.3.1
  * http://getbootstrap.com/javascript/#scrollspy
  * ========================================================================
- * Copyright 2011-2015 Twitter, Inc.
+ * Copyright 2011-2014 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * ======================================================================== */
 
@@ -14,8 +14,10 @@
   // ==========================
 
   function ScrollSpy(element, options) {
-    this.$body          = $(document.body)
-    this.$scrollElement = $(element).is(document.body) ? $(window) : $(element)
+    var process  = $.proxy(this.process, this)
+
+    this.$body          = $('body')
+    this.$scrollElement = $(element).is('body') ? $(window) : $(element)
     this.options        = $.extend({}, ScrollSpy.DEFAULTS, options)
     this.selector       = (this.options.target || '') + ' .nav li > a'
     this.offsets        = []
@@ -23,12 +25,12 @@
     this.activeTarget   = null
     this.scrollHeight   = 0
 
-    this.$scrollElement.on('scroll.bs.scrollspy', $.proxy(this.process, this))
+    this.$scrollElement.on('scroll.bs.scrollspy', process)
     this.refresh()
     this.process()
   }
 
-  ScrollSpy.VERSION  = '3.3.6'
+  ScrollSpy.VERSION  = '3.3.1'
 
   ScrollSpy.DEFAULTS = {
     offset: 10
@@ -39,18 +41,19 @@
   }
 
   ScrollSpy.prototype.refresh = function () {
-    var that          = this
-    var offsetMethod  = 'offset'
-    var offsetBase    = 0
-
-    this.offsets      = []
-    this.targets      = []
-    this.scrollHeight = this.getScrollHeight()
+    var offsetMethod = 'offset'
+    var offsetBase   = 0
 
     if (!$.isWindow(this.$scrollElement[0])) {
       offsetMethod = 'position'
       offsetBase   = this.$scrollElement.scrollTop()
     }
+
+    this.offsets = []
+    this.targets = []
+    this.scrollHeight = this.getScrollHeight()
+
+    var self     = this
 
     this.$body
       .find(this.selector)
@@ -66,8 +69,8 @@
       })
       .sort(function (a, b) { return a[0] - b[0] })
       .each(function () {
-        that.offsets.push(this[0])
-        that.targets.push(this[1])
+        self.offsets.push(this[0])
+        self.targets.push(this[1])
       })
   }
 
@@ -96,7 +99,7 @@
     for (i = offsets.length; i--;) {
       activeTarget != targets[i]
         && scrollTop >= offsets[i]
-        && (offsets[i + 1] === undefined || scrollTop < offsets[i + 1])
+        && (!offsets[i + 1] || scrollTop <= offsets[i + 1])
         && this.activate(targets[i])
     }
   }
@@ -107,8 +110,8 @@
     this.clear()
 
     var selector = this.selector +
-      '[data-target="' + target + '"],' +
-      this.selector + '[href="' + target + '"]'
+        '[data-target="' + target + '"],' +
+        this.selector + '[href="' + target + '"]'
 
     var active = $(selector)
       .parents('li')

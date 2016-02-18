@@ -54,6 +54,8 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+
 	/*
 	Copyright 2015 Twitter, Inc.
 	Licensed under the Apache License, Version 2.0
@@ -62,177 +64,496 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	module.exports = {
 	  Node: __webpack_require__(1),
-	  Force: __webpack_require__(4),
-	  Distributor: __webpack_require__(5),
-	  Renderer: __webpack_require__(11),
-
-	  // metrics: require('./core/metrics.js'),
-	  util: __webpack_require__(12)
+	  Force: __webpack_require__(2),
+	  Distributor: __webpack_require__(3),
+	  Renderer: __webpack_require__(10)
 	};
 
 /***/ },
 /* 1 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	var helper = __webpack_require__(2);
+	'use strict';
 
-	var Node = function (idealPos, width, data) {
-	  this.idealPos = idealPos;
-	  this.currentPos = idealPos;
-	  this.width = width;
-	  this.data = data;
-	  this.layerIndex = 0;
-	};
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var proto = Node.prototype;
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	// return negative if overlap
-	proto.distanceFrom = function (node) {
-	  var halfWidth = this.width / 2;
-	  var nodeHalfWidth = node.width / 2;
+	var Node = function () {
+	  function Node(idealPos, width, data) {
+	    _classCallCheck(this, Node);
 
-	  // max(a[0], b[0]) - min(a[1], b[1])
-	  return Math.max(this.currentPos - halfWidth, node.currentPos - nodeHalfWidth) - Math.min(this.currentPos + halfWidth, node.currentPos + nodeHalfWidth);
-	};
-
-	proto.moveToIdealPosition = function () {
-	  this.currentPos = this.idealPos;
-	  return this;
-	};
-
-	proto.displacement = function () {
-	  return this.idealPos - this.currentPos;
-	};
-
-	proto.overlapWithNode = function (node, buffer) {
-	  buffer = buffer === null || buffer === undefined ? 0 : buffer;
-	  return this.distanceFrom(node) - buffer < 0;
-	};
-
-	proto.overlapWithPoint = function (pos) {
-	  var halfWidth = this.width / 2;
-	  return pos >= this.currentPos - halfWidth && pos <= this.currentPos + halfWidth;
-	};
-
-	proto.positionBefore = function (node, buffer) {
-	  buffer = buffer ? buffer : 0;
-	  return node.currentLeft() - this.width / 2 - buffer;
-	};
-
-	proto.positionAfter = function (node, buffer) {
-	  buffer = buffer ? buffer : 0;
-	  return node.currentRight() + this.width / 2 + buffer;
-	};
-
-	proto.currentRight = function () {
-	  return this.currentPos + this.width / 2;
-	};
-
-	proto.currentLeft = function () {
-	  return this.currentPos - this.width / 2;
-	};
-
-	proto.idealRight = function () {
-	  return this.idealPos + this.width / 2;
-	};
-
-	proto.idealLeft = function () {
-	  return this.idealPos - this.width / 2;
-	};
-
-	proto.removeStub = function () {
-	  if (this.parent) {
-	    this.parent.child = null;
-	    this.parent = null;
+	    this.idealPos = idealPos;
+	    this.currentPos = idealPos;
+	    this.width = width;
+	    this.data = data;
+	    this.layerIndex = 0;
 	  }
-	  return this;
-	};
 
-	proto.createStub = function (width) {
-	  var stub = new Node(this.idealPos, width, this.data);
-	  stub.currentPos = this.currentPos;
-	  stub.child = this;
-	  this.parent = stub;
-	  return stub;
-	};
+	  // return negative if overlap
 
-	proto.isStub = function () {
-	  return !!this.child;
-	};
+	  _createClass(Node, [{
+	    key: 'distanceFrom',
+	    value: function distanceFrom(node) {
+	      var halfWidth = this.width / 2;
+	      var nodeHalfWidth = node.width / 2;
+	      // max(a[0], b[0]) - min(a[1], b[1])
+	      return Math.max(this.currentPos - halfWidth, node.currentPos - nodeHalfWidth) - Math.min(this.currentPos + halfWidth, node.currentPos + nodeHalfWidth);
+	    }
+	  }, {
+	    key: 'moveToIdealPosition',
+	    value: function moveToIdealPosition() {
+	      this.currentPos = this.idealPos;
+	      return this;
+	    }
+	  }, {
+	    key: 'displacement',
+	    value: function displacement() {
+	      return this.idealPos - this.currentPos;
+	    }
+	  }, {
+	    key: 'overlapWithNode',
+	    value: function overlapWithNode(node) {
+	      var buffer = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
-	proto.getPathToRoot = function () {
-	  var path = [];
-	  var current = this;
-	  while (current) {
-	    path.push(current);
-	    current = current.parent;
-	  }
-	  return path;
-	};
+	      return this.distanceFrom(node) - buffer < 0;
+	    }
+	  }, {
+	    key: 'overlapWithPoint',
+	    value: function overlapWithPoint(pos) {
+	      var halfWidth = this.width / 2;
+	      return pos >= this.currentPos - halfWidth && pos <= this.currentPos + halfWidth;
+	    }
+	  }, {
+	    key: 'positionBefore',
+	    value: function positionBefore(node) {
+	      var buffer = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
-	proto.getPathFromRoot = function () {
-	  return this.getPathToRoot().reverse();
-	};
+	      return node.currentLeft() - this.width / 2 - buffer;
+	    }
+	  }, {
+	    key: 'positionAfter',
+	    value: function positionAfter(node) {
+	      var buffer = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
-	// Trace back to the node without parent
-	proto.getRoot = function () {
-	  var previous = this;
-	  var current = this;
-	  while (current) {
-	    previous = current;
-	    current = current.parent;
-	  }
-	  return previous;
-	};
+	      return node.currentRight() + this.width / 2 + buffer;
+	    }
+	  }, {
+	    key: 'currentRight',
+	    value: function currentRight() {
+	      return this.currentPos + this.width / 2;
+	    }
+	  }, {
+	    key: 'currentLeft',
+	    value: function currentLeft() {
+	      return this.currentPos - this.width / 2;
+	    }
+	  }, {
+	    key: 'idealRight',
+	    value: function idealRight() {
+	      return this.idealPos + this.width / 2;
+	    }
+	  }, {
+	    key: 'idealLeft',
+	    value: function idealLeft() {
+	      return this.idealPos - this.width / 2;
+	    }
+	  }, {
+	    key: 'createStub',
+	    value: function createStub(width) {
+	      var stub = new Node(this.idealPos, width, this.data);
+	      stub.currentPos = this.currentPos;
+	      stub.child = this;
+	      this.parent = stub;
+	      return stub;
+	    }
+	  }, {
+	    key: 'removeStub',
+	    value: function removeStub() {
+	      if (this.parent) {
+	        this.parent.child = null;
+	        this.parent = null;
+	      }
+	      return this;
+	    }
+	  }, {
+	    key: 'isStub',
+	    value: function isStub() {
+	      return !!this.child;
+	    }
+	  }, {
+	    key: 'getPathToRoot',
+	    value: function getPathToRoot() {
+	      var path = [];
+	      var current = this;
+	      while (current) {
+	        path.push(current);
+	        current = current.parent;
+	      }
+	      return path;
+	    }
+	  }, {
+	    key: 'getPathFromRoot',
+	    value: function getPathFromRoot() {
+	      return this.getPathToRoot().reverse();
+	    }
+	  }, {
+	    key: 'getPathToRootLength',
+	    value: function getPathToRootLength() {
+	      var length = 0;
+	      var current = this;
+	      while (current) {
+	        var targetPos = current.parent ? current.parent.currentPos : current.idealPos;
+	        length += Math.abs(current.currentPos - targetPos);
+	        current = current.parent;
+	      }
 
-	proto.getLayerIndex = function () {
-	  return this.layerIndex;
-	};
+	      return length;
+	    }
 
-	proto.clone = function () {
-	  var node = new Node(this.idealPos, this.width, this.data);
-	  node.currentPos = this.currentPos;
-	  node.layerIndex = this.layerIndex;
-	  return node;
-	};
+	    // Trace back to the node without parent
 
-	// return module
+	  }, {
+	    key: 'getRoot',
+	    value: function getRoot() {
+	      var previous = this;
+	      var current = this;
+	      while (current) {
+	        previous = current;
+	        current = current.parent;
+	      }
+	      return previous;
+	    }
+	  }, {
+	    key: 'getLayerIndex',
+	    value: function getLayerIndex() {
+	      return this.layerIndex;
+	    }
+	  }, {
+	    key: 'clone',
+	    value: function clone() {
+	      var node = new Node(this.idealPos, this.width, this.data);
+	      node.currentPos = this.currentPos;
+	      node.layerIndex = this.layerIndex;
+	      return node;
+	    }
+	  }]);
+
+	  return Node;
+	}();
+
 	module.exports = Node;
 
 /***/ },
 /* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var extend = __webpack_require__(3);
+	'use strict';
 
-	module.exports = function () {
-	  var helper = {};
+	var Distributor = __webpack_require__(3);
+	var helper = __webpack_require__(4);
+	var removeOverlap = __webpack_require__(8);
 
-	  helper.isDefined = function (x) {
-	    return x !== null && x !== undefined;
+	var DEFAULT_OPTIONS = {
+	  nodeSpacing: 3,
+	  minPos: 0,
+	  maxPos: null,
+
+	  algorithm: 'overlap',
+	  removeOverlap: true,
+	  density: 0.85,
+	  stubWidth: 1
+	};
+
+	var Force = function Force(_options) {
+	  var force = {};
+	  var options = helper.extend({}, DEFAULT_OPTIONS);
+	  var distributor = new Distributor();
+	  var nodes = [];
+	  var layers = null;
+
+	  force.nodes = function (x) {
+	    if (!arguments.length) return nodes;
+	    nodes = x;
+	    layers = [x];
+	    return force;
 	  };
 
-	  helper.extend = extend;
+	  force.getLayers = function () {
+	    return layers;
+	  };
 
-	  helper.pick = function (object, keys) {
+	  force.options = function (x) {
+	    if (!arguments.length) return options;
+	    options = helper.extend(options, x);
+
+	    var disOptions = helper.pick(options, Object.keys(Distributor.DEFAULT_OPTIONS));
+	    if (helper.isDefined(options.minPos) && helper.isDefined(options.maxPos)) {
+	      disOptions.layerWidth = options.maxPos - options.minPos;
+	    } else {
+	      disOptions.layerWidth = null;
+	    }
+	    distributor.options(disOptions);
+
+	    return force;
+	  };
+
+	  force.options(_options);
+
+	  force.compute = function () {
+	    var overlapOptions = helper.pick(options, Object.keys(removeOverlap.DEFAULT_OPTIONS));
+
+	    nodes.forEach(function (node) {
+	      node.removeStub();
+	    });
+
+	    layers = distributor.distribute(nodes);
+	    layers.map(function (nodes, layerIndex) {
+	      nodes.forEach(function (node) {
+	        node.layerIndex = layerIndex;
+	      });
+	      if (options.removeOverlap) {
+	        removeOverlap(nodes, overlapOptions);
+	      }
+	    });
+
+	    return force;
+	  };
+
+	  force.start = function () {
+	    console.log('[warning] force.start() is deprecated. Please use force.compute() instead.');
+	  };
+
+	  return force;
+	};
+
+	Force.DEFAULT_OPTIONS = DEFAULT_OPTIONS;
+
+	module.exports = Force;
+
+/***/ },
+/* 3 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var helper = __webpack_require__(4);
+	var IntervalTree = __webpack_require__(6);
+
+	var DEFAULT_OPTIONS = {
+	  algorithm: 'overlap',
+	  layerWidth: 1000,
+	  density: 0.75,
+	  nodeSpacing: 3,
+	  stubWidth: 1
+	};
+
+	var Distributor = function Distributor(options) {
+	  var distributor = {};
+
+	  options = helper.extend({}, DEFAULT_OPTIONS, options);
+
+	  distributor.options = function (x) {
+	    if (!arguments.length) return options;
+	    options = helper.extend(options, x);
+	    return distributor;
+	  };
+
+	  distributor.computeRequiredWidth = function (nodes) {
+	    return helper.sum(nodes, function (d) {
+	      return d.width + options.nodeSpacing;
+	    }) - options.nodeSpacing;
+	  };
+
+	  distributor.maxWidthPerLayer = function () {
+	    return options.density * options.layerWidth;
+	  };
+
+	  distributor.needToSplit = function (nodes) {
+	    return distributor.estimateRequiredLayers(nodes) > 1;
+	  };
+
+	  distributor.estimateRequiredLayers = function (nodes) {
+	    return options.layerWidth ? Math.ceil(distributor.computeRequiredWidth(nodes) / distributor.maxWidthPerLayer()) : 1;
+	  };
+
+	  var algorithms = {
+	    simple: function simple(nodes) {
+	      var numLayers = distributor.estimateRequiredLayers(nodes);
+
+	      var layers = [];
+	      for (var i = 0; i < numLayers; i++) {
+	        layers.push([]);
+	      }
+
+	      nodes.forEach(function (node, i) {
+	        var mod = i % numLayers;
+	        layers[mod].push(node);
+
+	        var stub = node;
+	        for (var j = mod - 1; j >= 0; j--) {
+	          stub = stub.createStub(options.stubWidth);
+	          layers[j].push(stub);
+	        }
+	      });
+
+	      return layers;
+	    },
+	    roundRobin: function roundRobin(nodes) {
+	      var layers = [];
+
+	      return layers;
+	    },
+	    overlap: function overlap(nodes) {
+	      var layers = [];
+	      var maxWidth = distributor.maxWidthPerLayer();
+
+	      var puntedNodes = nodes.concat();
+	      var puntedWidth = distributor.computeRequiredWidth(puntedNodes);
+
+	      while (puntedWidth > maxWidth) {
+	        distributor.countIdealOverlaps(puntedNodes);
+
+	        var nodesInCurrentLayer = puntedNodes.concat();
+	        var currentlayerWidth = puntedWidth;
+	        puntedNodes = [];
+
+	        while (nodesInCurrentLayer.length > 2 && currentlayerWidth > maxWidth) {
+	          // Sort by overlaps
+	          nodesInCurrentLayer.sort(function (a, b) {
+	            return b.overlapCount - a.overlapCount;
+	          });
+
+	          // Remove the node with most overlap
+	          var first = nodesInCurrentLayer.shift();
+
+	          // Update width
+	          currentlayerWidth -= first.width;
+	          currentlayerWidth += options.stubWidth;
+
+	          // Update overlap count for the remaining nodes
+	          first.overlaps.forEach(function (node) {
+	            node.overlapCount--;
+	          });
+
+	          // Add removed node to the next layer
+	          puntedNodes.push(first);
+	        }
+
+	        layers.push(nodesInCurrentLayer);
+
+	        puntedWidth = distributor.computeRequiredWidth(puntedNodes);
+	      }
+
+	      if (puntedNodes.length > 0) {
+	        layers.push(puntedNodes);
+	      }
+
+	      // Create stubs
+	      // From last layer
+	      for (var i = layers.length - 1; i >= 1; i--) {
+	        var layer = layers[i];
+	        // For each node in the layer
+	        for (var k = 0; k < layer.length; k++) {
+	          var node = layer[k];
+	          // If it is not a stub
+	          if (node.isStub()) continue;
+	          // Create one stub for each layer above it
+	          var stub = node;
+	          for (var j = i - 1; j >= 0; j--) {
+	            stub = stub.createStub(options.stubWidth);
+	            layers[j].push(stub);
+	          }
+	        }
+	      }
+
+	      return layers;
+	    }
+	  };
+
+	  distributor.countIdealOverlaps = function (nodes) {
+	    var iTree = new IntervalTree(options.layerWidth / 2);
+	    nodes.forEach(function (node) {
+	      iTree.add([node.idealLeft(), node.idealRight(), node]);
+	    });
+
+	    nodes.forEach(function (node) {
+	      var overlaps = iTree.search(node.idealLeft(), node.idealRight());
+	      node.overlaps = overlaps.map(function (x) {
+	        return x.data[2];
+	      });
+	      node.overlapCount = overlaps.length;
+	    });
+
+	    return nodes;
+	  };
+
+	  distributor.distribute = function (nodes) {
+	    if (!nodes || nodes.length === 0) return [];
+
+	    if (options.algorithm == 'none' || !helper.isDefined(options.algorithm)) {
+	      return [nodes];
+	    }
+
+	    if (!distributor.needToSplit(nodes)) {
+	      return [nodes];
+	    }
+
+	    nodes = nodes.concat().sort(function (a, b) {
+	      return a.idealPos - b.idealPos;
+	    });
+
+	    if (typeof options.algorithm == 'function') {
+	      return options.algorithm(nodes, options);
+	    } else if (algorithms.hasOwnProperty(options.algorithm)) {
+	      return algorithms[options.algorithm](nodes);
+	    } else {
+	      throw 'Unknown algorithm: ' + options.algorithm;
+	    }
+	  };
+
+	  return distributor;
+	};
+
+	Distributor.DEFAULT_OPTIONS = DEFAULT_OPTIONS;
+
+	// return module
+	module.exports = Distributor;
+
+/***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var helper = {
+	  isDefined: function isDefined(x) {
+	    return x !== null && x !== undefined;
+	  },
+	  pick: function pick(object, keys) {
 	    return keys.reduce(function (prev, key) {
 	      prev[key] = object[key];
 	      return prev;
 	    }, {});
-	  };
-
-	  helper.sum = function (array, accessor) {
+	  },
+	  sum: function sum(array, accessor) {
 	    return array.map(accessor).reduce(function (prev, current) {
 	      return prev + current;
 	    }, 0);
-	  };
+	  }
+	};
 
-	  return helper;
-	}();
+	helper.extend = __webpack_require__(5);
+
+	module.exports = helper;
 
 /***/ },
-/* 3 */
+/* 5 */
 /***/ function(module, exports) {
+
+	'use strict';
+
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
 	/*
 	This file is modified from https://github.com/justmoon/node-extend
@@ -313,7 +634,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    target = arguments[1] || {};
 	    // skip the boolean and the target
 	    i = 2;
-	  } else if (typeof target !== 'object' && typeof target !== 'function' || target == null) {
+	  } else if ((typeof target === 'undefined' ? 'undefined' : _typeof(target)) !== 'object' && typeof target !== 'function' || target == null) {
 	    target = {};
 	  }
 
@@ -356,299 +677,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 4 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// var Simulator = require('./simulator.js');
-	var Distributor = __webpack_require__(5);
-	var metrics = __webpack_require__(8);
-	var helper = __webpack_require__(2);
-	var removeOverlap = __webpack_require__(9);
-
-	var DEFAULT_OPTIONS = {
-	  nodeSpacing: 3,
-	  minPos: 0,
-	  maxPos: null,
-
-	  algorithm: 'overlap',
-	  density: 0.85,
-	  stubWidth: 1
-	};
-
-	var Force = function (_options) {
-	  var force = {};
-	  var options = helper.extend({}, DEFAULT_OPTIONS);
-	  var distributor = new Distributor();
-	  var nodes = [];
-	  var layers = null;
-
-	  force.nodes = function (x) {
-	    if (!arguments.length) return nodes;
-	    nodes = x;
-	    layers = null;
-	    return force;
-	  };
-
-	  force.getLayers = function () {
-	    return layers;
-	  };
-
-	  force.options = function (x) {
-	    if (!arguments.length) return options;
-	    options = helper.extend(options, x);
-
-	    var disOptions = helper.pick(options, Object.keys(Distributor.DEFAULT_OPTIONS));
-	    if (helper.isDefined(options.minPos) && helper.isDefined(options.maxPos)) {
-	      disOptions.layerWidth = options.maxPos - options.minPos;
-	    } else {
-	      disOptions.layerWidth = null;
-	    }
-	    distributor.options(disOptions);
-
-	    return force;
-	  };
-
-	  force.options(_options);
-
-	  force.compute = function () {
-	    var simOptions = helper.pick(options, Object.keys(removeOverlap.DEFAULT_OPTIONS));
-
-	    nodes.forEach(function (node) {
-	      node.removeStub();
-	    });
-
-	    layers = distributor.distribute(nodes);
-	    layers.map(function (nodes, layerIndex) {
-	      nodes.forEach(function (node) {
-	        node.layerIndex = layerIndex;
-	      });
-	      removeOverlap(nodes, simOptions);
-	    });
-
-	    return force;
-	  };
-
-	  force.start = function () {
-	    console.log('[warning] force.start() is deprecated. Please use force.compute() instead.');
-	  };
-
-	  force.metrics = function () {
-	    return Object.keys(metrics).map(function (name) {
-	      return {
-	        name: name,
-	        value: force.metric(name)
-	      };
-	    });
-	  };
-
-	  force.metric = function (name) {
-	    switch (name) {
-	      case 'overflow':
-	        return metrics[name](layers, options.minPos, options.maxPos);
-	      case 'overDensity':
-	        return metrics[name](layers, options.density, options.layerWidth, options.nodeSpacing - 1);
-	      case 'overlapCount':
-	        return metrics[name](layers, options.nodeSpacing - 1);
-	      default:
-	        return metrics[name] ? metrics[name](layers) : null;
-	    }
-	  };
-
-	  return force;
-	};
-
-	Force.DEFAULT_OPTIONS = DEFAULT_OPTIONS;
-
-	module.exports = Force;
-
-/***/ },
-/* 5 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var helper = __webpack_require__(2);
-	var IntervalTree = __webpack_require__(6);
-
-	var DEFAULT_OPTIONS = {
-	  algorithm: 'overlap',
-	  layerWidth: 1000,
-	  density: 0.75,
-	  nodeSpacing: 3,
-	  stubWidth: 1
-	};
-
-	var Distributor = function (options) {
-	  var distributor = {};
-
-	  options = helper.extend({}, DEFAULT_OPTIONS, options);
-
-	  distributor.options = function (x) {
-	    if (!arguments.length) return options;
-	    options = helper.extend(options, x);
-	    return distributor;
-	  };
-
-	  distributor.computeRequiredWidth = function (nodes) {
-	    return helper.sum(nodes, function (d) {
-	      return d.width + options.nodeSpacing;
-	    }) - options.nodeSpacing;
-	  };
-
-	  distributor.maxWidthPerLayer = function () {
-	    return options.density * options.layerWidth;
-	  };
-
-	  distributor.needToSplit = function (nodes) {
-	    return distributor.estimateRequiredLayers(nodes) > 1;
-	  };
-
-	  distributor.estimateRequiredLayers = function (nodes) {
-	    return options.layerWidth ? Math.ceil(distributor.computeRequiredWidth(nodes) / distributor.maxWidthPerLayer()) : 1;
-	  };
-
-	  var algorithms = {
-	    simple: function (nodes) {
-	      var numLayers = distributor.estimateRequiredLayers(nodes);
-
-	      var layers = [];
-	      for (var i = 0; i < numLayers; i++) {
-	        layers.push([]);
-	      }
-
-	      nodes.forEach(function (node, i) {
-	        var mod = i % numLayers;
-	        layers[mod].push(node);
-
-	        var stub = node;
-	        for (var j = mod - 1; j >= 0; j--) {
-	          stub = stub.createStub(options.stubWidth);
-	          layers[j].push(stub);
-	        }
-	      });
-
-	      return layers;
-	    },
-	    roundRobin: function (nodes) {
-	      var layers = [];
-
-	      return layers;
-	    },
-	    overlap: function (nodes) {
-	      var layers = [];
-	      var maxWidth = distributor.maxWidthPerLayer();
-
-	      var puntedNodes = nodes.concat();
-	      var puntedWidth = distributor.computeRequiredWidth(puntedNodes);
-
-	      while (puntedWidth > maxWidth) {
-	        distributor.countIdealOverlaps(puntedNodes);
-
-	        var nodesInCurrentLayer = puntedNodes.concat();
-	        var currentlayerWidth = puntedWidth;
-	        puntedNodes = [];
-
-	        while (nodesInCurrentLayer.length > 2 && currentlayerWidth > maxWidth) {
-	          // Sort by overlaps
-	          nodesInCurrentLayer.sort(function (a, b) {
-	            return b.overlapCount - a.overlapCount;
-	          });
-
-	          // Remove the node with most overlap
-	          var first = nodesInCurrentLayer.shift();
-
-	          // Update width
-	          currentlayerWidth -= first.width;
-	          currentlayerWidth += options.stubWidth;
-
-	          // Update overlap count for the remaining nodes
-	          first.overlaps.forEach(function (node) {
-	            node.overlapCount--;
-	          });
-
-	          // Add removed node to the next layer
-	          puntedNodes.push(first);
-	        }
-
-	        layers.push(nodesInCurrentLayer);
-
-	        puntedWidth = distributor.computeRequiredWidth(puntedNodes);
-	      }
-
-	      if (puntedNodes.length > 0) {
-	        layers.push(puntedNodes);
-	      }
-
-	      // Create stubs
-	      // From last layer
-	      for (var i = layers.length - 1; i >= 1; i--) {
-	        var layer = layers[i];
-	        // For each node in the layer
-	        for (var k = 0; k < layer.length; k++) {
-	          var node = layer[k];
-	          // If it is not a stub
-	          if (node.isStub()) continue;
-	          // Create one stub for each layer above it
-	          var stub = node;
-	          for (var j = i - 1; j >= 0; j--) {
-	            stub = stub.createStub(options.stubWidth);
-	            layers[j].push(stub);
-	          }
-	        }
-	      }
-
-	      return layers;
-	    }
-	  };
-
-	  distributor.countIdealOverlaps = function (nodes) {
-	    var iTree = new IntervalTree(options.layerWidth / 2);
-	    nodes.forEach(function (node) {
-	      iTree.add([node.idealLeft(), node.idealRight(), node]);
-	    });
-
-	    nodes.forEach(function (node) {
-	      var overlaps = iTree.search(node.idealLeft(), node.idealRight());
-	      node.overlaps = overlaps;
-	      node.overlapCount = overlaps.length;
-	    });
-
-	    return nodes;
-	  };
-
-	  distributor.distribute = function (nodes) {
-	    if (!nodes || nodes.length === 0) return [];
-
-	    if (options.algorithm == 'none' || !helper.isDefined(options.algorithm)) {
-	      return [nodes];
-	    }
-
-	    nodes = nodes.concat().sort(function (a, b) {
-	      return a.idealPos - b.idealPos;
-	    });
-
-	    if (!distributor.needToSplit(nodes)) {
-	      return [nodes];
-	    }
-
-	    if (typeof options.algorithm == 'function') {
-	      return options.algorithm(nodes, options);
-	    } else if (algorithms.hasOwnProperty(options.algorithm)) {
-	      return algorithms[options.algorithm](nodes);
-	    } else {
-	      throw 'Unknown algorithm: ' + options.algorithm;
-	    }
-	  };
-
-	  return distributor;
-	};
-
-	Distributor.DEFAULT_OPTIONS = DEFAULT_OPTIONS;
-
-	// return module
-	module.exports = Distributor;
-
-/***/ },
 /* 6 */
 /***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
 
 	/*
 	This file is modified from https://github.com/shinout/interval-tree
@@ -695,7 +727,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  this.endKey = options.endKey || 1; // end key
 	  this.intervalHash = {}; // id => interval object
 	  this.pointTree = new SortedList({ // b-tree of start, end points
-	    compare: function (a, b) {
+	    compare: function compare(a, b) {
 	      if (a == null) return -1;
 	      if (b == null) return 1;
 	      var c = a[0] - b[0];
@@ -879,7 +911,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	function Node(idx) {
 	  this.idx = idx;
 	  this.starts = new SortedList({
-	    compare: function (a, b) {
+	    compare: function compare(a, b) {
 	      if (a == null) return -1;
 	      if (b == null) return 1;
 	      var c = a.start - b.start;
@@ -888,7 +920,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  });
 
 	  this.ends = new SortedList({
-	    compare: function (a, b) {
+	    compare: function compare(a, b) {
 	      if (a == null) return -1;
 	      if (b == null) return 1;
 	      var c = a.end - b.end;
@@ -950,6 +982,10 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 7 */
 /***/ function(module, exports) {
 
+	"use strict";
+
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
 	/*
 	This file is modified from https://github.com/shinout/SortedList
 
@@ -986,7 +1022,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var val = args[n];
 	    if (Array.isArray(val)) {
 	      arr = val;
-	    } else if (val && typeof val == "object") {
+	    } else if (val && (typeof val === "undefined" ? "undefined" : _typeof(val)) == "object") {
 	      options = val;
 	    }
 	  });
@@ -1065,7 +1101,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      epos = this.length;
 	  while (epos - spos > 1) {
 	    mpos = Math.floor((spos + epos) / 2);
-	    mval = this[mpos];
+	    var mval = this[mpos];
 	    var comp = this._compare(val, mval);
 	    if (comp == 0) return mpos;
 	    if (comp > 0) spos = mpos;else epos = mpos;
@@ -1081,8 +1117,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (bsResult == null) bsResult = this.bsearch(val);
 	  var pos = bsResult;
 	  if (pos == -1 || this._compare(this[pos], val) < 0) return pos + 1 < this.length && this._compare(this[pos + 1], val) == 0 ? pos + 1 : null;
-	  while (pos >= 1 && this._compare(this[pos - 1], val) == 0) pos--;
-	  return pos;
+	  while (pos >= 1 && this._compare(this[pos - 1], val) == 0) {
+	    pos--;
+	  }return pos;
 	};
 
 	/**
@@ -1145,12 +1182,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * comparison functions
 	 **/
 	SortedList.compares = {
-	  "number": function (a, b) {
+	  "number": function number(a, b) {
 	    var c = a - b;
 	    return c > 0 ? 1 : c == 0 ? 0 : -1;
 	  },
 
-	  "string": function (a, b) {
+	  "string": function string(a, b) {
 	    return a > b ? 1 : a == b ? 0 : -1;
 	  }
 	};
@@ -1167,123 +1204,10 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var helper = __webpack_require__(2);
+	'use strict';
 
-	var module = function () {
-	  var metrics = {};
-
-	  function toLayers(nodes) {
-	    return nodes.length === 0 || Array.isArray(nodes[0]) ? nodes : [nodes];
-	  }
-
-	  metrics.displacement = function (nodes) {
-	    if (nodes.length === 0) return 0;
-	    var layers = toLayers(nodes);
-	    return helper.sum(layers, function (layer) {
-	      return helper.sum(layer, function (node) {
-	        return Math.abs(node.displacement());
-	      });
-	    });
-	  };
-
-	  metrics.overflow = function (nodes, minPos, maxPos) {
-	    if (nodes.length === 0 || !helper.isDefined(minPos) && !helper.isDefined(maxPos)) return 0;
-	    var layers = toLayers(nodes);
-
-	    return helper.sum(layers, function (layer) {
-	      return helper.sum(layer, function (node) {
-	        var l = node.currentLeft();
-	        var r = node.currentRight();
-
-	        if (helper.isDefined(minPos)) {
-	          if (r <= minPos) {
-	            return node.width;
-	          } else if (l < minPos) {
-	            return minPos - l;
-	          }
-	        }
-
-	        if (helper.isDefined(maxPos)) {
-	          if (l >= maxPos) {
-	            return node.width;
-	          } else if (r > maxPos) {
-	            return r - maxPos;
-	          }
-	        }
-
-	        return 0;
-	      });
-	    });
-	  };
-
-	  metrics.overDensity = function (nodes, density, layerWidth, nodeSpacing) {
-	    if (nodes.length === 0) return 0;
-
-	    var limit = density * layerWidth;
-
-	    var layers = toLayers(nodes);
-	    return helper.sum(layers, function (layer) {
-	      var width = helper.sum(layer, function (node) {
-	        return node.width + nodeSpacing;
-	      }) - nodeSpacing;
-	      return width <= limit ? 0 : width - limit;
-	    });
-	  };
-
-	  metrics.overlapCount = function (nodes, buffer) {
-	    if (nodes.length === 0) return 0;
-	    var layers = toLayers(nodes);
-	    return helper.sum(layers, function (layer) {
-	      var count = 0;
-	      for (var i = 0; i < layer.length; i++) {
-	        for (var j = i + 1; j < layer.length; j++) {
-	          if (layer[i].overlapWithNode(layer[j], buffer)) {
-	            count++;
-	          }
-	        }
-	      }
-	      return count;
-	    });
-	  };
-
-	  metrics.overlapSpace = function (nodes) {
-	    if (nodes.length === 0) return 0;
-	    var layers = toLayers(nodes);
-	    return helper.sum(layers, function (layer) {
-	      var count = 0;
-	      for (var i = 0; i < layer.length; i++) {
-	        for (var j = i + 1; j < layer.length; j++) {
-	          var distance = layer[i].distanceFrom(layer[j]);
-	          count += distance < 0 ? Math.abs(distance) : 0;
-	        }
-	      }
-	      return count;
-	    });
-	  };
-
-	  metrics.weightedAllocatedSpace = function (nodes) {
-	    if (nodes.length === 0) return 0;
-	    var layers = toLayers(nodes);
-
-	    return helper.sum(layers, function (layer, layerIndex) {
-	      return layerIndex * helper.sum(layer, function (d) {
-	        return d.width;
-	      });
-	    });
-	  };
-
-	  return metrics;
-	}();
-
-	// return module
-	module.exports = module;
-
-/***/ },
-/* 9 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var helper = __webpack_require__(2);
-	var vpsc = __webpack_require__(10);
+	var helper = __webpack_require__(4);
+	var vpsc = __webpack_require__(9);
 
 	var DEFAULT_OPTIONS = {
 	  lineSpacing: 2,
@@ -1312,7 +1236,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    });
 
 	    nodes.sort(function (a, b) {
-	      return a.targetPos - b.targetPos;
+	      var diff = a.targetPos - b.targetPos;
+	      if (diff !== 0) {
+	        return diff;
+	      } else {
+	        return a.isStub() - b.isStub();
+	      }
 	    });
 
 	    var variables = nodes.map(nodeToVariable);
@@ -1364,8 +1293,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = removeOverlap;
 
 /***/ },
-/* 10 */
+/* 9 */
 /***/ function(module, exports) {
+
+	"use strict";
 
 	/*
 	This file is compiled from https://github.com/tgdwyer/WebCola/blob/master/WebCola/src/vpsc.ts
@@ -1460,7 +1391,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	    // visit neighbours by active constraints within the same block
 	    Variable.prototype.visitNeighbours = function (prev, f) {
-	        var ff = function (c, next) {
+	        var ff = function ff(c, next) {
 	            return c.active && prev !== next && f(c, next);
 	        };
 	        this.cOut.forEach(function (c) {
@@ -1489,8 +1420,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    // move the block where it needs to be to minimize cost
 	    Block.prototype.updateWeightedPosition = function () {
 	        this.ps.AB = this.ps.AD = this.ps.A2 = 0;
-	        for (var i = 0, n = this.vars.length; i < n; ++i) this.ps.addVariable(this.vars[i]);
-	        this.posn = this.ps.getPosn();
+	        for (var i = 0, n = this.vars.length; i < n; ++i) {
+	            this.ps.addVariable(this.vars[i]);
+	        }this.posn = this.ps.getPosn();
 	    };
 	    Block.prototype.compute_lm = function (v, u, postAction) {
 	        var _this = this;
@@ -1634,8 +1566,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    Blocks.prototype.cost = function () {
 	        var sum = 0,
 	            i = this.list.length;
-	        while (i--) sum += this.list[i].cost();
-	        return sum;
+	        while (i--) {
+	            sum += this.list[i].cost();
+	        }return sum;
 	    };
 	    Blocks.prototype.insert = function (b) {
 	        /* DEBUG
@@ -1879,10 +1812,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = vpsc;
 
 /***/ },
-/* 11 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var helper = __webpack_require__(2);
+	'use strict';
+
+	var helper = __webpack_require__(4);
 
 	function Renderer(options) {
 	  this.options = helper.extend({
@@ -2024,37 +1959,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	// return module
 	module.exports = Renderer;
-
-/***/ },
-/* 12 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Node = __webpack_require__(1);
-	var helper = __webpack_require__(2);
-
-	module.exports = function () {
-	  var util = {};
-
-	  var OPTIONS = {
-	    minWidth: 20,
-	    maxWidth: 20,
-	    minPos: 0,
-	    maxPos: 800
-	  };
-
-	  util.generateNodes = function (amount, options) {
-	    var nodes = [];
-	    options = helper.extend({}, OPTIONS, options);
-	    var diffPos = options.maxPos - options.minPos;
-	    var diffWidth = options.maxWidth - options.minWidth;
-	    for (var i = 0; i < amount; i++) {
-	      nodes.push(new Node(Math.floor(Math.random() * diffPos) + options.minPos, Math.floor(Math.random() * diffWidth) + options.minWidth));
-	    }
-	    return nodes;
-	  };
-
-	  return util;
-	}();
 
 /***/ }
 /******/ ])

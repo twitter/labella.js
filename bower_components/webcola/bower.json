@@ -1,0 +1,39 @@
+{
+  "name": "webcola",
+  "version": "3.1.0",
+  "homepage": "https://github.com/tgdwyer/WebCola",
+  "authors": [
+    "Tim Dwyer"
+  ],
+  "description": "Javascript constraint based layout for high-quality graph visualization and exploration",
+  "main": "WebCola/cola.js",
+  "keywords": [
+    "d3",
+    "graph",
+    "layout",
+    "constraints",
+    "optimization"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "app/bower_components",
+    "test",
+    "tests",
+    "templates",
+    "tasks",
+    "*.sln",
+    "*.config",
+    "*.css",
+    "*.html",
+    "*.htm",
+    "**/compiledtypescript.js",
+    "**/linklengths.js",
+    "*.ts",
+    "*.csproj*",
+    "Gruntfile.js",
+    "WebCola/*/"
+  ]
+}

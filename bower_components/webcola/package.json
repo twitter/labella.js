@@ -1,0 +1,39 @@
+{
+  "name": "webcola",
+  "version": "3.0.1",
+  "devDependencies": {
+    "async": "~0.6.2",
+    "grunt": "~0.4.2",
+    "grunt-contrib-concat": "~0.3.0",
+    "grunt-contrib-qunit": "~0.3.0",
+    "grunt-contrib-uglify": "^0.7.0",
+    "grunt-contrib-watch": "~0.6.1",
+    "grunt-contrib-yuidoc": "~0.5.0",
+    "grunt-typescript": "^0.6.1",
+    "grunt-umd": "~1.7.3",
+    "load-grunt-tasks": "~0.4.0",
+    "typescript": "~1.4.1",
+    "uglify-js": "^2.4.16"
+  },
+  "description": "WebCola =======",
+  "main": "WebCola/cola.v3.min.js",
+  "scripts": {
+    "test": "grunt full"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tgdwyer/WebCola.git"
+  },
+  "keywords": [
+    "Graph",
+    "Layout",
+    "Constraints",
+    "Optimization"
+  ],
+  "author": "Tim Dwyer",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tgdwyer/WebCola/issues"
+  },
+  "homepage": "https://github.com/tgdwyer/WebCola"
+}

@@ -67,6 +67,7 @@
 
     &.collapse {
       display: block !important;
+      visibility: visible !important;
       height: auto !important;
       padding-bottom: 0; // Override default setting
       overflow: visible !important;
@@ -330,7 +331,6 @@
 }
 // Menu position and menu caret support for dropups via extra dropup class
 .navbar-fixed-bottom .navbar-nav > li > .dropdown-menu {
-  margin-bottom: 0;
   .border-top-radius(@navbar-border-radius);
   .border-bottom-radius(0);
 }
