@@ -1,4 +1,4 @@
-var helper = require('./helper.js');
+const helper = require('./helper.js');
 
 function Renderer(options){
   this.options = helper.extend({
@@ -21,7 +21,7 @@ function curveTo(c1, c2, point2){
 }
 
 function vCurveBetween(point1, point2){
-  var midY = (point1[1] + point2[1]) / 2;
+  const midY = (point1[1] + point2[1]) / 2;
   return curveTo(
     [point1[0], midY],
     [point2[0], midY],
@@ -30,13 +30,19 @@ function vCurveBetween(point1, point2){
 }
 
 function hCurveBetween(point1, point2){
-  var midX = (point1[0] + point2[0]) / 2;
+  const midX = (point1[0] + point2[0]) / 2;
   return curveTo(
     [midX, point1[1]],
     [midX, point2[1]],
     point2
   );
 }
+
+Renderer.lineTo = lineTo;
+Renderer.moveTo = moveTo;
+Renderer.curveTo = curveTo;
+Renderer.vCurveBetween = vCurveBetween;
+Renderer.hCurveBetween = hCurveBetween;
 
 Renderer.prototype.getWaypoints = function(node){
   var options = this.options;
@@ -54,7 +60,7 @@ Renderer.prototype.getWaypoints = function(node){
       ];
     }));
   }
-  if(direction==='right'){
+  else if(direction==='right'){
     return [[[0, hops[0].idealPos]]].concat(hops.map(function(hop, level){
       var xPos = gap * (level+1);
       return [

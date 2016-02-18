@@ -1,10 +1,10 @@
 'use strict';
 
-var Distributor = require('./distributor.js');
-var helper = require('./helper.js');
-var removeOverlap = require('./removeOverlap.js');
+const Distributor = require('./distributor.js');
+const helper = require('./helper.js');
+const removeOverlap = require('./removeOverlap.js');
 
-var DEFAULT_OPTIONS = {
+const DEFAULT_OPTIONS = {
   nodeSpacing: 3,
   minPos: 0,
   maxPos: null,

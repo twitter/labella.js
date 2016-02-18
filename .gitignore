@@ -7,3 +7,4 @@ coverage
 *.sublime-workspace
 examples/dist
 .publish
+npm-debug.log

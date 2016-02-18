@@ -1,19 +1,15 @@
-var helper = require('./helper.js');
-var vpsc = require('../lib/vpsc.js');
+const helper = require('./helper.js');
+const vpsc = require('../lib/vpsc.js');
 
-var DEFAULT_OPTIONS = {
+const DEFAULT_OPTIONS = {
   lineSpacing: 2,
   nodeSpacing: 3,
   minPos: 0,
   maxPos: null
 };
 
-function last(arr){
-  return arr[arr.length-1];
-}
-
 function nodeToVariable(node){
-  var v = new vpsc.Variable(node.targetPos);
+  const v = new vpsc.Variable(node.targetPos);
   v.node = node;
   return v;
 }
@@ -29,12 +25,7 @@ function removeOverlap(nodes, options){
 
     nodes.sort(function(a,b){
       var diff = a.targetPos - b.targetPos;
-      if(diff!==0){
-        return diff;
-      }
-      else{
-        return a.isStub() - b.isStub();
-      }
+      return diff!==0 ? diff : (a.isStub() - b.isStub());
     });
 
     var variables = nodes.map(nodeToVariable);
@@ -55,24 +46,23 @@ function removeOverlap(nodes, options){
     }
 
     if(helper.isDefined(options.minPos)){
-      var leftWall = new vpsc.Variable(options.minPos, 1e10);
-      var v = variables[0];
+      const leftWall = new vpsc.Variable(options.minPos, 1e10);
+      const v = variables[0];
       constraints.push(new vpsc.Constraint(leftWall, v, v.node.width/2));
       variables.unshift(leftWall);
     }
 
     if(helper.isDefined(options.maxPos)){
-      var rightWall = new vpsc.Variable(options.maxPos, 1e10);
-      var lastv = last(variables);
+      const rightWall = new vpsc.Variable(options.maxPos, 1e10);
+      const lastv = helper.last(variables);
       constraints.push(new vpsc.Constraint(lastv, rightWall, lastv.node.width/2));
       variables.push(rightWall);
     }
 
-    var solver = new vpsc.Solver(variables, constraints);
-    solver.solve();
+    (new vpsc.Solver(variables, constraints)).solve();
 
     variables
-      .filter(function(v){return v.node;})
+      .filter( v => v.node )
       .map(function(v){
         v.node.currentPos = Math.round(v.position());
         return v;

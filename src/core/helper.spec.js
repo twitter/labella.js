@@ -16,6 +16,17 @@ describe('helper', function(){
     });
   });
 
+  describe('#last(array)', function(){
+    it('should return last item in the array', function(){
+      expect(helper.last([1,2])).toEqual(2);
+      expect(helper.last([3])).toEqual(3);
+    });
+    it('should return null if the array is empty', function(){
+      expect(helper.last([])).toEqual(null);
+    });
+  });
+
+
   describe('#pick(object, keys)', function(){
     it('should create an object composed of the picked keys.', function(){
       var source = {

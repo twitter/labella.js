@@ -4,6 +4,9 @@ const helper = {
   isDefined(x){
     return x!==null && x!==undefined;
   },
+  last(array){
+    return array.length > 0 ? array[array.length-1] : null;
+  },
   pick(object, keys){
     return keys.reduce((prev, key) => {
       prev[key] = object[key];
@@ -12,9 +15,7 @@ const helper = {
   },
   sum(array, accessor){
     return array.map(accessor)
-      .reduce((prev, current) => {
-        return prev + current;
-      }, 0);
+      .reduce(((prev, current) => prev + current), 0);
   }
 };
 
