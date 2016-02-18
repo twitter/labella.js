@@ -91,6 +91,13 @@ Labella.js also supports usage in commonjs style.
 var labella = require('path/to/labella');
 ```
 
+### Files
+
+The *dist* directory contains four variations of this library:
+
+- *labella.js* and *labella.min.js* : Core functionalities. This is what you will need for regular use.
+- *labella-extra.js* and *labella-extra.min.js* (since v1.1.0) : Same content with the above bundle plus `labella.util` and `labella.metrics`, which are special modules for demo/evaluation.
+
 ### Author
 
 Krist Wongsuphasawat / [@kristw](https://twitter.com/kristw)

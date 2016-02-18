@@ -3,12 +3,17 @@
 ## v1.x.x
 
 <a name="1.0.1"></a>
-### 1.0.1 (2016-01-23)
+### 1.1.0 (2016-01-23)
 
-No API change, just bug fixes and refactoring.
+Separate utilities and extra code for evaluation/demo into a separate bundle *labella-extra* to keep the main bundle as lean as possible. Now the *dist* directory contains four files:
 
-- Fix the *overlap* distribution algorithm. Thanks @GjjvdBurg
-- Use webpack to make the library support UMD instead of using a custom template.
+- *labella.js* and *labella.min.js* : Core functionalities. This is what you will need for regular use.
+- *labella-extra.js* and *labella-extra.min.js* (introduced in this version) : Same with the above bundle plus `labella.util` and `labella.metrics`, which are special modules for demo/evaluation. 
+
+Other than that, No API change, just bug fixes and refactoring.
+
+- Fix the bug in *overlap* distribution algorithm. Thanks @GjjvdBurg. **This may position the labels slightly differently if you use the overlap algorithm and your labels exceed one row.**
+- Use [webpack](https://webpack.github.io) to make the library support UMD instead of using a custom template.
 - Refactor a few classes to ES6
 
 <a name="1.0.0"></a>
