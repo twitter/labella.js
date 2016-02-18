@@ -45,7 +45,7 @@ gulp build
 
 ### Releasing
 
-Use one of these commands to build, bump version and publish to both npm and bower.
+Use one of these commands to build, bump version and publish to both npm and bower. Don't for get to `gulp build` first
 
 ```bash
 gulp tag --npm --patch # will add version by 0.0.1
