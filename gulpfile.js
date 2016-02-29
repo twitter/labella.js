@@ -120,6 +120,3 @@ gulp.task('gh-pages', ['build'], function() {
   return gulp.src(paths.examples + '/**/*')
     .pipe($.ghPages());
 });
-
-/* Add release tasks */
-$.releaseTasks(gulp);

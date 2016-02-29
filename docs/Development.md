@@ -48,9 +48,11 @@ gulp build
 Use one of these commands to build, bump version and publish to both npm and bower. Don't for get to `gulp build` first
 
 ```bash
-gulp tag --npm --patch # will add version by 0.0.1
-gulp tag --npm --minor # will add version by 0.1
-gulp tag --npm --major # will add version by 1
-# then
+# Choose from one of these
+npm version patch  # will add version by 0.0.1
+npm version minor  # will add version by 0.1
+npm version major  # will add version by 1
+# Check package version and size.
+# If everything looks good, then publish
 npm publish
 ```
