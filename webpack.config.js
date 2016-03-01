@@ -1,4 +1,13 @@
 var webpack = require('webpack');
+var fs = require('fs');
+
+var bowerPath = 'bower_components';
+if(fs.statSync(__dirname + '/.bowerrc')){
+  var bowerrc = JSON.parse(fs.readFileSync(__dirname + '/.bowerrc', 'utf-8'));
+  if(bowerrc.directory){
+    bowerPath = __dirname + '/' + bowerrc.directory;
+  }
+}
 
 module.exports = function(){
   return {
@@ -19,7 +28,7 @@ module.exports = function(){
       ],
     },
     resolve: {
-      modulesDirectories: ['examples/bower_components']
+      modulesDirectories: [bowerPath]
     },
     plugins: [
       new webpack.ResolverPlugin(
