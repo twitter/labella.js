@@ -2,12 +2,15 @@ var webpack = require('webpack');
 var fs = require('fs');
 
 var bowerPath = 'bower_components';
-if(fs.statSync(__dirname + '/.bowerrc')){
-  var bowerrc = JSON.parse(fs.readFileSync(__dirname + '/.bowerrc', 'utf-8'));
-  if(bowerrc.directory){
-    bowerPath = __dirname + '/' + bowerrc.directory;
+try{
+  if(fs.statSync(__dirname + '/.bowerrc')){
+    var bowerrc = JSON.parse(fs.readFileSync(__dirname + '/.bowerrc', 'utf-8'));
+    if(bowerrc.directory){
+      bowerPath = __dirname + '/' + bowerrc.directory;
+    }
   }
 }
+catch(ex){}
 
 module.exports = function(){
   return {
