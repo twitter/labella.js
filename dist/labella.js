@@ -1230,13 +1230,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	    options = helper.extend(DEFAULT_OPTIONS, options);
 
 	    // For nodes with stub, set target position to stub's current position
-	    nodes.forEach(function (node) {
+	    nodes.forEach(function (node, index) {
 	      node.targetPos = node.parent ? node.parent.currentPos : node.idealPos;
+	      node.index = index;
 	    });
 
 	    nodes.sort(function (a, b) {
 	      var diff = a.targetPos - b.targetPos;
-	      return diff !== 0 ? diff : a.isStub() - b.isStub();
+	      if (diff !== 0) return diff;
+	      var diff2 = a.isStub() - b.isStub();
+	      if (diff2 !== 0) return diff2;
+	      // If same position, use original order
+	      return a.index - b.index;
 	    });
 
 	    var variables = nodes.map(nodeToVariable);
