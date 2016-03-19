@@ -2,12 +2,14 @@
 
 ## v1.x.x
 
-<a name="1.0.1"></a>
+### 1.1.2 (2016-03-18)
+
+Use original order if labels are at the same position and has no good reason to change order. This was the intended behavior, but the way it was written sometimes it changes the order, so I ensure that it will keep the original order in this version.
+
 ### 1.1.1 (2016-02-17)
 
 Fix the bug in *overlap* distribution algorithm. Thanks @GjjvdBurg. **After upgrading to this version, Labella may position the labels slightly different if you use the overlap algorithm and your labels exceed one row.**
 
-<a name="1.0.1"></a>
 ### 1.1.0 (2016-02-17)
 
 Separate utilities and extra code for evaluation/demo into a separate bundle *labella-extra* to keep the main bundle as lean as possible. Now the *dist* directory contains four files:
@@ -20,7 +22,6 @@ Other than that, No API change, just refactoring.
 - Use [webpack](https://webpack.github.io) to make the library support UMD instead of using a custom template.
 - Refactor a few classes to ES6
 
-<a name="1.0.0"></a>
 ### 1.0.0 (2016-01-23)
 
 Replace *force-directed simulation* with *constraint-based layout* and use [VPSC](https://github.com/tgdwyer/WebCola/wiki/What-is-VPSC%3F) quadratic solver to compute positions that best satisfy the constraints. This method is much faster and does not rely on number of iterations like a simulation, therefore the computation can return results immediately and does not need to be asynchronous anymore. This improves overall performance and leads to several changes to the API.
@@ -51,7 +52,6 @@ var force = new labella.Force()
 
 ## v0.x.x
 
-<a name="0.1.1"></a>
 ### 0.1.1 (2015-11-21)
 
 #### Breaking changes
@@ -59,7 +59,6 @@ var force = new labella.Force()
 - For the **Force**, use ```options.minPos``` and ```options.maxPos``` to set ```options.layerWidth``` for the **Distributor** inside it instead of having to specify ```options.layerWidth``` explicitly.
 - Change ```options.labelHeight``` in **Renderer** to ```options.nodeHeight```.
 
-<a name="0.1.0"></a>
 ### 0.1.0 (2015-11-20)
 
 First release. Hello, world!
