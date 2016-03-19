@@ -530,6 +530,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  isDefined: function isDefined(x) {
 	    return x !== null && x !== undefined;
 	  },
+	  last: function last(array) {
+	    return array.length > 0 ? array[array.length - 1] : null;
+	  },
 	  pick: function pick(object, keys) {
 	    return keys.reduce(function (prev, key) {
 	      prev[key] = object[key];
@@ -1216,10 +1219,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  maxPos: null
 	};
 
-	function last(arr) {
-	  return arr[arr.length - 1];
-	}
-
 	function nodeToVariable(node) {
 	  var v = new vpsc.Variable(node.targetPos);
 	  v.node = node;
@@ -1231,17 +1230,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	    options = helper.extend(DEFAULT_OPTIONS, options);
 
 	    // For nodes with stub, set target position to stub's current position
-	    nodes.forEach(function (node) {
+	    nodes.forEach(function (node, index) {
 	      node.targetPos = node.parent ? node.parent.currentPos : node.idealPos;
+	      node.index = index;
 	    });
 
 	    nodes.sort(function (a, b) {
 	      var diff = a.targetPos - b.targetPos;
-	      if (diff !== 0) {
-	        return diff;
-	      } else {
-	        return a.isStub() - b.isStub();
-	      }
+	      if (diff !== 0) return diff;
+	      var diff2 = a.isStub() - b.isStub();
+	      if (diff2 !== 0) return diff2;
+	      // If same position, use original order
+	      return a.index - b.index;
 	    });
 
 	    var variables = nodes.map(nodeToVariable);
@@ -1269,13 +1269,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    if (helper.isDefined(options.maxPos)) {
 	      var rightWall = new vpsc.Variable(options.maxPos, 1e10);
-	      var lastv = last(variables);
+	      var lastv = helper.last(variables);
 	      constraints.push(new vpsc.Constraint(lastv, rightWall, lastv.node.width / 2));
 	      variables.push(rightWall);
 	    }
 
-	    var solver = new vpsc.Solver(variables, constraints);
-	    solver.solve();
+	    new vpsc.Solver(variables, constraints).solve();
 
 	    variables.filter(function (v) {
 	      return v.node;
@@ -1849,6 +1848,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return curveTo([midX, point1[1]], [midX, point2[1]], point2);
 	}
 
+	Renderer.lineTo = lineTo;
+	Renderer.moveTo = moveTo;
+	Renderer.curveTo = curveTo;
+	Renderer.vCurveBetween = vCurveBetween;
+	Renderer.hCurveBetween = hCurveBetween;
+
 	Renderer.prototype.getWaypoints = function (node) {
 	  var options = this.options;
 	  var direction = options.direction;
@@ -1861,8 +1866,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var xPos = gap * (level + 1) * -1;
 	      return [[xPos + options.nodeHeight, hop.currentPos], [xPos, hop.currentPos]];
 	    }));
-	  }
-	  if (direction === 'right') {
+	  } else if (direction === 'right') {
 	    return [[[0, hops[0].idealPos]]].concat(hops.map(function (hop, level) {
 	      var xPos = gap * (level + 1);
 	      return [[xPos - options.nodeHeight, hop.currentPos], [xPos, hop.currentPos]];
