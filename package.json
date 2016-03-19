@@ -44,10 +44,14 @@
   },
   "license": "Apache-2.0",
   "scripts": {
-    "prepublish": "pkgfiles",
     "start": "gulp --debug",
     "test": "karma start --single-run",
-    "tdd": "karma start"
+    "tdd": "karma start",
+    "build": "gulp build",
+    "preversion": "npm test",
+    "version": "npm run build && git add -A dist",
+    "postversion": "git push ; git push --tags; pkgfiles",
+    "prepublish": "pkgfiles"
   },
   "repository": {
     "type": "git",
