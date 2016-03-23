@@ -3,21 +3,6 @@ const helper = require('./helper.js');
 const DEFAULT_NODE_HEIGHT = 10;
 
 function Renderer(options){
-  if(typeof options.nodeHeight === "function"){
-    var currentNodeHeightFunction = options.nodeHeight;
-    options.nodeHeight = function(nodeData){
-      var retValue = currentNodeHeightFunction(nodeData);
-      if(typeof retValue !== "number"){
-        console.error('It seems like your nodeHeight function does NOT ' + 
-          'return a number. Instead it returns ' + retValue + '. A fallback ' +
-          'value has been used instead. The following console.log shows ' +
-          'the input data of a node: ');
-        console.log(nodeData);
-        return DEFAULT_NODE_HEIGHT;
-      }
-      else return retValue;
-    };
-  }
   this.options = helper.extend({
     layerGap: 60,
     nodeHeight: DEFAULT_NODE_HEIGHT,
@@ -63,9 +48,7 @@ Renderer.hCurveBetween = hCurveBetween;
 
 Renderer.prototype.getWaypoints = function(node){
   var options = this.options;
-  var nodeHeight = (typeof options.nodeHeight === "function")
-    ? options.nodeHeight(node.data)
-    : options.nodeHeight;
+  var nodeHeight = helper.functor(options.nodeHeight)(node.data);
   var direction = options.direction;
 
   var hops = node.getPathFromRoot();
@@ -112,6 +95,7 @@ Renderer.prototype.getWaypoints = function(node){
 Renderer.prototype.layout = function(nodes){
   var options = this.options;
 
+  var nodeHeightFn = helper.functor(options.nodeHeight);
   if(typeof options.nodeHeight === 'function'){
     var gaps = [];
     nodes.forEach(function(node, index){
@@ -131,16 +115,9 @@ Renderer.prototype.layout = function(nodes){
         else{
           pos = node.getLayerIndex() * gap + options.layerGap;
         }
-        if(typeof options.nodeHeight === 'function'){
-          node.x = -pos - options.nodeHeight(node.data);
-        }
-        else{
-          node.x = -pos - options.nodeHeight;
-        }
+        node.x = -pos - nodeHeightFn(node.data);
         node.y = node.currentPos;
-        node.dx = (typeof options.nodeHeight === 'function')
-          ? options.nodeHeight(node.data)
-          : options.nodeHeight;
+        node.dx = nodeHeightFn(node.data);
         node.dy = node.width;
       });
       break;
@@ -155,9 +132,7 @@ Renderer.prototype.layout = function(nodes){
         }
         node.x = pos;
         node.y = node.currentPos;
-        node.dx = (typeof options.nodeHeight === 'function')
-          ? options.nodeHeight(node.data)
-          : options.nodeHeight;
+        node.dx = nodeHeightFn(node.data);
         node.dy = node.width;
       });
       break;
@@ -171,16 +146,9 @@ Renderer.prototype.layout = function(nodes){
           pos = node.getLayerIndex() * gap + options.layerGap;
         }
         node.x = node.currentPos;
-        if(typeof options.nodeHeight === 'function'){
-          node.y = - pos - options.nodeHeight(node.data);
-        }
-        else{
-          node.y = -pos - options.nodeHeight;
-        }
+        node.y = -pos - nodeHeightFn(node.data);
         node.dx = node.width;
-        node.dy = (typeof options.nodeHeight === 'function')
-          ? options.nodeHeight(node.data)
-          : options.nodeHeight;
+        node.dy = nodeHeightFn(node.data);
       });
       break;
     default:
@@ -196,9 +164,7 @@ Renderer.prototype.layout = function(nodes){
         node.x = node.currentPos;
         node.y = pos;
         node.dx = node.width;
-        node.dy = (typeof options.nodeHeight === 'function')
-          ? options.nodeHeight(node.data)
-          : options.nodeHeight;
+        node.dy = nodeHeightFn(node.data);
       });
       break;
   }

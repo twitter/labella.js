@@ -16,6 +16,20 @@ const helper = {
   sum(array, accessor){
     return array.map(accessor)
       .reduce(((prev, current) => prev + current), 0);
+  },
+  functor(v) {
+    return typeof v === "function"
+      ? function(nodeData){
+        var result = v(nodeData);
+        if(typeof result !== "number"){
+          console.warn('Your nodeHeight function does not return a number.');
+          return 10; //10 because it is a default node height
+        }
+        else return result;
+      }
+      : function() {
+        return v;
+      };
   }
 };
 

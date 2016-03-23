@@ -46,4 +46,17 @@ describe('helper', function(){
     });
   });
 
+  describe('#functor(nodeHeight)', function(){
+    it('should always return a function', function(){
+      var result = helper.functor(10);
+      expect(typeof result).toEqual('function');
+      var result2 = helper.functor(function(){return 10;});
+      expect(typeof result2).toEqual('function');
+    });
+    it('should return a function that always returns a number', function(){
+      var result2 = helper.functor(function(){return 'string';});
+      expect(typeof result2()).toEqual('number');
+    });
+  });
+
 });

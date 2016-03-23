@@ -547,6 +547,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return array.map(accessor).reduce(function (prev, current) {
 	      return prev + current;
 	    }, 0);
+	  },
+	  functor: function functor(v) {
+	    return typeof v === "function" ? function (nodeData) {
+	      var result = v(nodeData);
+	      if (typeof result !== "number") {
+	        console.warn('Your nodeHeight function does not return a number.');
+	        return 10; //10 because it is a default node height
+	      } else return result;
+	    } : function () {
+	      return v;
+	    };
 	  }
 	};
 
@@ -1822,14 +1833,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var helper = __webpack_require__(4);
 
+	var DEFAULT_NODE_HEIGHT = 10;
+
 	function Renderer(options) {
-	  console.log(options.nodeHeight);
 	  this.options = helper.extend({
 	    layerGap: 60,
-	    nodeHeight: 10,
+	    nodeHeight: DEFAULT_NODE_HEIGHT,
 	    direction: 'down'
 	  }, options);
-	  console.log(this.options);
 	}
 
 	function lineTo(point) {
@@ -1862,7 +1873,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	Renderer.prototype.getWaypoints = function (node) {
 	  var options = this.options;
-	  var nodeHeight = typeof options.nodeHeight === "function" ? options.nodeHeight(node.data) : options.nodeHeight;
+	  var nodeHeight = helper.functor(options.nodeHeight)(node.data);
 	  var direction = options.direction;
 
 	  var hops = node.getPathFromRoot();
@@ -1894,6 +1905,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	Renderer.prototype.layout = function (nodes) {
 	  var options = this.options;
 
+	  var nodeHeightFn = helper.functor(options.nodeHeight);
 	  if (typeof options.nodeHeight === 'function') {
 	    var gaps = [];
 	    nodes.forEach(function (node, index) {
@@ -1913,13 +1925,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        } else {
 	          pos = node.getLayerIndex() * gap + options.layerGap;
 	        }
-	        if (typeof options.nodeHeight === 'function') {
-	          node.x = -pos - options.nodeHeight(node.data);
-	        } else {
-	          node.x = -pos - options.nodeHeight;
-	        }
+	        node.x = -pos - nodeHeightFn(node.data);
 	        node.y = node.currentPos;
-	        node.dx = typeof options.nodeHeight === 'function' ? options.nodeHeight(node.data) : options.nodeHeight;
+	        node.dx = nodeHeightFn(node.data);
 	        node.dy = node.width;
 	      });
 	      break;
@@ -1934,7 +1942,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        node.x = pos;
 	        node.y = node.currentPos;
-	        node.dx = typeof options.nodeHeight === 'function' ? options.nodeHeight(node.data) : options.nodeHeight;
+	        node.dx = nodeHeightFn(node.data);
 	        node.dy = node.width;
 	      });
 	      break;
@@ -1948,13 +1956,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	          pos = node.getLayerIndex() * gap + options.layerGap;
 	        }
 	        node.x = node.currentPos;
-	        if (typeof options.nodeHeight === 'function') {
-	          node.y = -pos - options.nodeHeight(node.data);
-	        } else {
-	          node.y = -pos - options.nodeHeight;
-	        }
+	        node.y = -pos - nodeHeightFn(node.data);
 	        node.dx = node.width;
-	        node.dy = typeof options.nodeHeight === 'function' ? options.nodeHeight(node.data) : options.nodeHeight;
+	        node.dy = nodeHeightFn(node.data);
 	      });
 	      break;
 	    default:
@@ -1970,10 +1974,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        node.x = node.currentPos;
 	        node.y = pos;
 	        node.dx = node.width;
-	        node.dy = typeof options.nodeHeight === 'function' ? options.nodeHeight(node.data) : options.nodeHeight;
-	        if (typeof node.dy !== 'number') {
-	          console.error('It seems like your nodeHeight function does not' + 'return a number. Instead it returns ' + node.dy + '. A fallback' + 'value has been used instead.');
-	        }
+	        node.dy = nodeHeightFn(node.data);
 	      });
 	      break;
 	  }
