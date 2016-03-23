@@ -92,6 +92,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  // return negative if overlap
 
+
 	  _createClass(Node, [{
 	    key: 'distanceFrom',
 	    value: function distanceFrom(node) {
@@ -1814,16 +1815,30 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
 	var helper = __webpack_require__(4);
 
+	var DEFAULT_NODE_HEIGHT = 10;
+
 	function Renderer(options) {
+	  if (typeof options.nodeHeight === "function") {
+	    var currentNodeHeightFunction = options.nodeHeight;
+	    options.nodeHeight = function (nodeData) {
+	      var retValue = currentNodeHeightFunction(nodeData);
+	      if (typeof retValue !== "number") {
+	        console.error('It seems like your nodeHeight function does NOT ' + 'return a number. Instead it returns ' + retValue + '. A fallback ' + 'value has been used instead. The following console.log shows ' + 'the input data of a node: ');
+	        console.log(nodeData);
+	        return DEFAULT_NODE_HEIGHT;
+	      } else return retValue;
+	    };
+	  }
 	  this.options = helper.extend({
 	    layerGap: 60,
-	    nodeHeight: 10,
+	    nodeHeight: DEFAULT_NODE_HEIGHT,
 	    direction: 'down'
 	  }, options);
+	  console.log(this.options);
 	}
 
 	function lineTo(point) {
@@ -1856,30 +1871,31 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	Renderer.prototype.getWaypoints = function (node) {
 	  var options = this.options;
+	  var nodeHeight = typeof options.nodeHeight === "function" ? options.nodeHeight(node.data) : options.nodeHeight;
 	  var direction = options.direction;
 
 	  var hops = node.getPathFromRoot();
-	  var gap = options.nodeHeight + options.layerGap;
+	  var gap = nodeHeight + options.layerGap;
 
 	  if (direction === 'left') {
 	    return [[[0, hops[0].idealPos]]].concat(hops.map(function (hop, level) {
 	      var xPos = gap * (level + 1) * -1;
-	      return [[xPos + options.nodeHeight, hop.currentPos], [xPos, hop.currentPos]];
+	      return [[xPos + nodeHeight, hop.currentPos], [xPos, hop.currentPos]];
 	    }));
 	  } else if (direction === 'right') {
 	    return [[[0, hops[0].idealPos]]].concat(hops.map(function (hop, level) {
 	      var xPos = gap * (level + 1);
-	      return [[xPos - options.nodeHeight, hop.currentPos], [xPos, hop.currentPos]];
+	      return [[xPos - nodeHeight, hop.currentPos], [xPos, hop.currentPos]];
 	    }));
 	  } else if (direction === 'up') {
 	    return [[[hops[0].idealPos, 0]]].concat(hops.map(function (hop, level) {
 	      var yPos = gap * (level + 1) * -1;
-	      return [[hop.currentPos, yPos + options.nodeHeight], [hop.currentPos, yPos]];
+	      return [[hop.currentPos, yPos + nodeHeight], [hop.currentPos, yPos]];
 	    }));
 	  } else {
 	    return [[[hops[0].idealPos, 0]]].concat(hops.map(function (hop, level) {
 	      var yPos = gap * (level + 1);
-	      return [[hop.currentPos, yPos - options.nodeHeight], [hop.currentPos, yPos]];
+	      return [[hop.currentPos, yPos - nodeHeight], [hop.currentPos, yPos]];
 	    }));
 	  }
 	};
@@ -1887,44 +1903,83 @@ return /******/ (function(modules) { // webpackBootstrap
 	Renderer.prototype.layout = function (nodes) {
 	  var options = this.options;
 
+	  if (typeof options.nodeHeight === 'function') {
+	    var gaps = [];
+	    nodes.forEach(function (node, index) {
+	      gaps[index] = options.layerGap + options.nodeHeight(node.data);
+	    });
+	  }
+
 	  var gap = options.layerGap + options.nodeHeight;
 
 	  switch (options.direction) {
 	    case 'left':
-	      nodes.forEach(function (node) {
-	        var pos = node.getLayerIndex() * gap + options.layerGap;
-	        node.x = -pos - options.nodeHeight;
+	      nodes.forEach(function (node, index) {
+	        var pos = 0;
+	        if (gaps) {
+	          //if the nodeHeight is a function
+	          pos = node.getLayerIndex() * gaps[index] + options.layerGap;
+	        } else {
+	          pos = node.getLayerIndex() * gap + options.layerGap;
+	        }
+	        if (typeof options.nodeHeight === 'function') {
+	          node.x = -pos - options.nodeHeight(node.data);
+	        } else {
+	          node.x = -pos - options.nodeHeight;
+	        }
 	        node.y = node.currentPos;
-	        node.dx = options.nodeHeight;
+	        node.dx = typeof options.nodeHeight === 'function' ? options.nodeHeight(node.data) : options.nodeHeight;
 	        node.dy = node.width;
 	      });
 	      break;
 	    case 'right':
-	      nodes.forEach(function (node) {
-	        var pos = node.getLayerIndex() * gap + options.layerGap;
+	      nodes.forEach(function (node, index) {
+	        var pos = 0;
+	        if (gaps) {
+	          //if the nodeHeight is a function
+	          pos = node.getLayerIndex() * gaps[index] + options.layerGap;
+	        } else {
+	          pos = node.getLayerIndex() * gap + options.layerGap;
+	        }
 	        node.x = pos;
 	        node.y = node.currentPos;
-	        node.dx = options.nodeHeight;
+	        node.dx = typeof options.nodeHeight === 'function' ? options.nodeHeight(node.data) : options.nodeHeight;
 	        node.dy = node.width;
 	      });
 	      break;
 	    case 'up':
-	      nodes.forEach(function (node) {
-	        var pos = node.getLayerIndex() * gap + options.layerGap;
+	      nodes.forEach(function (node, index) {
+	        var pos = 0;
+	        if (gaps) {
+	          //if the nodeHeight is a function
+	          pos = node.getLayerIndex() * gaps[index] + options.layerGap;
+	        } else {
+	          pos = node.getLayerIndex() * gap + options.layerGap;
+	        }
 	        node.x = node.currentPos;
-	        node.y = -pos - options.nodeHeight;
+	        if (typeof options.nodeHeight === 'function') {
+	          node.y = -pos - options.nodeHeight(node.data);
+	        } else {
+	          node.y = -pos - options.nodeHeight;
+	        }
 	        node.dx = node.width;
-	        node.dy = options.nodeHeight;
+	        node.dy = typeof options.nodeHeight === 'function' ? options.nodeHeight(node.data) : options.nodeHeight;
 	      });
 	      break;
 	    default:
 	    case 'down':
-	      nodes.forEach(function (node) {
-	        var pos = node.getLayerIndex() * gap + options.layerGap;
+	      nodes.forEach(function (node, index) {
+	        var pos = 0;
+	        if (gaps) {
+	          //if the nodeHeight is a function
+	          pos = node.getLayerIndex() * gaps[index] + options.layerGap;
+	        } else {
+	          pos = node.getLayerIndex() * gap + options.layerGap;
+	        }
 	        node.x = node.currentPos;
 	        node.y = pos;
 	        node.dx = node.width;
-	        node.dy = options.nodeHeight;
+	        node.dy = typeof options.nodeHeight === 'function' ? options.nodeHeight(node.data) : options.nodeHeight;
 	      });
 	      break;
 	  }
