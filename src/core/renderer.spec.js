@@ -39,37 +39,85 @@ describe('Renderer', function(){
       var node = new Node(1,10);
       var stub1 = node.createStub();
       stub1.currentPos = 10;
-      it('for left direction', function(){
+      describe('left direction', function(){
+        it('nodeHeight as number', function(){
+          var r = new Renderer({
+            layerGap: 20,
+            nodeHeight: 10,
+            direction: 'left'
+          });
+          expect(r.getWaypoints(node)).toEqual([ [ [ 0, 1 ] ], [ [ -20, 10 ], [ -30, 10 ] ], [ [ -50, 1 ], [ -60, 1 ] ] ]);
+        });
+        it('nodeHeight as function', function(){
+          var r = new Renderer({
+            layerGap: 20,
+            nodeHeight: function(nodeData){return 10;},
+            direction: 'left'
+          });
+          expect(r.getWaypoints(node)).toEqual([ [ [ 0, 1 ] ], [ [ -20, 10 ], [ -30, 10 ] ], [ [ -50, 1 ], [ -60, 1 ] ] ]);
+        });
+      });
+      describe('right direction', function(){
+        it('nodeHeight as number', function(){
+          var r = new Renderer({
+            layerGap: 20,
+            nodeHeight: 10,
+            direction: 'right'
+          });
+          expect(r.getWaypoints(node)).toEqual([ [ [ 0, 1 ] ], [ [ 20, 10 ], [ 30, 10 ] ], [ [ 50, 1 ], [ 60, 1 ] ] ]);
+        });
+        it('nodeHeight as function', function(){
+          var r = new Renderer({
+            layerGap: 20,
+            nodeHeight: function(nodeData){return 10;},
+            direction: 'right'
+          });
+          expect(r.getWaypoints(node)).toEqual([ [ [ 0, 1 ] ], [ [ 20, 10 ], [ 30, 10 ] ], [ [ 50, 1 ], [ 60, 1 ] ] ]);
+        });
+      });
+      describe('up direction', function(){
+        it('nodeHeight as a number', function(){
+          var r = new Renderer({
+            layerGap: 20,
+            nodeHeight: 10,
+            direction: 'up'
+          });
+          expect(r.getWaypoints(node)).toEqual([ [ [ 1, 0 ] ], [ [ 10, -20 ], [ 10, -30 ] ], [ [ 1, -50 ], [ 1, -60 ] ] ]);
+        });
+        it('nodeHeight as a function', function(){
+          var r = new Renderer({
+            layerGap: 20,
+            nodeHeight: function(nodeData){return 10;},
+            direction: 'up'
+          });
+          expect(r.getWaypoints(node)).toEqual([ [ [ 1, 0 ] ], [ [ 10, -20 ], [ 10, -30 ] ], [ [ 1, -50 ], [ 1, -60 ] ] ]);
+        });
+      });
+      describe('down direction', function(){
+        it('nodeHeight as a number', function(){
+          var r = new Renderer({
+            layerGap: 20,
+            nodeHeight: 10,
+            direction: 'down'
+          });
+          expect(r.getWaypoints(node)).toEqual([ [ [ 1, 0 ] ], [ [ 10, 20 ], [ 10, 30 ] ], [ [ 1, 50 ], [ 1, 60 ] ] ]);
+        });
+        it('nodeHeight as a function', function(){
+          var r = new Renderer({
+            layerGap: 20,
+            nodeHeight: function(nodeData){return 10;},
+            direction: 'down'
+          });
+          expect(r.getWaypoints(node)).toEqual([ [ [ 1, 0 ] ], [ [ 10, 20 ], [ 10, 30 ] ], [ [ 1, 50 ], [ 1, 60 ] ] ]);
+        });
+      });
+      it('should fallback if the function does not return a number', function(){
         var r = new Renderer({
           layerGap: 20,
-          nodeHeight: 10,
+          nodeHeight: function(nodeData){return "error"},
           direction: 'left'
         });
         expect(r.getWaypoints(node)).toEqual([ [ [ 0, 1 ] ], [ [ -20, 10 ], [ -30, 10 ] ], [ [ -50, 1 ], [ -60, 1 ] ] ]);
-      });
-      it('for right direction', function(){
-        var r = new Renderer({
-          layerGap: 20,
-          nodeHeight: 10,
-          direction: 'right'
-        });
-        expect(r.getWaypoints(node)).toEqual([ [ [ 0, 1 ] ], [ [ 20, 10 ], [ 30, 10 ] ], [ [ 50, 1 ], [ 60, 1 ] ] ]);
-      });
-      it('for up direction', function(){
-        var r = new Renderer({
-          layerGap: 20,
-          nodeHeight: 10,
-          direction: 'up'
-        });
-        expect(r.getWaypoints(node)).toEqual([ [ [ 1, 0 ] ], [ [ 10, -20 ], [ 10, -30 ] ], [ [ 1, -50 ], [ 1, -60 ] ] ]);
-      });
-      it('for down direction', function(){
-        var r = new Renderer({
-          layerGap: 20,
-          nodeHeight: 10,
-          direction: 'down'
-        });
-        expect(r.getWaypoints(node)).toEqual([ [ [ 1, 0 ] ], [ [ 10, 20 ], [ 10, 30 ] ], [ [ 1, 50 ], [ 1, 60 ] ] ]);
       });
     });
   });

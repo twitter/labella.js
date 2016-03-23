@@ -21,7 +21,8 @@ How about making the labels push each other and find where they can stay with ov
 [left](http://twitter.github.io/labella.js/basic_left.html) |
 [right](http://twitter.github.io/labella.js/basic_right.html) |
 [with text (v)](http://twitter.github.io/labella.js/with_text.html) |
-[with text (h)](http://twitter.github.io/labella.js/with_text2.html)
+[with text (h)](http://twitter.github.io/labella.js/with_text2.html) |
+[with flex height](http://twitter.github.io/labella.js/with_flex_height.html)
 * Read the instructions on this page or API reference.
 
 Moreover, if you are looking for a ready-to-use timeline component with Labella's smart labeling instead of building your own timeline from scratch, check out [d3Kit-timeline](https://github.com/kristw/d3kit-timeline).
