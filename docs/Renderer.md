@@ -53,7 +53,7 @@ There are a few options that you can customize when creating a renderer.
 | option  | default | description |
 | ------- | ------- | ----------- |
 | layerGap  | 60 | gap between layer of labels |
-| nodeHeight  | 12 | For horizontal axis, this is the height of each label. For vertical axis, this is the width of each label. |
+| nodeHeight  | 12 | For horizontal axis, this is the height of each label. For vertical axis, this is the width of each label. You can also pass a function with a node.data as a parameter. This function MUST return a number. This can be useful for example when you want your nodes to have a different height based on the content. |
 | direction | 'down' | placement of the label relative to the axis. Choose from ```'up'```, ```'down'```, ```'left'``` or ```'right'```. Use ```'left'``` or ```'right'``` for vertical axis and ```'up'``` or ```'down'``` for horizontal axis. See [example](http://twitter.github.io/labella.js/basic_down.html).|
 
 ### Functions

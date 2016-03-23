@@ -1838,7 +1838,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    nodeHeight: DEFAULT_NODE_HEIGHT,
 	    direction: 'down'
 	  }, options);
-	  console.log(this.options);
 	}
 
 	function lineTo(point) {
