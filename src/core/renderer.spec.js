@@ -102,14 +102,22 @@ describe('Renderer', function(){
           });
           expect(r.getWaypoints(node)).toEqual([ [ [ 1, 0 ] ], [ [ 10, 20 ], [ 10, 30 ] ], [ [ 1, 50 ], [ 1, 60 ] ] ]);
         });
-      it('nodeHeight as a function', function(){
+        it('nodeHeight as a function', function(){
+          var r = new Renderer({
+            layerGap: 20,
+            nodeHeight: function(nodeData){return 10;},
+            direction: 'down'
+          });
+          expect(r.getWaypoints(node)).toEqual([ [ [ 1, 0 ] ], [ [ 10, 20 ], [ 10, 30 ] ], [ [ 1, 50 ], [ 1, 60 ] ] ]);
+        });
+      });
+      it('should fallback if the function does not return a number', function(){
         var r = new Renderer({
           layerGap: 20,
-          nodeHeight: function(nodeData){return 10;},
-          direction: 'down'
+          nodeHeight: function(nodeData){return "error"},
+          direction: 'left'
         });
-        expect(r.getWaypoints(node)).toEqual([ [ [ 1, 0 ] ], [ [ 10, 20 ], [ 10, 30 ] ], [ [ 1, 50 ], [ 1, 60 ] ] ]);
-      });
+        expect(r.getWaypoints(node)).toEqual([ [ [ 0, 1 ] ], [ [ -20, 10 ], [ -30, 10 ] ], [ [ -50, 1 ], [ -60, 1 ] ] ]);
       });
     });
   });
