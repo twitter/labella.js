@@ -546,13 +546,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, 0);
 	  },
 	  functor: function functor(v) {
-	    return typeof v === "function" ? function (nodeData) {
-	      var result = v(nodeData);
-	      if (typeof result !== "number") {
-	        console.warn('Your nodeHeight function does not return a number.');
-	        return 10; //10 because it is a default node height
-	      } else return result;
-	    } : function () {
+	    return typeof v === "function" ? v : function () {
 	      return v;
 	    };
 	  }
