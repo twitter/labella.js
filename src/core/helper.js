@@ -16,6 +16,13 @@ const helper = {
   sum(array, accessor){
     return array.map(accessor)
       .reduce(((prev, current) => prev + current), 0);
+  },
+  functor(v) {
+    return typeof v === "function"
+      ? v
+      : function() {
+        return v;
+      };
   }
 };
 

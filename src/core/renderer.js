@@ -1,9 +1,11 @@
 const helper = require('./helper.js');
 
+const DEFAULT_NODE_HEIGHT = 10;
+
 function Renderer(options){
   this.options = helper.extend({
     layerGap: 60,
-    nodeHeight: 10,
+    nodeHeight: DEFAULT_NODE_HEIGHT,
     direction: 'down'
   }, options);
 }
@@ -46,16 +48,17 @@ Renderer.hCurveBetween = hCurveBetween;
 
 Renderer.prototype.getWaypoints = function(node){
   var options = this.options;
+  var nodeHeight = helper.functor(options.nodeHeight)(node);
   var direction = options.direction;
 
   var hops = node.getPathFromRoot();
-  var gap = options.nodeHeight + options.layerGap;
+  var gap = nodeHeight + options.layerGap;
 
   if(direction==='left'){
     return [[[0, hops[0].idealPos]]].concat(hops.map(function(hop, level){
       var xPos = gap * (level+1) * -1;
       return [
-        [xPos + options.nodeHeight, hop.currentPos],
+        [xPos + nodeHeight, hop.currentPos],
         [xPos, hop.currentPos]
       ];
     }));
@@ -64,7 +67,7 @@ Renderer.prototype.getWaypoints = function(node){
     return [[[0, hops[0].idealPos]]].concat(hops.map(function(hop, level){
       var xPos = gap * (level+1);
       return [
-        [xPos - options.nodeHeight, hop.currentPos],
+        [xPos - nodeHeight, hop.currentPos],
         [xPos, hop.currentPos]
       ];
     }));
@@ -73,7 +76,7 @@ Renderer.prototype.getWaypoints = function(node){
     return [[[hops[0].idealPos, 0]]].concat(hops.map(function(hop, level){
       var yPos = gap * (level+1) * -1;
       return [
-        [hop.currentPos, yPos + options.nodeHeight],
+        [hop.currentPos, yPos + nodeHeight],
         [hop.currentPos, yPos]
       ];
     }));
@@ -82,7 +85,7 @@ Renderer.prototype.getWaypoints = function(node){
     return [[[hops[0].idealPos, 0]]].concat(hops.map(function(hop, level){
       var yPos = gap * (level+1);
       return [
-        [hop.currentPos, yPos - options.nodeHeight],
+        [hop.currentPos, yPos - nodeHeight],
         [hop.currentPos, yPos]
       ];
     }));
@@ -92,44 +95,76 @@ Renderer.prototype.getWaypoints = function(node){
 Renderer.prototype.layout = function(nodes){
   var options = this.options;
 
+  var nodeHeightFn = helper.functor(options.nodeHeight);
+  if(typeof options.nodeHeight === 'function'){
+    var gaps = [];
+    nodes.forEach(function(node, index){
+      gaps[index] = options.layerGap + options.nodeHeight(node);
+    });
+  }
+
   var gap = options.layerGap + options.nodeHeight;
 
   switch(options.direction){
     case 'left':
-      nodes.forEach(function(node){
-        var pos = node.getLayerIndex() * gap + options.layerGap;
-        node.x = -pos - options.nodeHeight;
+      nodes.forEach(function(node, index){
+        var pos = 0;
+        if(gaps){ //if the nodeHeight is a function
+          pos = node.getLayerIndex() * gaps[index] + options.layerGap;
+        }
+        else{
+          pos = node.getLayerIndex() * gap + options.layerGap;
+        }
+        node.x = -pos - nodeHeightFn(node);
         node.y = node.currentPos;
-        node.dx = options.nodeHeight;
+        node.dx = nodeHeightFn(node);
         node.dy = node.width;
       });
       break;
     case 'right':
-      nodes.forEach(function(node){
-        var pos = node.getLayerIndex() * gap + options.layerGap;
+      nodes.forEach(function(node, index){
+        var pos = 0;
+        if(gaps){ //if the nodeHeight is a function
+          pos = node.getLayerIndex() * gaps[index] + options.layerGap;
+        }
+        else{
+          pos = node.getLayerIndex() * gap + options.layerGap;
+        }
         node.x = pos;
         node.y = node.currentPos;
-        node.dx = options.nodeHeight;
+        node.dx = nodeHeightFn(node);
         node.dy = node.width;
       });
       break;
     case 'up':
-      nodes.forEach(function(node){
-        var pos = node.getLayerIndex() * gap + options.layerGap;
+      nodes.forEach(function(node, index){
+        var pos = 0;
+        if(gaps){ //if the nodeHeight is a function
+          pos = node.getLayerIndex() * gaps[index] + options.layerGap;
+        }
+        else{
+          pos = node.getLayerIndex() * gap + options.layerGap;
+        }
         node.x = node.currentPos;
-        node.y = -pos - options.nodeHeight;
+        node.y = -pos - nodeHeightFn(node);
         node.dx = node.width;
-        node.dy = options.nodeHeight;
+        node.dy = nodeHeightFn(node);
       });
       break;
     default:
     case 'down':
-      nodes.forEach(function(node){
-        var pos = node.getLayerIndex() * gap + options.layerGap;
+      nodes.forEach(function(node, index){
+        var pos = 0;
+        if(gaps){ //if the nodeHeight is a function
+          pos = node.getLayerIndex() * gaps[index] + options.layerGap;
+        }
+        else{
+          pos = node.getLayerIndex() * gap + options.layerGap;
+        }
         node.x = node.currentPos;
         node.y = pos;
         node.dx = node.width;
-        node.dy = options.nodeHeight;
+        node.dy = nodeHeightFn(node);
       });
       break;
   }
