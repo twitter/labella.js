@@ -65,16 +65,16 @@
 // ---------------------------------------------------
 
 var data = [
-  {date: new Date(2015,0,9), name: 'Snape'},
-  {date: new Date(2015,0,30), name: 'Lily'},
-  {date: new Date(2015,2,1), name: 'Ron'},
-  {date: new Date(2015,2,27), name: 'James'},
-  {date: new Date(2015,5,5), name: 'Draco'},
-  {date: new Date(2015,6,30), name: 'Neville'},
-  {date: new Date(2015,6,31), name: 'Harry'},
-  {date: new Date(2015,8,19), name: 'Hermione'},
-  {date: new Date(2015,11,6), name: 'Hagrid'},
-  {date: new Date(2015,11,31), name: 'Voldemort'}
+  {date: new Date(2015,0,9), height: 30, name: 'Snape'},
+  {date: new Date(2015,0,30), height: 30, name: 'Lily'},
+  {date: new Date(2015,2,1), height: 30, name: 'Ron'},
+  {date: new Date(2015,2,27), height: 30, name: 'James'},
+  {date: new Date(2015,5,5), height: 50, name: 'Draco'},
+  {date: new Date(2015,6,30), height: 30, name: 'Neville'},
+  {date: new Date(2015,6,31), height: 30, name: 'Harry'},
+  {date: new Date(2015,8,19), height: 30, name: 'Hermione'},
+  {date: new Date(2015,11,6), height: 30, name: 'Hagrid'},
+  {date: new Date(2015,11,31), height: 30, name: 'Voldemort'}
 ];
 
 var formatDate = d3.time.format('%b %e');
@@ -146,10 +146,9 @@ function color(d,i){
 
 var renderer = new labella.Renderer({
   layerGap: 60,
-  //nodeHeight: 30,//nodes[0].data.h,
-  nodeHeight: function(nodeData){
-    if(nodeData.name === "Draco" || nodeData.name === "Hermione") return 50;
-    else return 30;
+  nodeHeight: function(node){
+    console.log(node);
+    return node.data.height;
   },
   direction: 'bottom'
 });

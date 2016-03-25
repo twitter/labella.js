@@ -48,7 +48,7 @@ Renderer.hCurveBetween = hCurveBetween;
 
 Renderer.prototype.getWaypoints = function(node){
   var options = this.options;
-  var nodeHeight = helper.functor(options.nodeHeight)(node.data);
+  var nodeHeight = helper.functor(options.nodeHeight)(node);
   var direction = options.direction;
 
   var hops = node.getPathFromRoot();
@@ -99,7 +99,7 @@ Renderer.prototype.layout = function(nodes){
   if(typeof options.nodeHeight === 'function'){
     var gaps = [];
     nodes.forEach(function(node, index){
-      gaps[index] = options.layerGap + options.nodeHeight(node.data);
+      gaps[index] = options.layerGap + options.nodeHeight(node);
     });
   }
 
@@ -115,9 +115,9 @@ Renderer.prototype.layout = function(nodes){
         else{
           pos = node.getLayerIndex() * gap + options.layerGap;
         }
-        node.x = -pos - nodeHeightFn(node.data);
+        node.x = -pos - nodeHeightFn(node);
         node.y = node.currentPos;
-        node.dx = nodeHeightFn(node.data);
+        node.dx = nodeHeightFn(node);
         node.dy = node.width;
       });
       break;
@@ -132,7 +132,7 @@ Renderer.prototype.layout = function(nodes){
         }
         node.x = pos;
         node.y = node.currentPos;
-        node.dx = nodeHeightFn(node.data);
+        node.dx = nodeHeightFn(node);
         node.dy = node.width;
       });
       break;
@@ -146,9 +146,9 @@ Renderer.prototype.layout = function(nodes){
           pos = node.getLayerIndex() * gap + options.layerGap;
         }
         node.x = node.currentPos;
-        node.y = -pos - nodeHeightFn(node.data);
+        node.y = -pos - nodeHeightFn(node);
         node.dx = node.width;
-        node.dy = nodeHeightFn(node.data);
+        node.dy = nodeHeightFn(node);
       });
       break;
     default:
@@ -164,7 +164,7 @@ Renderer.prototype.layout = function(nodes){
         node.x = node.currentPos;
         node.y = pos;
         node.dx = node.width;
-        node.dy = nodeHeightFn(node.data);
+        node.dy = nodeHeightFn(node);
       });
       break;
   }

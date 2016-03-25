@@ -1864,7 +1864,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	Renderer.prototype.getWaypoints = function (node) {
 	  var options = this.options;
-	  var nodeHeight = helper.functor(options.nodeHeight)(node.data);
+	  var nodeHeight = helper.functor(options.nodeHeight)(node);
 	  var direction = options.direction;
 
 	  var hops = node.getPathFromRoot();
@@ -1900,7 +1900,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (typeof options.nodeHeight === 'function') {
 	    var gaps = [];
 	    nodes.forEach(function (node, index) {
-	      gaps[index] = options.layerGap + options.nodeHeight(node.data);
+	      gaps[index] = options.layerGap + options.nodeHeight(node);
 	    });
 	  }
 
@@ -1916,9 +1916,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        } else {
 	          pos = node.getLayerIndex() * gap + options.layerGap;
 	        }
-	        node.x = -pos - nodeHeightFn(node.data);
+	        node.x = -pos - nodeHeightFn(node);
 	        node.y = node.currentPos;
-	        node.dx = nodeHeightFn(node.data);
+	        node.dx = nodeHeightFn(node);
 	        node.dy = node.width;
 	      });
 	      break;
@@ -1933,7 +1933,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        node.x = pos;
 	        node.y = node.currentPos;
-	        node.dx = nodeHeightFn(node.data);
+	        node.dx = nodeHeightFn(node);
 	        node.dy = node.width;
 	      });
 	      break;
@@ -1947,9 +1947,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	          pos = node.getLayerIndex() * gap + options.layerGap;
 	        }
 	        node.x = node.currentPos;
-	        node.y = -pos - nodeHeightFn(node.data);
+	        node.y = -pos - nodeHeightFn(node);
 	        node.dx = node.width;
-	        node.dy = nodeHeightFn(node.data);
+	        node.dy = nodeHeightFn(node);
 	      });
 	      break;
 	    default:
@@ -1965,7 +1965,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        node.x = node.currentPos;
 	        node.y = pos;
 	        node.dx = node.width;
-	        node.dy = nodeHeightFn(node.data);
+	        node.dy = nodeHeightFn(node);
 	      });
 	      break;
 	  }
