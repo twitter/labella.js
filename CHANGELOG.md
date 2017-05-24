@@ -2,6 +2,12 @@
 
 ## v1.x.x
 
+### 1.1.3 (2017-05-24)
+
+Ensure that labella does not sort the nodes within the input array and return the list of nodes in the same order that it was supplied. ([#23](https://github.com/twitter/labella.js/issues/23))
+
+If you specify `force.node([n1, n2, n3])`, you should get `[n1, n2, n3]` back from `force.nodes()` with updated `currentPos` for `n1`, `n2` and `n3`.
+
 ### 1.1.2 (2016-03-18)
 
 Use original order if labels are at the same position and has no good reason to change order. This was the intended behavior, but the way it was written sometimes it changes the order, so I ensure that it will keep the original order in this version.
@@ -15,7 +21,7 @@ Fix the bug in *overlap* distribution algorithm. Thanks @GjjvdBurg. **After upgr
 Separate utilities and extra code for evaluation/demo into a separate bundle *labella-extra* to keep the main bundle as lean as possible. Now the *dist* directory contains four files:
 
 - *labella.js* and *labella.min.js* : Core functionalities. This is what you will need for regular use.
-- *labella-extra.js* and *labella-extra.min.js* (introduced in this version) : Same with the above bundle plus `labella.util` and `labella.metrics`, which are special modules for demo/evaluation. 
+- *labella-extra.js* and *labella-extra.min.js* (introduced in this version) : Same with the above bundle plus `labella.util` and `labella.metrics`, which are special modules for demo/evaluation.
 
 Other than that, No API change, just refactoring.
 
