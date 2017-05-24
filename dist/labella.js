@@ -92,6 +92,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  // return negative if overlap
 
+
 	  _createClass(Node, [{
 	    key: 'distanceFrom',
 	    value: function distanceFrom(node) {
@@ -114,7 +115,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'overlapWithNode',
 	    value: function overlapWithNode(node) {
-	      var buffer = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
+	      var buffer = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
 
 	      return this.distanceFrom(node) - buffer < 0;
 	    }
@@ -127,14 +128,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'positionBefore',
 	    value: function positionBefore(node) {
-	      var buffer = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
+	      var buffer = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
 
 	      return node.currentLeft() - this.width / 2 - buffer;
 	    }
 	  }, {
 	    key: 'positionAfter',
 	    value: function positionAfter(node) {
-	      var buffer = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
+	      var buffer = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
 
 	      return node.currentRight() + this.width / 2 + buffer;
 	    }
@@ -275,7 +276,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  force.nodes = function (x) {
 	    if (!arguments.length) return nodes;
 	    nodes = x;
-	    layers = [x];
+	    layers = [x.concat()];
 	    return force;
 	  };
 
@@ -499,14 +500,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return [nodes];
 	    }
 
-	    nodes = nodes.concat().sort(function (a, b) {
+	    var sortedNodes = nodes.concat().sort(function (a, b) {
 	      return a.idealPos - b.idealPos;
 	    });
 
 	    if (typeof options.algorithm == 'function') {
-	      return options.algorithm(nodes, options);
+	      return options.algorithm(sortedNodes, options);
 	    } else if (algorithms.hasOwnProperty(options.algorithm)) {
-	      return algorithms[options.algorithm](nodes);
+	      return algorithms[options.algorithm](sortedNodes);
 	    } else {
 	      throw 'Unknown algorithm: ' + options.algorithm;
 	    }
@@ -556,7 +557,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 	/*
 	This file is modified from https://github.com/justmoon/node-extend
@@ -669,8 +670,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	          // Don't bring in undefined values
 	        } else if (copy !== undefined) {
-	            target[name] = copy;
-	          }
+	          target[name] = copy;
+	        }
 	      }
 	    }
 	  }
@@ -987,7 +988,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	"use strict";
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 	/*
 	This file is modified from https://github.com/shinout/SortedList
@@ -1235,23 +1236,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	      node.index = index;
 	    });
 
-	    nodes.sort(function (a, b) {
+	    var variables = nodes.concat().sort(function (a, b) {
 	      var diff = a.targetPos - b.targetPos;
 	      if (diff !== 0) return diff;
 	      var diff2 = a.isStub() - b.isStub();
 	      if (diff2 !== 0) return diff2;
 	      // If same position, use original order
 	      return a.index - b.index;
-	    });
-
-	    var variables = nodes.map(nodeToVariable);
+	    }).map(nodeToVariable);
 
 	    var constraints = [];
 	    for (var i = 1; i < variables.length; i++) {
 	      var v1 = variables[i - 1];
 	      var v2 = variables[i];
 
-	      var gap;
+	      var gap = void 0;
 	      if (v1.node.isStub() && v2.node.isStub()) {
 	        gap = (v1.node.width + v2.node.width) / 2 + options.lineSpacing;
 	      } else {
