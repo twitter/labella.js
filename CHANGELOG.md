@@ -2,6 +2,10 @@
 
 ## v1.x.x
 
+### 1.1.4 (2017-05-24)
+
+Move `karma-phantomjs-launcher` to devDependencies where it should be.
+
 ### 1.1.3 (2017-05-24)
 
 Ensure that labella does not sort the nodes within the input array and return the list of nodes in the same order that it was supplied. ([#23](https://github.com/twitter/labella.js/issues/23))

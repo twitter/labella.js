@@ -6,9 +6,6 @@
   "files": [
     "dist/*.*"
   ],
-  "dependencies": {
-    "karma-phantomjs-launcher": "^1.0.4"
-  },
   "devDependencies": {
     "babel-cli": "^6.4.5",
     "babel-core": "~6.3.21",
@@ -30,6 +27,7 @@
     "karma": "~0.13.15",
     "karma-coverage": "~0.5.3",
     "karma-jasmine": "~0.3.6",
+    "karma-phantomjs-launcher": "^1.0.4",
     "karma-sourcemap-loader": "~0.3.6",
     "karma-spec-reporter": "~0.0.23",
     "karma-webpack": "~1.7.0",
