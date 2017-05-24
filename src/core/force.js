@@ -25,7 +25,7 @@ var Force = function(_options){
   force.nodes = function(x) {
     if (!arguments.length) return nodes;
     nodes = x;
-    layers = [x];
+    layers = [x.concat()];
     return force;
   };
 

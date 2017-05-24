@@ -24,23 +24,23 @@ function removeOverlap(nodes, options){
       node.index = index;
     });
 
-    nodes.sort(function (a, b) {
-      var diff = a.targetPos - b.targetPos;
-      if (diff !== 0) return diff;
-      var diff2 = a.isStub() - b.isStub();
-      if (diff2!== 0) return diff2;
-      // If same position, use original order
-      return a.index-b.index;
-    });
+    const variables = nodes.concat()
+      .sort(function (a, b) {
+        const diff = a.targetPos - b.targetPos;
+        if (diff !== 0) return diff;
+        const diff2 = a.isStub() - b.isStub();
+        if (diff2!== 0) return diff2;
+        // If same position, use original order
+        return a.index-b.index;
+      })
+      .map(nodeToVariable);
 
-    var variables = nodes.map(nodeToVariable);
+    const constraints = [];
+    for(let i=1;i<variables.length;i++){
+      const v1 = variables[i-1];
+      const v2 = variables[i];
 
-    var constraints = [];
-    for(var i=1;i<variables.length;i++){
-      var v1 = variables[i-1];
-      var v2 = variables[i];
-
-      var gap;
+      let gap;
       if(v1.node.isStub() && v2.node.isStub()){
         gap = (v1.node.width+v2.node.width)/2 + options.lineSpacing;
       }

@@ -158,15 +158,15 @@ var Distributor = function(options){
       return [nodes];
     }
 
-    nodes = nodes.concat().sort(function(a,b){
+    const sortedNodes = nodes.concat().sort(function(a,b){
       return a.idealPos - b.idealPos;
     });
 
     if(typeof options.algorithm == 'function'){
-      return options.algorithm(nodes, options);
+      return options.algorithm(sortedNodes, options);
     }
     else if(algorithms.hasOwnProperty(options.algorithm)){
-      return algorithms[options.algorithm](nodes);
+      return algorithms[options.algorithm](sortedNodes);
     }
     else{
       throw 'Unknown algorithm: ' + options.algorithm;

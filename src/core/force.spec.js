@@ -1,5 +1,6 @@
 var Force = require('./force.js');
 var Node = require('./node.js');
+var util = require('./util.js');
 
 describe('Force', function(){
   describe('#nodes([nodes])', function(){
@@ -104,6 +105,39 @@ describe('Force', function(){
 
       nodes.forEach(function(node){
         expect(node.currentRight()).not.toBeLessThan(30);
+      });
+    });
+
+    describe('should not change the order of the nodes within the input array', function(){
+      it('10 nodes', function() {
+        var nodes = util.generateNodes(10);
+        nodes.forEach(function(n, i){ n.data = i; });
+        var inNodes = nodes.concat();
+        var force = new Force().nodes(nodes).compute();
+        var outNodes = force.nodes();
+        expect(inNodes.every(function(n, i) {
+          return n.data === outNodes[i].data;
+        })).toEqual(true);
+      });
+      it('20 nodes', function() {
+        var nodes = util.generateNodes(20);
+        nodes.forEach(function(n, i){ n.data = i; });
+        var inNodes = nodes.concat();
+        var force = new Force().nodes(nodes).compute();
+        var outNodes = force.nodes();
+        expect(inNodes.every(function(n, i) {
+          return n.data === outNodes[i].data;
+        })).toEqual(true);
+      });
+      it('100 nodes', function() {
+        var nodes = util.generateNodes(100);
+        nodes.forEach(function(n, i){ n.data = i; });
+        var inNodes = nodes.concat();
+        var force = new Force().nodes(nodes).compute();
+        var outNodes = force.nodes();
+        expect(inNodes.every(function(n, i) {
+          return n.data === outNodes[i].data;
+        })).toEqual(true);
       });
     });
   });
